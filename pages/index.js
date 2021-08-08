@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useDebounce as useDebounceFn } from 'react-use';
 
 import Layout from 'components/Layout';
-import BlockText from 'components/BlockText';
+import BlockText from 'components/LazyBlockText';
 import { useHoveredLink } from 'components/Link';
+import { Fade, TransitionGroup } from 'components/AnimatedItems';
 
 const useDebounced = (val, wait) => {
   const [v, setV] = useState(val);
@@ -19,9 +20,13 @@ const IndexPage = () => {
   return (
     <>
       <BlockText text={text} />
-      <div>
-        <h1>Personal Site</h1>
-      </div>
+      <TransitionGroup component={null}>
+        <Fade timeout={500}>
+          <div>
+            <h1>Personal Site</h1>
+          </div>
+        </Fade>
+      </TransitionGroup>
 
       <style jsx>{`
         div {
@@ -40,7 +45,7 @@ const IndexPage = () => {
 };
 
 IndexPage.getLayout = ({ children }) => (
-  <Layout className="index-page" pageClassName="layers" noSpacing>
+  <Layout wrapperClassName="index-page" pageClassName="layers" noLayout>
     {children}
   </Layout>
 );

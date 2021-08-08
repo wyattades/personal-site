@@ -1,38 +1,29 @@
 import React from 'react';
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import CSSTransition from 'react-transition-group/CSSTransition';
-import TransitionGroup from 'react-transition-group/TransitionGroup';
+// import { useRouter } from 'next/router';
 
 import Nav from 'components/Nav';
+// import { Fade, TransitionGroup } from 'components/AnimatedItems';
 
 const Layout = ({
   children,
-  className,
-  innerClassName,
+  wrapperClassName,
   pageClassName,
-
-  noSpacing = false,
+  noLayout = false,
 }) => {
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
-    <div className={clsx('wrapper', className)}>
-      <TransitionGroup component="main" className="main">
-        <CSSTransition
-          key={router.asPath}
-          classNames="pagefade"
-          timeout={500}
-          mountOnEnter
-          unmountOnExit
-        >
-          <div className={clsx('main-inner', innerClassName)}>
-            <div className={clsx(pageClassName, !noSpacing && 'page')}>
-              {children}
-            </div>
-          </div>
-        </CSSTransition>
-      </TransitionGroup>
+    <div className={clsx('wrapper', wrapperClassName)}>
+      <main>
+        {/* <TransitionGroup component={null}>
+          <Fade key={router.asPath} timeout={500} unmount> */}
+        <div className={clsx(!noLayout && 'page')}>
+          <div className={pageClassName}>{children}</div>
+        </div>
+        {/* </Fade>
+        </TransitionGroup> */}
+      </main>
       <Nav />
     </div>
   );

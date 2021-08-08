@@ -11,14 +11,12 @@ const resumeItems = getResumeItems();
 const AboutPage = () => {
   return (
     <AnimatedItems>
-      <div className="content" style={{ marginBottom: 0 }}>
-        <div className="space-between">
-          <h1>About Me</h1>
-          <a href="/resume.pdf">
-            <FaLink className="icon-head" aria-hidden />
-            Resume PDF
-          </a>
-        </div>
+      <div className="space-between content">
+        <h1>About Me</h1>
+        <a href="/resume.pdf">
+          <FaLink className="icon-head" aria-hidden />
+          Resume PDF
+        </a>
       </div>
       {resumeItems}
     </AnimatedItems>

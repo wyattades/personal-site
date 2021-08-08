@@ -12,19 +12,30 @@ $error: #ff2323;
 
 $container: 800px;
 
-@import './transition';
 @import './resume';
 
-// TODO: dotted background
 html,
-body,
-#__next,
-.wrapper,
-main {
-  height: 100%;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  color: $color;
+  margin: 0;
+  padding: 0;
 }
 
-.wrapper.index-page::before {
+.wrapper {
+  background: $background;
+  position: relative;
+  min-height: 100vh;
+}
+
+.page {
+  margin: 0 auto;
+  max-width: $container;
+  padding: 72px 20px;
+}
+
+.index-page::before {
   content: '';
   display: block;
   position: absolute;
@@ -41,6 +52,9 @@ main {
 
   animation: fadeInOpacity 2s ease;
   animation-fill-mode: forwards;
+}
+.index-page .nav-container {
+  background: none;
 }
 
 @keyframes fadeInOpacity {
@@ -193,15 +207,6 @@ a:not(:hover) {
   padding: 0 0.25in;
 }
 
-.container {
-  display: flex;
-  flex-direction: row;
-  flex-basis: $container;
-  max-width: $container;
-  justify-content: space-between;
-  margin: 0 20px;
-}
-
 .layers {
   & > * {
     overflow: hidden;
@@ -219,9 +224,16 @@ a:not(:hover) {
 }
 
 .nav {
-  text-align: center;
   display: flex;
-  flex: 1;
+  // flex-direction: row;
+  // flex-basis: $container;
+  max-width: $container;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin: 0 auto;
+
+  text-align: center;
+
   ul {
     display: flex;
     flex: 1;
@@ -245,6 +257,7 @@ a:not(:hover) {
         letter-spacing: 3px;
 
         &:hover,
+        &:focus,
         &.active {
           box-shadow: inset 0 4px 0 0 $color;
         }
@@ -269,38 +282,6 @@ dl.expertise-table {
   }
 }
 
-html,
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-html,
-body,
-#__next,
-.wrapper {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  color: $color;
-}
-
-.wrapper {
-  display: flex;
-  flex: 1;
-  background: $background;
-  position: relative;
-  & > * {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-}
-
 .text-center {
   text-align: center;
 }
@@ -312,30 +293,7 @@ body,
   align-items: center;
 }
 
-.main {
-  position: relative;
-  display: flex;
-  flex: 1;
-  height: 100%;
-}
-
-.main-inner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  // padding-top: 72px;
-}
-
-.topbar {
-  width: auto;
-  margin: 0 20px; // make room for scrollbar to appear HACK
+.nav-container {
   background: linear-gradient(
     0deg,
     transparent,
@@ -344,10 +302,15 @@ body,
   );
   height: 100px;
   pointer-events: none;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 .content {
-  margin-bottom: 3rem;
   &,
   p {
     font-size: 18px;
@@ -370,18 +333,6 @@ body,
   }
   & > :last-child {
     margin-bottom: 0;
-  }
-}
-
-.page {
-  flex: 1;
-  flex-direction: column;
-  flex-basis: $container;
-  max-width: $container;
-  padding: 72px 20px 0 20px;
-  clear: both;
-  & > :last-child {
-    margin-bottom: 72px;
   }
 }
 
@@ -445,7 +396,7 @@ body,
   margin: 0 -1rem 0 -1rem;
 }
 
-.goBack {
+.go-back-link {
   outline: none;
   user-select: none;
   text-decoration: none;
@@ -490,10 +441,6 @@ body,
   .box-link {
     flex-basis: 100%;
     height: 150px;
-  }
-
-  .topbar {
-    margin: 0;
   }
 
   .flex-table span:first-child {

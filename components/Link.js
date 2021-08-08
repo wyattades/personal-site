@@ -1,16 +1,16 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import BLink from 'next/link';
+import NextLink from 'next/link';
 import { createGlobalState } from 'react-use/lib/factory/createGlobalState';
 
 export const useHoveredLink = createGlobalState();
 
 const Link = ({ href, children, ...rest }) => {
   return (
-    <BLink href={href} passHref>
+    <NextLink href={href} passHref>
       <a {...rest}>{children}</a>
-    </BLink>
+    </NextLink>
   );
 };
 
@@ -47,7 +47,7 @@ export const NavLink = ({ href, exact, className, ...rest }) => {
 
 export const GoBackLink = ({ href }) => {
   return (
-    <Link className="goBack" href={href}>
+    <Link className="go-back-link" href={href}>
       <span>←</span>
       <span className="sr-only">Go back</span>
     </Link>

@@ -6,8 +6,10 @@ import 'styles/global.scss';
 
 const HOST_URL = process.env.HOST_URL;
 
+const DefaultLayout = ({ children }) => children;
+
 const App = ({ Component, pageProps }) => {
-  const Layout = Component.getLayout || (({ children }) => children);
+  const Layout = Component.getLayout || DefaultLayout;
 
   return (
     <>
@@ -62,7 +64,7 @@ const App = ({ Component, pageProps }) => {
         }}
       />
 
-      <Layout>
+      <Layout pageProps={pageProps}>
         <Component {...pageProps} />
       </Layout>
     </>

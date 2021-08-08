@@ -14,9 +14,10 @@ import {
   Group,
   DirectionalLight,
 } from 'three';
-import { useAsync } from 'react-use';
 
 import listenToOrientation from 'lib/orientation';
+
+import fontJson from 'fonts/helv.json';
 
 const defaultOptions = {
   fontSize: 45,
@@ -277,13 +278,9 @@ const renderText = (parent, options, font) => {
 const BlockText = ({ options, text }) => {
   const containerRef = useRef();
 
-  const { value: fontJson } = useAsync(() => import('fonts/helv.json'), []);
-
   const blockText = useRef(null);
 
   useEffect(() => {
-    if (!fontJson) return;
-
     blockText.current = renderText(
       containerRef.current,
       { ...defaultOptions, ...(options || {}) },
@@ -293,13 +290,13 @@ const BlockText = ({ options, text }) => {
     return () => {
       blockText.current.dispose();
     };
-  }, [fontJson]);
+  }, []);
 
   useEffect(() => {
-    if (!fontJson || !blockText.current) return;
+    if (!blockText.current) return;
 
     blockText.current.setText(text);
-  }, [text, fontJson]);
+  }, [text]);
 
   return (
     // Use min width and height to prevent webGL crash when size is 0

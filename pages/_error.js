@@ -1,4 +1,4 @@
-import BlockText from 'components/BlockText';
+import BlockText from 'components/LazyBlockText';
 import Layout from 'components/Layout';
 
 const ErrorPage = ({ error }) => (
