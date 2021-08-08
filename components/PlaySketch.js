@@ -1,13 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useAsync } from 'react-use';
-import { FaCode } from '@react-icons';
-
-import { GoBackLink } from 'components/Link';
-import AnimatedItems from 'components/AnimatedItems';
 
 const HEIGHT = 600;
-const SRC_DIR =
-  'https://github.com/wyattades/personal-site/blob/master/lib/sketches';
+
+const wait = (millis) => new Promise((resolve) => setTimeout(resolve, millis));
 
 const PlaySketch = ({ game }) => {
   const {
@@ -18,8 +14,9 @@ const PlaySketch = ({ game }) => {
     const [p5, sketch] = await Promise.all([
       import('p5'),
       import(`lib/sketches/${game.id}`),
+      wait(1500), // wait for animation to finish
     ]);
-    return { p5, sketch };
+    return { p5: p5.default, sketch: sketch.default };
   }, [game.id]);
 
   const containerRef = useRef();
@@ -31,9 +28,10 @@ const PlaySketch = ({ game }) => {
     const w = containerRef.current.clientWidth;
     // const h = containerRef.current.clientHeight;
 
-    const P5 = modules.p5.default;
+    const { sketch, p5: P5 } = modules;
+
     const sketchInstance = new P5(
-      (p5) => modules.sketch.default(p5, w, HEIGHT, P5),
+      (p5) => sketch(p5, w, HEIGHT, P5),
       sketchRef.current,
     );
 
@@ -57,27 +55,17 @@ const PlaySketch = ({ game }) => {
       />
     );
 
-  return (
-    <AnimatedItems className="content">
-      <GoBackLink href="/projects" />
+  return [
+    <div key="game_container" ref={containerRef} className="text-center">
+      {content}
+    </div>,
 
-      <div>
-        <h1>{game.title}</h1>
-      </div>
-      <p>
-        <a href={`${SRC_DIR}/${game.id}.js`}>
-          <FaCode className="icon-head" aria-hidden />
-          Source
-        </a>
+    game.help && (
+      <p key="game_help" className="help">
+        {game.help}
       </p>
-      <div>
-        <div ref={containerRef} className="text-center">
-          {content}
-        </div>
-        {game.help && <p className="help">{game.help}</p>}
-      </div>
-    </AnimatedItems>
-  );
+    ),
+  ];
 };
 
 export default PlaySketch;

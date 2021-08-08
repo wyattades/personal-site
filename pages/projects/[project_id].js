@@ -59,8 +59,6 @@ const Markdown = ({ content }) => {
 };
 
 const ShowProjectPage = ({ project }) => {
-  if (project.p5Sketch) return <PlaySketch game={project} />;
-
   const {
     title,
     desc,
@@ -124,7 +122,10 @@ const ShowProjectPage = ({ project }) => {
           </p>
         )}
         {!hideImage && image && (
-          <div className="shadowed" style={{ marginBottom: '2rem' }}>
+          <div
+            className="shadowed image-wrapper"
+            style={{ marginBottom: '2rem' }}
+          >
             <Image
               width={800}
               height={imageW && imageH ? (800 * imageH) / imageW : 600}
@@ -134,14 +135,17 @@ const ShowProjectPage = ({ project }) => {
             />
           </div>
         )}
-        {desc && typeof desc === 'string' ? (
+
+        {project.p5Sketch ? (
+          PlaySketch({ game: project }) // insert array elements instead of rendering an element
+        ) : desc && typeof desc === 'string' ? (
           <Markdown content={desc} />
         ) : Array.isArray(desc) ? (
           desc
         ) : null}
 
         <style jsx>{`
-          .shadowed > :global(*) {
+          .image-wrapper > :global(*) {
             display: block !important;
           }
         `}</style>

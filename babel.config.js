@@ -1,27 +1,3 @@
-const iconsPrefix = {
-  ai: 'Ai',
-  bi: 'Bi',
-  bs: 'Bs',
-  cg: 'Cg',
-  di: 'Di',
-  fa: 'Fa',
-  fc: 'Fc',
-  fi: 'Fi',
-  gi: 'Gi',
-  go: 'Go',
-  gr: 'Gr',
-  hi: 'Hi',
-  im: 'Im',
-  io: 'IoIos',
-  io5: 'Io',
-  md: 'Md',
-  ri: 'Ri',
-  si: 'Si',
-  ti: 'Ti',
-  vsc: 'Vsc',
-  wi: 'Wi',
-};
-
 // const threeModules = [
 //   ...require('fs')
 //     .readFileSync('node_modules/three/src/Three.js', 'utf8')
@@ -59,14 +35,23 @@ module.exports = {
         camel2DashComponentName: false,
         transformToDefaultImport: false,
         customName: (name) => {
-          const prefix = '@react-icons/all-files';
+          const rootDir = '@react-icons/all-files';
 
-          for (const dir in iconsPrefix) {
-            if (name.startsWith(iconsPrefix[dir])) {
-              return prefix + `/${dir}/` + name + '.js';
+          for (const [prefix, dir] of [
+            ['Io', 'io5'],
+            ['IoIos', 'io'],
+          ]) {
+            if (name.startsWith(prefix)) {
+              return `${rootDir}/${dir}/${name}.js`;
             }
           }
-          return prefix;
+
+          const match = name.match(/^[A-Z][a-z0-9]*/);
+          if (match) {
+            return `${rootDir}/${match[0].toLowerCase()}/${name}.js`;
+          }
+
+          return rootDir;
         },
       },
       'import-react-icons',
