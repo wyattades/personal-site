@@ -1,11 +1,102 @@
-import React, { useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Transition from 'react-transition-group/Transition';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
-import { useInterval } from 'react-use';
+import { useInterval, useUpdate } from 'react-use';
+import { useRouter } from 'next/router';
 
 import { useReducedMotion } from 'lib/hooks';
 
 export { TransitionGroup };
+
+const OutTransition = createContext(null);
+export const useOutTransition = () => useContext(OutTransition);
+
+export const PageTransition = ({ children }) => {
+  const { asPath: page } = useRouter();
+
+  const counter = useRef(1);
+  const stack = useRef([
+    {
+      key: 0,
+      page,
+      children,
+    },
+  ]);
+  const first = stack.current[0];
+
+  const removeKey = (key) => {
+    const i = stack.current.findIndex((s) => s.key === key);
+    if (i !== -1) {
+      stack.current.splice(i, 1);
+      update();
+    }
+  };
+
+  if (first.page !== page) {
+    stack.current.unshift({
+      key: counter.current++,
+      page,
+      children,
+    });
+    const next = stack.current[1];
+    next.timeout = setTimeout(() => {
+      next.timeout = null;
+      removeKey(next.key);
+    }, 1000);
+  }
+
+  useEffect(
+    () => () => {
+      for (const s of stack.current) if (s.timeout) clearTimeout(s.timeout);
+      stack.current = stack.current.slice(0, 1);
+    },
+    [],
+  );
+
+  const update = useUpdate();
+
+  return (
+    <div className="page-transition">
+      {stack.current.map((s, i) => (
+        <OutTransition.Provider
+          key={s.key}
+          value={
+            i === 0
+              ? null
+              : {
+                  onComplete: () => removeKey(s.key),
+                }
+          }
+        >
+          <div className={i === 0 ? undefined : 'page-transition-out'}>
+            {s.children}
+          </div>
+        </OutTransition.Provider>
+      ))}
+
+      <style jsx>{`
+        .page-transition {
+          position: relative;
+        }
+        .page-transition-out {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          min-height: 70vh; // so page isn't cutoff while transitioning
+          max-height: 100vh;
+          overflow: hidden;
+        }
+      `}</style>
+    </div>
+  );
+};
 
 export const Fade = ({
   children,
@@ -17,6 +108,8 @@ export const Fade = ({
   disabled = false,
   ...rest
 }) => {
+  if (!children) return null;
+
   const transition = `opacity ${timeout}ms ease, transform ${timeout}ms ease`;
 
   const canInjectStyle = typeof children.type === 'string';
@@ -54,27 +147,37 @@ export const Fade = ({
   );
 };
 
-const AnimatedItems = ({ children, dist = 12 }) => {
+const AnimatedItems = ({ children, dist = 12, className }) => {
+  const outTransition = useOutTransition();
+
   const validChildren = React.Children.toArray(children).filter(
     (c) => c != null && c !== false,
   );
 
   const [animatedI, setAnimatedI] = useState(-1);
   useInterval(() => {
-    if (animatedI < validChildren.length - 1) setAnimatedI((i) => i + 1);
+    if (outTransition && animatedI >= -1) {
+      setAnimatedI((i) => i - 1);
+      if (animatedI === -1) outTransition.onComplete?.();
+    } else if (!outTransition && animatedI < validChildren.length - 1)
+      setAnimatedI((i) => i + 1);
   }, 100);
 
   const reducedMotion = useReducedMotion();
 
   return (
-    <TransitionGroup component={null}>
+    <div className={className}>
       {validChildren.map((item, i) => {
         const left = item.props['data-animate-dir'] === 'left'; // only supporting 'left' for now
 
         return (
           <Fade
             key={i}
-            show={animatedI >= i}
+            show={
+              outTransition
+                ? animatedI > validChildren.length - i
+                : animatedI >= i
+            }
             toX={left ? -dist : 0}
             toY={left ? 0 : dist}
             disabled={reducedMotion}
@@ -83,7 +186,7 @@ const AnimatedItems = ({ children, dist = 12 }) => {
           </Fade>
         );
       })}
-    </TransitionGroup>
+    </div>
   );
 };
 

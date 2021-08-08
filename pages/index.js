@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDebounce as useDebounceFn } from 'react-use';
 
 import Layout from 'components/Layout';
 import BlockText from 'components/LazyBlockText';
 import { useHoveredLink } from 'components/Link';
-import { Fade, TransitionGroup } from 'components/AnimatedItems';
+import { useOutTransition } from 'components/AnimatedItems';
 
 const useDebounced = (val, wait) => {
   const [v, setV] = useState(val);
@@ -13,23 +13,25 @@ const useDebounced = (val, wait) => {
 };
 
 const IndexPage = () => {
+  const outTransition = useOutTransition();
+  useEffect(() => {
+    outTransition?.onComplete?.();
+  }, [outTransition]);
+
   const [hoveredLink] = useHoveredLink();
 
   const text = useDebounced(hoveredLink || 'WYATT', 600);
 
   return (
-    <>
+    <div className="layers">
       <BlockText text={text} />
-      <TransitionGroup component={null}>
-        <Fade timeout={500}>
-          <div>
-            <h1>Personal Site</h1>
-          </div>
-        </Fade>
-      </TransitionGroup>
+
+      <div className="title-wrapper">
+        <h1>Personal Site</h1>
+      </div>
 
       <style jsx>{`
-        div {
+        .title-wrapper {
           display: flex;
           justify-content: center;
           align-items: center;
@@ -40,12 +42,12 @@ const IndexPage = () => {
           text-align: center;
         }
       `}</style>
-    </>
+    </div>
   );
 };
 
 IndexPage.getLayout = ({ children }) => (
-  <Layout wrapperClassName="index-page" pageClassName="layers" noLayout>
+  <Layout wrapperClassName="index-page" noLayout noTransition>
     {children}
   </Layout>
 );

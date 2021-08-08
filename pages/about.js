@@ -24,8 +24,7 @@ const AboutPage = () => {
 };
 
 AboutPage.getLayout = ({ children }) => (
-  <Layout>
-    <NextSeo title="About" />
+  <Layout pageKey="about" seo={<NextSeo title="About" />}>
     {children}
   </Layout>
 );

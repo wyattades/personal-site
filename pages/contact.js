@@ -7,7 +7,7 @@ import AnimatedItems from 'components/AnimatedItems';
 
 const ContactPage = () => {
   return (
-    <AnimatedItems>
+    <AnimatedItems className="content">
       <h1>Contact</h1>
       <p>
         <a href="mailto:me@wyattades.com">
@@ -41,8 +41,7 @@ const ContactPage = () => {
 };
 
 ContactPage.getLayout = ({ children }) => (
-  <Layout pageClassName="content">
-    <NextSeo title="Contact" />
+  <Layout pageKey="contact" seo={<NextSeo title="Contact" />}>
     {children}
   </Layout>
 );

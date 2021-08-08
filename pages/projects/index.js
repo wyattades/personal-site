@@ -11,7 +11,7 @@ const projectItems = projects.filter((p) => !p.noListing);
 
 const ProjectsPage = () => {
   return (
-    <AnimatedItems>
+    <AnimatedItems className="box-list">
       <div
         className="content"
         style={{ flexBasis: '100%', margin: '0 1rem 3rem' }}
@@ -23,7 +23,6 @@ const ProjectsPage = () => {
           <a href="https://github.com/wyattades">github</a>.
         </p>
       </div>
-
       {projectItems.map((p) => {
         return (
           <div key={p.id} className="box-link">
@@ -39,8 +38,7 @@ const ProjectsPage = () => {
 };
 
 ProjectsPage.getLayout = ({ children }) => (
-  <Layout pageClassName="box-list">
-    <NextSeo title="Projects" />
+  <Layout pageKey="projects" seo={<NextSeo title="Projects" />} animateItems>
     {children}
   </Layout>
 );

@@ -1,30 +1,23 @@
 import React from 'react';
 import clsx from 'clsx';
-// import { useRouter } from 'next/router';
 
 import Nav from 'components/Nav';
-// import { Fade, TransitionGroup } from 'components/AnimatedItems';
+import { PageTransition } from 'components/AnimatedItems';
 
 const Layout = ({
   children,
   wrapperClassName,
-  pageClassName,
   noLayout = false,
+  seo = null,
+  // pageKey = null,
 }) => {
-  // const router = useRouter();
-
   return (
     <div className={clsx('wrapper', wrapperClassName)}>
-      <main>
-        {/* <TransitionGroup component={null}>
-          <Fade key={router.asPath} timeout={500} unmount> */}
-        <div className={clsx(!noLayout && 'page')}>
-          <div className={pageClassName}>{children}</div>
-        </div>
-        {/* </Fade>
-        </TransitionGroup> */}
-      </main>
+      <PageTransition>
+        <main className={clsx(!noLayout && 'page')}>{children}</main>
+      </PageTransition>
       <Nav />
+      {seo}
     </div>
   );
 };

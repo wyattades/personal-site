@@ -9,10 +9,15 @@ const HOST_URL = process.env.HOST_URL;
 const DefaultLayout = ({ children }) => children;
 
 const App = ({ Component, pageProps }) => {
-  const Layout = Component.getLayout || DefaultLayout;
+  const renderLayout = Component.getLayout || DefaultLayout;
 
   return (
     <>
+      {
+        // render with function to prevent unmount/remount of `Layout`
+        renderLayout({ pageProps, children: <Component {...pageProps} /> })
+      }
+
       <Head>
         <link
           rel="apple-touch-icon"
@@ -63,10 +68,6 @@ const App = ({ Component, pageProps }) => {
           cardType: 'summary_large_image',
         }}
       />
-
-      <Layout pageProps={pageProps}>
-        <Component {...pageProps} />
-      </Layout>
     </>
   );
 };

@@ -73,7 +73,7 @@ const ShowProjectPage = ({ project }) => {
   const isNPM = !!url?.includes('npmjs.com');
 
   return (
-    <AnimatedItems dist={24}>
+    <AnimatedItems className="content" dist={24}>
       <GoBackLink href="/projects" data-animate-dir="left" />
       <h1>{title}</h1>
       {download && (
@@ -138,25 +138,29 @@ ShowProjectPage.getLayout = ({
     project: { title, image, imageW, imageH },
   },
 }) => (
-  <Layout pageClassName="content">
-    <NextSeo
-      title={`${title} - Wyatt Ades Project`}
-      openGraph={
-        image
-          ? {
-              images: [
-                {
-                  url: image,
-                  alt: title,
-                  ...(imageW && imageH
-                    ? { width: imageW, height: imageH }
-                    : {}),
-                },
-              ],
-            }
-          : {}
-      }
-    />
+  <Layout
+    pageKey="project"
+    seo={
+      <NextSeo
+        title={`${title} - Wyatt Ades Project`}
+        openGraph={
+          image
+            ? {
+                images: [
+                  {
+                    url: image,
+                    alt: title,
+                    ...(imageW && imageH
+                      ? { width: imageW, height: imageH }
+                      : {}),
+                  },
+                ],
+              }
+            : {}
+        }
+      />
+    }
+  >
     {children}
   </Layout>
 );
