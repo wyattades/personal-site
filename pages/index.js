@@ -20,7 +20,10 @@ const IndexPage = () => {
 
   const [hoveredLink] = useHoveredLink();
 
-  const text = useDebounced(hoveredLink || 'WYATT', 600);
+  const text = useDebounced(
+    hoveredLink && hoveredLink !== 'Home' ? hoveredLink : 'WYATT',
+    500,
+  );
 
   return (
     <div className="layers">
