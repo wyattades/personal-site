@@ -11,36 +11,36 @@ const projectItems = projects.filter((p) => !p.noListing);
 
 const ProjectsPage = () => {
   return (
-    <AnimatedItems className="box-list">
-      <div
-        className="content"
-        style={{ flexBasis: '100%', margin: '0 1rem 3rem' }}
-      >
-        <h1>Projects</h1>
-        <p>
-          Here are some of my noteworthy projects that were mostly created in my
-          spare time. You can also view all of them and more on my{' '}
-          <a href="https://github.com/wyattades">github</a>.
-        </p>
-      </div>
-      {projectItems.map((p) => {
-        return (
-          <div key={p.id} className="box-link">
-            {p.image ? (
-              <Image src={p.image} layout="fill" objectFit="cover" alt="" />
-            ) : null}
-            <Link href={`/projects/${p.id}`}>{p.title}</Link>
-          </div>
-        );
-      })}
-    </AnimatedItems>
+    <div className="box-list">
+      <AnimatedItems>
+        <div
+          className="content"
+          style={{ flexBasis: '100%', margin: '0 1rem 3rem' }}
+        >
+          <h1>Projects</h1>
+          <p>
+            Here are some of my noteworthy projects that were mostly created in
+            my spare time. You can also view all of them and more on my{' '}
+            <a href="https://github.com/wyattades">github</a>.
+          </p>
+        </div>
+        {projectItems.map((p) => {
+          return (
+            <div key={p.id} className="box-link">
+              {p.image ? (
+                <Image src={p.image} layout="fill" objectFit="cover" alt="" />
+              ) : null}
+              <Link href={`/projects/${p.id}`}>{p.title}</Link>
+            </div>
+          );
+        })}
+      </AnimatedItems>
+    </div>
   );
 };
 
 ProjectsPage.getLayout = ({ children }) => (
-  <Layout pageKey="projects" seo={<NextSeo title="Projects" />} animateItems>
-    {children}
-  </Layout>
+  <Layout seo={<NextSeo title="Projects" />}>{children}</Layout>
 );
 
 export default ProjectsPage;

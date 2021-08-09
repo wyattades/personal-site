@@ -169,7 +169,6 @@ const renderText = (parent, options, font) => {
 
   return {
     setText(newText) {
-      if (!newText) return;
       if (currentText === newText) return;
 
       currentText = newText;

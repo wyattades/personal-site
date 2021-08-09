@@ -54,7 +54,6 @@ export const PageTransition = ({ children }) => {
   useEffect(
     () => () => {
       for (const s of stack.current) if (s.timeout) clearTimeout(s.timeout);
-      stack.current = stack.current.slice(0, 1);
     },
     [],
   );
@@ -110,8 +109,6 @@ export const Fade = ({
 }) => {
   if (!children) return null;
 
-  const transition = `opacity ${timeout}ms ease, transform ${timeout}ms ease`;
-
   const canInjectStyle = typeof children.type === 'string';
 
   return (
@@ -129,7 +126,7 @@ export const Fade = ({
           state === 'entered' || disabled
             ? undefined
             : {
-                transition,
+                transition: `opacity ${timeout}ms ease, transform ${timeout}ms ease`,
                 opacity: hide ? 0 : 1,
                 transform: hide ? `translate(${toX}px, ${toY}px)` : 'none',
               };
@@ -137,7 +134,9 @@ export const Fade = ({
         if (canInjectStyle)
           return style
             ? React.cloneElement(children, {
-                style: { ...children.props.style, ...style },
+                style: children.props.style
+                  ? { ...children.props.style, ...style }
+                  : style,
               })
             : children;
 
@@ -147,7 +146,7 @@ export const Fade = ({
   );
 };
 
-const AnimatedItems = ({ children, dist = 12, className }) => {
+const AnimatedItems = ({ children, dist = 12 }) => {
   const outTransition = useOutTransition();
 
   const validChildren = React.Children.toArray(children).filter(
@@ -156,17 +155,16 @@ const AnimatedItems = ({ children, dist = 12, className }) => {
 
   const [animatedI, setAnimatedI] = useState(-1);
   useInterval(() => {
-    if (outTransition && animatedI >= -1) {
-      setAnimatedI((i) => i - 1);
-      if (animatedI === -1) outTransition.onComplete?.();
+    if (outTransition && animatedI >= 0) {
+      setAnimatedI(animatedI - 1);
     } else if (!outTransition && animatedI < validChildren.length - 1)
-      setAnimatedI((i) => i + 1);
+      setAnimatedI(animatedI + 1);
   }, 100);
 
   const reducedMotion = useReducedMotion();
 
   return (
-    <div className={className}>
+    <>
       {validChildren.map((item, i) => {
         const left = item.props['data-animate-dir'] === 'left'; // only supporting 'left' for now
 
@@ -186,7 +184,7 @@ const AnimatedItems = ({ children, dist = 12, className }) => {
           </Fade>
         );
       })}
-    </div>
+    </>
   );
 };
 

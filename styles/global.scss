@@ -46,9 +46,10 @@ body {
   opacity: 0;
 
   $d: 15px;
+  $offset: 15px;
   background-image: radial-gradient(#cecece 1px, transparent 0);
   background-size: ($d * 2) ($d * 2);
-  background-position: (1 - $d) (1 - $d);
+  background-position: ($offset - $d) ($offset - $d);
 
   animation: fadeInOpacity 2s ease;
   animation-fill-mode: forwards;

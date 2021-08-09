@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDebounce as useDebounceFn } from 'react-use';
 
 import Layout from 'components/Layout';
 import BlockText from 'components/LazyBlockText';
 import { useHoveredLink } from 'components/Link';
-import { useOutTransition } from 'components/AnimatedItems';
+import AnimatedItems, { useOutTransition } from 'components/AnimatedItems';
 
 const useDebounced = (val, wait) => {
   const [v, setV] = useState(val);
@@ -14,24 +14,24 @@ const useDebounced = (val, wait) => {
 
 const IndexPage = () => {
   const outTransition = useOutTransition();
-  useEffect(() => {
-    outTransition?.onComplete?.();
-  }, [outTransition]);
 
   const [hoveredLink] = useHoveredLink();
 
-  const text = useDebounced(
+  let text = useDebounced(
     hoveredLink && hoveredLink !== 'Home' ? hoveredLink : 'WYATT',
     500,
   );
+  if (outTransition) text = '';
 
   return (
     <div className="layers">
       <BlockText text={text} />
 
-      <div className="title-wrapper">
-        <h1>Personal Site</h1>
-      </div>
+      <AnimatedItems>
+        <div className="title-wrapper">
+          <h1>Personal Site</h1>
+        </div>
+      </AnimatedItems>
 
       <style jsx>{`
         .title-wrapper {

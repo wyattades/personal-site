@@ -7,14 +7,16 @@ import { PageTransition } from 'components/AnimatedItems';
 const Layout = ({
   children,
   wrapperClassName,
+  pageClassName,
   noLayout = false,
   seo = null,
-  // pageKey = null,
 }) => {
   return (
     <div className={clsx('wrapper', wrapperClassName)}>
       <PageTransition>
-        <main className={clsx(!noLayout && 'page')}>{children}</main>
+        <main className={clsx(!noLayout && 'page', pageClassName)}>
+          {children}
+        </main>
       </PageTransition>
       <Nav />
       {seo}

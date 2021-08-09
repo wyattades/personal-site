@@ -73,74 +73,7 @@ const ShowProjectPage = ({ project }) => {
   const isNPM = !!url?.includes('npmjs.com');
 
   return (
-    <AnimatedItems className="content" dist={24}>
-      <GoBackLink href="/projects" data-animate-dir="left" />
-      <h1>{title}</h1>
-      {download && (
-        <p>
-          <a href={download}>
-            <FaCloudDownloadAlt className="icon-head" aria-hidden />
-            Download Link
-          </a>
-        </p>
-      )}
-      {url && (
-        <p>
-          <a href={url}>
-            <FaLink className="icon-head" aria-hidden />
-            {isNPM ? 'NPM Package' : 'Live Website'}
-          </a>
-        </p>
-      )}
-      {source && (
-        <p>
-          <a href={source}>
-            <FaCode className="icon-head" aria-hidden />
-            Source
-          </a>
-        </p>
-      )}
-      {!hideImage && image && (
-        <div
-          className="shadowed image-wrapper"
-          style={{ marginBottom: '2rem' }}
-        >
-          <Image
-            width={800}
-            height={imageW && imageH ? (800 * imageH) / imageW : 600}
-            objectFit="cover"
-            src={image}
-            alt={`Image of ${title}`}
-          />
-        </div>
-      )}
-
-      {project.p5Sketch ? (
-        PlaySketch({ game: project }) // insert array elements instead of rendering an element
-      ) : desc && typeof desc === 'string' ? (
-        <Markdown content={desc} />
-      ) : Array.isArray(desc) ? (
-        desc
-      ) : null}
-
-      <style jsx>{`
-        .image-wrapper > :global(*) {
-          display: block !important;
-        }
-      `}</style>
-    </AnimatedItems>
-  );
-};
-
-ShowProjectPage.getLayout = ({
-  children,
-  pageProps: {
-    project: { title, image, imageW, imageH },
-  },
-}) => (
-  <Layout
-    pageKey="project"
-    seo={
+    <>
       <NextSeo
         title={`${title} - Wyatt Ades Project`}
         openGraph={
@@ -159,10 +92,69 @@ ShowProjectPage.getLayout = ({
             : {}
         }
       />
-    }
-  >
-    {children}
-  </Layout>
-);
+
+      <AnimatedItems dist={24}>
+        <GoBackLink href="/projects" data-animate-dir="left" />
+        <h1>{title}</h1>
+        {download && (
+          <p>
+            <a href={download}>
+              <FaCloudDownloadAlt className="icon-head" aria-hidden />
+              Download Link
+            </a>
+          </p>
+        )}
+        {url && (
+          <p>
+            <a href={url}>
+              <FaLink className="icon-head" aria-hidden />
+              {isNPM ? 'NPM Package' : 'Live Website'}
+            </a>
+          </p>
+        )}
+        {source && (
+          <p>
+            <a href={source}>
+              <FaCode className="icon-head" aria-hidden />
+              Source
+            </a>
+          </p>
+        )}
+        {!hideImage && image && (
+          <div
+            className="shadowed image-wrapper"
+            style={{ marginBottom: '2rem' }}
+          >
+            <Image
+              width={800}
+              height={imageW && imageH ? (800 * imageH) / imageW : 600}
+              objectFit="cover"
+              src={image}
+              alt={`Image of ${title}`}
+            />
+          </div>
+        )}
+
+        {project.p5Sketch ? (
+          PlaySketch({ game: project }) // insert array elements instead of rendering an element
+        ) : desc && typeof desc === 'string' ? (
+          <Markdown content={desc} />
+        ) : Array.isArray(desc) ? (
+          desc
+        ) : null}
+
+        <style jsx>{`
+          .image-wrapper > :global(*) {
+            display: block !important;
+          }
+        `}</style>
+      </AnimatedItems>
+    </>
+  );
+};
+
+ShowProjectPage.getLayout = ({ children }) => {
+  return <Layout pageClassName="content">{children}</Layout>;
+};
 
 export default ShowProjectPage;

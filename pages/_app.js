@@ -13,11 +13,6 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <>
-      {
-        // render with function to prevent unmount/remount of `Layout`
-        renderLayout({ pageProps, children: <Component {...pageProps} /> })
-      }
-
       <Head>
         <link
           rel="apple-touch-icon"
@@ -68,6 +63,11 @@ const App = ({ Component, pageProps }) => {
           cardType: 'summary_large_image',
         }}
       />
+
+      {
+        // render with function to prevent unmount/remount of `Layout`
+        renderLayout({ children: <Component {...pageProps} /> })
+      }
     </>
   );
 };
