@@ -36,18 +36,27 @@ const callOpenHtmlToPdf = async (type, html, outFile) => {
 
 const HOST = 'http://localhost:3000';
 
-const getPlainHtml = async (outFile) => {
+const fetchPageHtml = async (url) => {
   // NOTE: make sure xlaunch is running if using WSL2
   const browser = await puppeteer.launch();
 
   const page = await browser.newPage();
 
   // NOTE: make sure the dev server is running
-  await page.goto(HOST + '/resume');
+  const res = await page.goto(url);
+
+  if (res.status() !== 200)
+    throw new Error(`Bad "goto" response: ${res.url()} - ${res.status()}`);
 
   const pageHtml = await page.content();
 
   await browser.close();
+
+  return pageHtml;
+};
+
+const getPlainHtml = async (outFile) => {
+  const pageHtml = await fetchPageHtml(HOST + '/resume');
 
   const $ = cheerio.load(pageHtml);
 
@@ -92,6 +101,8 @@ const getPlainHtml = async (outFile) => {
 };
 
 (async () => {
+  if (!fs.existsSync('tmp')) fs.mkdirSync('tmp');
+
   const outHtml = await getPlainHtml('tmp/resume.html');
 
   await callOpenHtmlToPdf('logs', outHtml, 'tmp/build-resume-logs.txt');
