@@ -4,6 +4,10 @@ const HOST_URL = process.env.VERCEL_URL
 
 const staticFiles = ['sitemap.xml', 'robots.txt'];
 
+const mode = process.env.NODE_ENV;
+if (!['production', 'development'].includes(mode))
+  throw new Error(`Invalid NODE_ENV: ${mode}`);
+
 /** @type {import('next/dist/server/config').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -31,5 +35,5 @@ const nextConfig = {
 };
 
 module.exports = require('@next/bundle-analyzer')({
-  enabled: process.env.NODE_ENV === 'production' && !process.env.VERCEL_URL,
+  enabled: mode === 'production' && !process.env.VERCEL_URL,
 })(nextConfig);
