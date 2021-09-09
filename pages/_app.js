@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import Script from 'next/script';
 import { DefaultSeo } from 'next-seo';
 
 import 'styles/global.scss';
@@ -40,7 +39,9 @@ const App = ({ Component, pageProps }) => {
           referrerPolicy="no-referrer"
         />
         {process.env.NODE_ENV === 'production' ? (
-          <Script
+          <script
+            async
+            defer
             data-website-id="583e2bc6-8606-4c14-a2be-70612377adff"
             src="https://sip-umami.vercel.app/umami.js"
           />

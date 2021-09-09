@@ -1,10 +1,5 @@
 {
   "github": {
     "autoJobCancelation": true
-  },
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
   }
 }
