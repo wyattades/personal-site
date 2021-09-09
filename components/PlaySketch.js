@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useAsync } from 'react-use';
 
+import { withErrorBoundary } from 'components/ErrorBoundary';
+
 const HEIGHT = 600;
 
 const wait = (millis) => new Promise((resolve) => setTimeout(resolve, millis));
@@ -55,17 +57,11 @@ const PlaySketch = ({ game }) => {
       />
     );
 
-  return [
-    <div key="game_container" ref={containerRef} className="text-center">
+  return (
+    <div ref={containerRef} className="text-center">
       {content}
-    </div>,
-
-    game.help && (
-      <p key="game_help" className="help">
-        {game.help}
-      </p>
-    ),
-  ];
+    </div>
+  );
 };
 
-export default PlaySketch;
+export default withErrorBoundary(PlaySketch);

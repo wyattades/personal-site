@@ -6,26 +6,25 @@ import React, {
   useState,
 } from 'react';
 import Transition from 'react-transition-group/Transition';
-import TransitionGroup from 'react-transition-group/TransitionGroup';
 import { useInterval, useUpdate } from 'react-use';
 import { useRouter } from 'next/router';
 
 import { useReducedMotion } from 'lib/hooks';
 
-export { TransitionGroup };
-
 const OutTransition = createContext(null);
 export const useOutTransition = () => useContext(OutTransition);
 
-export const PageTransition = ({ children }) => {
-  const { asPath: page } = useRouter();
+export const useAnimatedSwitch = (value, children, removeDelay = 1000) => {
+  const update = useUpdate();
 
   const counter = useRef(1);
   const stack = useRef([
     {
       key: 0,
-      page,
+      value,
       children,
+      isInitial: true,
+      remove: () => removeKey(0),
     },
   ]);
   const first = stack.current[0];
@@ -38,17 +37,19 @@ export const PageTransition = ({ children }) => {
     }
   };
 
-  if (first.page !== page) {
+  if (first.value !== value) {
+    const key = counter.current++;
     stack.current.unshift({
-      key: counter.current++,
-      page,
+      key,
+      value,
       children,
+      remove: () => removeKey(key),
     });
     const next = stack.current[1];
     next.timeout = setTimeout(() => {
       next.timeout = null;
-      removeKey(next.key);
-    }, 1000);
+      next.remove();
+    }, removeDelay);
   }
 
   useEffect(
@@ -58,18 +59,24 @@ export const PageTransition = ({ children }) => {
     [],
   );
 
-  const update = useUpdate();
+  return stack.current;
+};
+
+export const PageTransition = ({ children }) => {
+  const { asPath: page } = useRouter();
+
+  const stack = useAnimatedSwitch(page, children);
 
   return (
     <div className="page-transition">
-      {stack.current.map((s, i) => (
+      {stack.map((s, i) => (
         <OutTransition.Provider
           key={s.key}
           value={
             i === 0
               ? null
               : {
-                  onComplete: () => removeKey(s.key),
+                  onComplete: s.remove,
                 }
           }
         >
@@ -146,6 +153,13 @@ export const Fade = ({
   );
 };
 
+const ANIMATE_DIRS = {
+  left: [-1, 0],
+  right: [1, 0],
+  up: [0, -1],
+  down: [0, 1],
+};
+
 const AnimatedItems = ({ children, dist = 12 }) => {
   const outTransition = useOutTransition();
 
@@ -166,7 +180,9 @@ const AnimatedItems = ({ children, dist = 12 }) => {
   return (
     <>
       {validChildren.map((item, i) => {
-        const left = item.props['data-animate-dir'] === 'left'; // only supporting 'left' for now
+        const dir = item.props['data-animate-dir'];
+
+        const [ax, ay] = (dir && ANIMATE_DIRS[dir]) || ANIMATE_DIRS.down;
 
         return (
           <Fade
@@ -176,8 +192,8 @@ const AnimatedItems = ({ children, dist = 12 }) => {
                 ? animatedI > validChildren.length - i
                 : animatedI >= i
             }
-            toX={left ? -dist : 0}
-            toY={left ? 0 : dist}
+            toX={ax * dist}
+            toY={ay * dist}
             disabled={reducedMotion}
           >
             {item}

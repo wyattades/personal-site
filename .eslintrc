@@ -6,8 +6,11 @@
     "browser": true
   },
   "rules": {
-    "no-unused-vars": 1,
     "react/display-name": 0,
-    "no-empty": 0
+    "no-empty": 0,
+    "no-unused-vars": [
+      1,
+      { "args": "all", "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ]
   }
 }

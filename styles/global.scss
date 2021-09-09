@@ -5,8 +5,8 @@ $easing: ease;
 $bg-color: #ffffff;
 $text-color: #000000;
 $text-color2: #818181;
-$link-color: #0004ff;
-$error-color: #ff2323;
+$link-color: #0039f3;
+$error-color: #cf2f2f;
 
 $container: 800px;
 
@@ -19,13 +19,17 @@ $container: 800px;
   --link-visited-color: var(--link-color);
   --dots-color: #cecece;
 }
-body.dark {
-  --bg-color: rgb(14, 28, 54);
-  --text-color: rgb(245, 251, 239);
-  --link-color: rgb(240, 166, 202);
-  --link-visited-color: var(--link-color);
-  --dots-color: rgb(38, 28, 83);
-}
+
+// TODO: maybe
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     --bg-color: rgb(14, 28, 54);
+//     --text-color: rgb(245, 251, 239);
+//     --link-color: rgb(240, 166, 202);
+//     --link-visited-color: var(--link-color);
+//     --dots-color: rgb(38, 28, 83);
+//   }
+// }
 
 html,
 body {

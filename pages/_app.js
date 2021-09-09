@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import Script from 'next/script';
 import { DefaultSeo } from 'next-seo';
 
 import 'styles/global.scss';
@@ -31,10 +32,15 @@ const App = ({ Component, pageProps }) => {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+          integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
         {process.env.NODE_ENV === 'production' ? (
-          <script
-            async
-            defer
+          <Script
             data-website-id="583e2bc6-8606-4c14-a2be-70612377adff"
             src="https://sip-umami.vercel.app/umami.js"
           />

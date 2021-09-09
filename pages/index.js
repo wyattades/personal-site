@@ -19,7 +19,7 @@ const IndexPage = () => {
 
   let text = useDebounced(
     hoveredLink && hoveredLink !== 'Home' ? hoveredLink : 'WYATT',
-    500,
+    200,
   );
   if (outTransition) text = '';
 
@@ -38,11 +38,13 @@ const IndexPage = () => {
           display: flex;
           justify-content: center;
           align-items: center;
+          pointer-events: none;
         }
         h1 {
           margin-top: 250px;
           text-transform: uppercase;
           text-align: center;
+          pointer-events: all;
         }
       `}</style>
     </div>

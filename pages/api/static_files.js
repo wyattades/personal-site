@@ -66,7 +66,7 @@ export default async function staticFiles(req, res) {
       res.setHeader('cache-control', 'public, max-age=86400, immutable');
       res.setHeader(
         'content-type',
-        `${contentTypes[ext] || 'text/plain'}; charset=UTF-8`,
+        `${contentTypes[ext] || contentTypes.txt}; charset=UTF-8`,
       );
 
       return res.send(txt);

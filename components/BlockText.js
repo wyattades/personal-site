@@ -1,317 +1,332 @@
-import React, { useEffect, useRef } from 'react';
-import * as Animated from 'animated/lib/targets/react-dom';
-import {
-  FontLoader,
-  LoadingManager,
-  WebGLRenderer,
-  PerspectiveCamera,
-  Scene,
-  MeshPhongMaterial,
-  Vector3,
-  Box3,
-  TextGeometry,
-  Mesh,
-  Group,
-  DirectionalLight,
-} from 'three';
+import React, { Suspense, useLayoutEffect, useMemo, useRef } from 'react';
+import { useEvent } from 'react-use';
+import { FontLoader, Vector3, MathUtils } from 'three';
+import { Canvas, useThree } from '@react-three/fiber';
+import Stats from 'stats.js';
+import { Environment, PerspectiveCamera, useCamera } from '@react-three/drei';
+import { useSpring, animated } from '@react-spring/three';
+import { Physics, usePlane, useBox, Debug } from '@react-three/cannon';
 
-import listenToOrientation from 'lib/orientation';
+import { ErrorBoundary } from 'components/ErrorBoundary';
+import { useAnimatedSwitch } from 'components/AnimatedItems';
 
 import fontJson from 'fonts/helv.json';
 
-const defaultOptions = {
-  fontSize: 45,
-  thickness: 10,
-  specular: 0x777777,
-  // followRate: 0.03,
-  followRadius: 280,
-  opacity: 0.8,
-  yPos: 0,
-  animateDist: -20,
-};
+const IS_DEV = process.env.NODE_ENV === 'development';
 
-const loadingManager = new LoadingManager(null, null, console.error);
-const loader = new FontLoader(loadingManager);
+const PhysicsDebug =
+  IS_DEV &&
+  typeof window !== 'undefined' &&
+  localStorage.getItem('wa:physics_debug')
+    ? Debug
+    : (p) => p.children;
 
-const renderText = (parent, options, font) => {
-  // const listeners = [];
+const debug = IS_DEV
+  ? (...args) => console.debug('[blocktext]', ...args)
+  : () => {};
 
-  const { specular, fontSize, thickness, followRadius, animateDist, yPos } =
-    options;
-
-  const renderer = new WebGLRenderer({
-    alpha: true,
-    antialias: true,
-  });
-
-  parent.appendChild(renderer.domElement);
-
-  const camera = new PerspectiveCamera(
-    60,
-    parent.clientWidth / parent.clientHeight,
-    1,
-    1000,
-  );
-  camera.position.z = 200;
-  camera.position.y = -8;
-
-  const scene = new Scene();
-
-  const material = new MeshPhongMaterial({
-    specular,
-    transparent: true,
-    opacity: 0,
-  });
-
-  /** @type {THREE.Group[]} */
-  let anchors = [];
-
-  const lightLookAt = new Vector3(11.45, 0, 0);
-
-  const addLight = (color, x, y, z, intensity = 1) => {
-    const newLight = new DirectionalLight(color, intensity);
-    newLight.position.set(x, y, z);
-    newLight.lookAt(lightLookAt);
-    // newLight.lookAt(anchors[Math.floor(chars.length / 2)].position);
-    scene.add(newLight);
+// show FPS stats
+if (IS_DEV) {
+  const stats = new Stats();
+  stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+  document.body.appendChild(stats.dom);
+  const animate = () => {
+    stats.update();
+    requestAnimationFrame(animate);
   };
+  requestAnimationFrame(animate);
+}
 
-  addLight(0xffffff, 0, 1, 4, 0.3);
+const REMOVE_DURATION = 1000;
+const SHOW_DURATION = 300;
 
-  // addLight(0xccb87a, 0, 4, 4, 1);
-  // addLight(0xc9fff8, 0, 3, 1, 1);
-  // addLight(0xff0000, -2, 1, 1);
-  // addLight(0x0000ff, 0, -1, 0.5);
-  // addLight(0xffff00, 2, -1, 2);
-  // addLight(0x0000ff, 20, 0, 50);
-  // addLight(0xffff00, -100, 0, 50);
+const parsedFont = new FontLoader().parse(fontJson);
 
-  let mx = null,
-    my = null;
-  // let animateId;
-  let render = () => {
-    if (mx != null && my != null) {
-      let ratioX = 0;
-      let ratioY = 0;
+let seqIdCounter = 1;
+const seqId = () => seqIdCounter++;
 
-      const { clientWidth: w, clientHeight: h } = parent;
-
-      ratioX = mx / w - 0.5;
-      ratioY = my / h - 0.5;
-
-      const target = new Vector3(
-        ratioX * followRadius,
-        -ratioY * followRadius,
-        2 * followRadius,
-      );
-
-      for (const anchor of anchors) anchor.lookAt(target);
-    }
-
-    renderer.render(scene, camera);
-
-    // animateId = requestAnimationFrame(render);
-  };
-
-  const resize = () => {
-    const { clientWidth: w, clientHeight: h } = parent;
-
-    renderer.setSize(w, h);
-    camera.aspect = w / h;
-    // Set FOV so letters fit in screen with some margin (20deg)
-    // harcoding `250` for now, was `moveX`
-    camera.fov =
-      20 +
-      2 *
-        Math.atan(250 / (camera.aspect * 2 * camera.position.z)) *
-        (180 / Math.PI);
-    camera.updateProjectionMatrix();
-    render();
-  };
-  window.addEventListener('resize', resize);
-
-  const onMouseMove = (e) => {
-    mx = e.clientX;
-    my = e.clientY;
-    render();
-  };
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('click', onMouseMove);
-
-  let orientation;
-  if ('DeviceOrientationEvent' in window) {
-    orientation = listenToOrientation(
-      () => {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('click', onMouseMove);
-        mx = my = null;
-      },
-      (quaternion) => {
-        for (let obj of anchors) {
-          // TODO: necessary?
-          if (obj.rotation.order !== 'YXZ') obj.rotation.reorder('YXZ');
-
-          obj.quaternion.copy(quaternion);
-        }
-
-        renderer.render(scene, camera);
-      },
-    );
-  }
-
-  let anim, anim2;
-  let animDelay;
-
-  // causes a render
-  resize();
-
-  let currentText;
-
-  return {
-    setText(newText) {
-      if (currentText === newText) return;
-
-      currentText = newText;
-
-      let moveX = 0;
-
-      clearTimeout(animDelay);
-      anim?.stop();
-      // anim2?.stop();
-
-      const oldAnchors = anchors;
-      const anims2 = oldAnchors.map(() => new Animated.Value(0));
-
-      anim2 = Animated.stagger(
-        100,
-        anims2.map((an) => Animated.spring(an, { toValue: 1 })),
-      );
-
-      anim2.start();
-
-      anims2.forEach((anim, i) =>
-        anim.addListener(({ value }) => {
-          oldAnchors[i].position.z = value * animateDist + yPos;
-
-          oldAnchors[i].children[0].material.opacity = 1 - value;
-
-          render();
-
-          if (value >= 1) scene.remove(oldAnchors[i]);
-        }),
-      );
-
-      // let lastW2 = 0;
-      const chars = newText.split('');
-      const center = new Vector3();
-      anchors = chars.map((char, i) => {
-        const geometry = new TextGeometry(char, {
-          font,
-          size: fontSize,
-          height: thickness,
-        });
-
-        const text = new Mesh(geometry, material.clone());
-        const bbox = new Box3().setFromObject(text);
-        bbox.getCenter(center);
-        text.position.sub(center);
-        text.position.y = -fontSize / 2;
-
-        const anchor = new Group();
-
-        const w2 = bbox.getSize(new Vector3()).x / 2;
-        if (i !== 0) moveX += 10;
-        moveX += w2;
-        anchor.position.x = moveX;
-        moveX += w2;
-
-        anchor.position.y = animateDist + yPos;
-        anchor.add(text);
-        scene.add(anchor);
-
-        return anchor;
-      });
-      for (const anchor of anchors) anchor.position.x -= moveX / 2;
-
-      const anims = anchors.map(() => new Animated.Value(0));
-
-      anim = Animated.stagger(
-        100,
-        anims.map((anim) => Animated.spring(anim, { toValue: 1 })),
-      );
-
-      anims.forEach((anim, i) =>
-        anim.addListener(({ value }) => {
-          anchors[i].position.y = (1 - value) * animateDist + yPos;
-
-          anchors[i].children[0].material.opacity = value;
-          render();
-        }),
-      );
-
-      animDelay = setTimeout(() => {
-        anim.start();
-      }, 200);
-    },
-
-    dispose() {
-      clearTimeout(animDelay);
-
-      anim?.stop();
-      anim2?.stop();
-
-      renderer.dispose();
-      renderer.domElement.remove();
-      // cancelAnimationFrame(animateId);
-
-      // Remove event listeners
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('click', onMouseMove);
-      window.removeEventListener('resize', resize);
-
-      orientation?.dispose();
-    },
-  };
-};
-
-const BlockText = ({ options, text }) => {
-  const containerRef = useRef();
-
-  const blockText = useRef(null);
-
-  useEffect(() => {
-    blockText.current = renderText(
-      containerRef.current,
-      { ...defaultOptions, ...(options || {}) },
-      loader.parse(fontJson),
-    );
-
-    return () => {
-      blockText.current.dispose();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!blockText.current) return;
-
-    blockText.current.setText(text);
-  }, [text]);
+// this `y` is perfect for resting the letters on initially
+const FloorPlane = ({ size = 100, y = -8.25 }) => {
+  const [ref] = usePlane(() => ({
+    rotation: [-Math.PI / 2, 0, 0],
+    position: [0, y, 0],
+  }));
 
   return (
-    // Use min width and height to prevent webGL crash when size is 0
-    <>
+    <mesh ref={ref} visible={false}>
+      <planeBufferGeometry args={[size, size]} />
+    </mesh>
+  );
+};
+
+/** @param {THREE.Vector3} vec3 */
+const r = new Vector3();
+const initialInnerPos = (vec3) => {
+  r.set(0, 0, 7);
+  return r.add(vec3).toArray();
+};
+
+const Char = ({
+  char,
+  textGeomConfig,
+  pos,
+  innerPos,
+  size,
+  boxRef,
+  animateIn,
+  // isInitial,
+}) => {
+  const [ref, boxApi] = useBox(() => ({
+    mass: 1,
+    position: pos.toArray(),
+    args: size.toArray(),
+  }));
+
+  // allow movement after 1s
+  // useTimeoutFn(() => {
+  //   boxApi.mass.set(1);
+  // }, REMOVE_DELAY);
+
+  // boxRef?.(boxApi); // HACK
+
+  const { opacity, innerPosAnimated } = useSpring({
+    from: {
+      opacity: animateIn ? 0 : 1,
+      innerPosAnimated: initialInnerPos(innerPos),
+    },
+    to: { opacity: animateIn ? 1 : 0, innerPosAnimated: innerPos.toArray() },
+    config: {
+      duration: animateIn ? SHOW_DURATION : REMOVE_DURATION,
+    },
+  });
+
+  const explodeLetter = (strength = 2) => {
+    debug('explodeLetter', char);
+
+    boxApi.applyImpulse(
+      [
+        MathUtils.randFloat(-20, 20),
+        MathUtils.randFloat(-5, 0),
+        MathUtils.randFloat(-35 * strength, -25 * strength),
+      ],
+      [MathUtils.randFloat(-4, 4), MathUtils.randFloat(-2, 1), 0],
+    );
+  };
+
+  useLayoutEffect(() => {
+    if (!animateIn) {
+      const temp = ref.current.position.clone();
+      temp.z -= 10;
+      boxApi.position.set(...temp.toArray());
+      explodeLetter();
+    }
+  }, [animateIn]);
+
+  useEvent('click', () => {
+    explodeLetter();
+  });
+
+  return (
+    <group ref={ref}>
+      <animated.mesh receiveShadow castShadow position={innerPosAnimated}>
+        <animated.meshNormalMaterial
+          // color="#333"
+          envMapIntensity={0.2}
+          transparent
+          opacity={opacity}
+        />
+        <textGeometry args={[char, textGeomConfig]} />
+      </animated.mesh>
+    </group>
+  );
+};
+
+const Text = ({
+  children,
+  fontSize = 15,
+  depth = 0.5,
+  bevelThickness = 3,
+  letterPadding = 3,
+  animateIn,
+  isInitial,
+  // onComplete,
+}) => {
+  const letters = useMemo(() => {
+    const arr = children.split('').map((char) => ({ char, id: seqId() }));
+
+    let moveX = 0;
+    let i = 0;
+    for (const el of arr) {
+      const glyph = parsedFont.data.glyphs[el.char];
+
+      const { x_min, x_max, ha: _ha } = glyph;
+
+      const width = ((x_max - x_min) / 1000) * fontSize;
+
+      el.size = new Vector3(
+        bevelThickness / 2 + width,
+        bevelThickness / 2 + fontSize,
+        2 * bevelThickness + depth,
+      );
+
+      const w2 = width / 2;
+      el.innerPos = new Vector3(-w2, -fontSize / 2, 0);
+
+      if (i > 0) moveX += letterPadding;
+      moveX += w2;
+      el.pos = new Vector3(moveX, 0, 0);
+
+      moveX += w2;
+
+      i++;
+    }
+
+    for (const el of arr) {
+      el.pos.x -= moveX / 2;
+    }
+
+    return arr;
+  }, [children]);
+
+  /** @type {React.MutableRefObject<import('@react-three/cannon').PublicApi[]>} */
+  // const lettersRef = useRef([]);
+
+  const textGeomConfig = useMemo(
+    () => ({
+      font: parsedFont,
+      size: fontSize,
+      height: depth, // this is actually depth
+      curveSegments: 16,
+      bevelEnabled: true,
+      bevelThickness,
+      bevelSize: 0.75,
+      bevelOffset: 0,
+      bevelSegments: 4,
+    }),
+    [fontSize, depth, bevelThickness],
+  );
+
+  return (
+    <group>
+      {letters.map(({ id, char, pos, innerPos, size }, i) => (
+        <Char
+          key={id}
+          // boxRef={(el) => (lettersRef.current[i] = el)}
+          char={char}
+          pos={pos}
+          innerPos={innerPos}
+          size={size}
+          animateIn={animateIn}
+          isInitial={isInitial}
+          textGeomConfig={textGeomConfig}
+        />
+      ))}
+    </group>
+  );
+};
+
+const SpringGroup = ({ children, changeKey }) => {
+  const stack = useAnimatedSwitch(changeKey, children, REMOVE_DURATION);
+
+  return stack.map((s, i) =>
+    React.cloneElement(s.children, {
+      key: s.key,
+      animateIn: i === 0,
+      onComplete: s.remove,
+      isInitial: s.isInitial,
+    }),
+  );
+};
+
+const cameraZ = 190;
+
+const Resizer = ({ parentRef }) => {
+  const camera = useThree((state) => state.camera);
+
+  const resize = () => {
+    const { clientWidth: w, clientHeight: h } = parentRef.current;
+
+    camera.aspect = w / h;
+
+    const objectsWidth = 90; // should be close to `moveX`
+
+    // Set FOV so letters fit in screen with some margin (20deg)
+    const fov =
+      20 +
+      2 *
+        Math.atan(objectsWidth / (camera.aspect * 2 * cameraZ)) *
+        (180 / Math.PI);
+
+    camera.fov = fov;
+    camera.updateProjectionMatrix();
+  };
+
+  useEvent('resize', resize);
+
+  useLayoutEffect(resize, []);
+
+  return null;
+};
+
+const BlockText = ({ text }) => {
+  const parent = useRef();
+  const camera = useRef();
+
+  return (
+    <ErrorBoundary fallback={null}>
       <div
-        ref={containerRef}
+        ref={parent}
         style={{
-          pointerEvents: 'none',
+          // Use min width and height to prevent webGL crash when size is 0
           minHeight: 10,
           minWidth: 10,
           maxWidth: 1600,
           margin: '0 auto',
         }}
-      />
+      >
+        {/* TODO: shadows */}
+        <Canvas>
+          <Resizer parentRef={parent} />
+          <group name="Camera" position={[0, 0, cameraZ]}>
+            <PerspectiveCamera
+              makeDefault
+              far={500}
+              near={0.1}
+              fov={42} // will be overridden by `<Resizer/>`
+              ref={camera}
+            >
+              <directionalLight
+                castShadow
+                position={[10, 20, 15]}
+                shadow-camera-right={8}
+                shadow-camera-top={8}
+                shadow-camera-left={-8}
+                shadow-camera-bottom={-8}
+                shadow-mapSize-width={1024}
+                shadow-mapSize-height={1024}
+                intensity={2}
+                shadow-bias={-0.0001}
+              />
+            </PerspectiveCamera>
+          </group>
+          <ambientLight intensity={1} />
+          {/* <ambientLight /> */}
+          {/* <pointLight position={[10, 10, 10]} /> */}
+          <Suspense fallback={null}>
+            {/* <Environment preset="city" /> doesn't do anything */}
+            <Physics allowSleep step={1 / 30} gravity={[0, -20, 0]}>
+              <PhysicsDebug>
+                <SpringGroup changeKey={text}>
+                  <Text>{text}</Text>
+                </SpringGroup>
+                <FloorPlane />
+              </PhysicsDebug>
+            </Physics>
+          </Suspense>
+        </Canvas>
+      </div>
       <h1 className="sr-only">{text}</h1>
-    </>
+    </ErrorBoundary>
   );
 };
 

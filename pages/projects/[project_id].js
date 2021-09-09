@@ -136,7 +136,14 @@ const ShowProjectPage = ({ project }) => {
         )}
 
         {project.p5Sketch ? (
-          PlaySketch({ game: project }) // insert array elements instead of rendering an element
+          [
+            <PlaySketch key="play_sketch" game={project} />,
+            project.help && (
+              <p key="game_help" className="help">
+                {project.help}
+              </p>
+            ),
+          ]
         ) : desc && typeof desc === 'string' ? (
           <Markdown content={desc} />
         ) : Array.isArray(desc) ? (

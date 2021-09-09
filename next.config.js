@@ -4,8 +4,10 @@ const HOST_URL = process.env.VERCEL_URL
 
 const staticFiles = ['sitemap.xml', 'robots.txt'];
 
-/** @type {import('next/dist/next-server/server/config').NextConfig} */
+/** @type {import('next/dist/server/config').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+
   env: {
     HOST_URL,
   },
