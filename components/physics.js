@@ -4,6 +4,24 @@ import { Debug, usePlane } from '@react-three/cannon';
 
 export const IS_DEV = process.env.NODE_ENV === 'development';
 
+export const COLLIDERS = {
+  default: 1,
+  boundary: 2,
+};
+
+export const V = {
+  add: (...vs) => {
+    const s = [0, 0, 0];
+    for (const v of vs) {
+      s[0] += v[0];
+      s[1] += v[1];
+      s[2] += v[2];
+    }
+    return s;
+  },
+  mult: (a, v) => [a[0] * v, a[1] * v, a[2] * v],
+};
+
 export const useStats = () => {
   useEffect(() => {
     let mounted = true;

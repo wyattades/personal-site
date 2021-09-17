@@ -4,11 +4,11 @@ import { FontLoader, Vector3, MathUtils } from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
-import { Physics, usePlane, useBox } from '@react-three/cannon';
+import { Physics, useBox } from '@react-three/cannon';
 
-import { ErrorBoundary } from 'components/ErrorBoundary';
+import { ErrorBoundary, withErrorBoundary } from 'components/ErrorBoundary';
 import { useAnimatedSwitch } from 'components/AnimatedItems';
-import { debug, PhysicsDebug } from 'components/physics';
+import { debug, PhysicsDebug, FloorPlane } from 'components/physics';
 
 import fontJson from 'fonts/helv.json';
 
@@ -19,20 +19,6 @@ const parsedFont = new FontLoader().parse(fontJson);
 
 let seqIdCounter = 1;
 const seqId = () => seqIdCounter++;
-
-// this `y` is perfect for resting the letters on initially
-const FloorPlane = ({ size = 100, y = -8.25 }) => {
-  const [ref] = usePlane(() => ({
-    rotation: [-Math.PI / 2, 0, 0],
-    position: [0, y, 0],
-  }));
-
-  return (
-    <mesh ref={ref} visible={false}>
-      <planeBufferGeometry args={[size, size]} />
-    </mesh>
-  );
-};
 
 /** @param {THREE.Vector3} vec3 */
 const r = new Vector3();
@@ -248,7 +234,7 @@ const BlockText = ({ text }) => {
   const camera = useRef();
 
   return (
-    <ErrorBoundary fallback={null}>
+    <>
       <div
         ref={parent}
         style={{
@@ -294,15 +280,20 @@ const BlockText = ({ text }) => {
                 <SpringGroup changeKey={text}>
                   <Text>{text}</Text>
                 </SpringGroup>
-                <FloorPlane />
+                {/* this `y` is perfect for resting the letters on initially */}
+                <FloorPlane
+                  size={[100, 100]}
+                  position={[0, -8.25, 0]}
+                  rotation={[-Math.PI / 2, 0, 0]}
+                />
               </PhysicsDebug>
             </Physics>
           </Suspense>
         </Canvas>
       </div>
       <h1 className="sr-only">{text}</h1>
-    </ErrorBoundary>
+    </>
   );
 };
 
-export default React.memo(BlockText);
+export default React.memo(withErrorBoundary(BlockText, null));

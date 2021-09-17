@@ -1,10 +1,16 @@
 import _ from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { Physics, useBox } from '@react-three/cannon';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 
 import { withErrorBoundary } from 'components/ErrorBoundary';
-import { PhysicsDebug, FloorPlane, IS_DEV } from 'components/physics';
+import {
+  PhysicsDebug,
+  FloorPlane,
+  IS_DEV,
+  COLLIDERS,
+} from 'components/physics';
+// import { BallOnChain } from 'components/BallOnChain';
 
 /** @returns {HTMLElement | null} */
 const $ = (s, d) => (d ? s : document).querySelector(d || s);
@@ -39,20 +45,38 @@ const ElementBody = ({ start, position, size, el }) => {
     }px) rotate(${TWO_PI - r}rad)`;
   };
 
-  useEffect(() => {
-    const rs = api.rotation.subscribe((r) => {
+  useEffect(() =>
+    api.rotation.subscribe((r) => {
       tmp.current.r = r;
       if (tmp.current.p) updateStyles();
-    });
-    const ps = api.position.subscribe((p) => {
+    }),
+  );
+  useEffect(() =>
+    api.position.subscribe((p) => {
       tmp.current.p = p;
       if (tmp.current.r) updateStyles();
-    });
+    }),
+  );
+  const hovered = useRef(null);
+  useEffect(() => {
+    const mouseEnter = () => {
+      hovered.current = [0, 80, 0];
+    };
+    const mouseLeave = () => {
+      hovered.current = null;
+    };
+    el.addEventListener('mouseenter', mouseEnter);
+    el.addEventListener('mouseleave', mouseLeave);
     return () => {
-      rs();
-      ps();
+      el.removeEventListener('mouseenter', mouseEnter);
+      el.removeEventListener('mouseleave', mouseLeave);
     };
   }, []);
+  useFrame(() => {
+    if (hovered.current) {
+      api.applyForce(hovered.current, [0, 1000, 0]);
+    }
+  });
 
   return null;
 };
@@ -70,9 +94,7 @@ const findFixedParent = (el, depth = 4) => {
   return findFixedParent(parent, depth - 1);
 };
 
-const HTMLPhysics = ({
-  selector = 'nav a, .box-link, .box-list > :first-child > *',
-}) => {
+const HTMLPhysics = ({ selector = '.box-link' }) => {
   const [state, setState] = useState(null);
 
   const [size] = useState(() => {
@@ -86,7 +108,7 @@ const HTMLPhysics = ({
   useEffect(() => {
     const { width: cw, height: ch } = size;
 
-    const depth = 50 * scaleIn;
+    const depth = 100 * scaleIn;
 
     // const preventDefault = (e) => e.preventDefault();
 
@@ -163,9 +185,15 @@ const HTMLPhysics = ({
 
   if (!size) return null;
 
+  // camera.updateProjectionMatrix();
+
+  const cameraZ = 40;
   return (
     <Canvas
-      camera={{ position: [2, 0, 30] }}
+      camera={{
+        position: [0, 0, cameraZ],
+        // fov: 2 * Math.atan(100 / (2 * cameraZ)) * (180 / Math.PI),
+      }}
       style={{
         visibility: IS_DEV ? 'visible' : 'hidden',
         position: 'fixed',
@@ -176,14 +204,32 @@ const HTMLPhysics = ({
         pointerEvents: 'none',
       }}
     >
+      {IS_DEV ? (
+        <>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[-10, -10, -10]} />
+          <spotLight
+            position={[10, 10, 10]}
+            angle={0.3}
+            penumbra={1}
+            intensity={1}
+            castShadow
+          />
+        </>
+      ) : null}
       <Physics>
         <PhysicsDebug>
           {state?.els.map((props, i) => (
             <ElementBody key={i} {...props} />
           ))}
           {state?.floors.map((props, i) => (
-            <FloorPlane key={i} {...props} />
+            <FloorPlane
+              key={i}
+              {...props}
+              collisionFilterGroup={COLLIDERS.boundary}
+            />
           ))}
+          {/* <BallOnChain /> */}
         </PhysicsDebug>
       </Physics>
       <style jsx global>{`
