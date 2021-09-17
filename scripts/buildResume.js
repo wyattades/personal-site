@@ -101,7 +101,7 @@ const getPlainHtml = async (outFile) => {
 };
 
 (async () => {
-  if (!fs.existsSync('tmp')) fs.mkdirSync('tmp');
+  fs.mkdirSync('tmp', { recursive: true });
 
   const outHtml = await getPlainHtml('tmp/resume.html');
 

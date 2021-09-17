@@ -3,7 +3,7 @@ import { useEvent } from 'react-use';
 import { FontLoader, Vector3, MathUtils } from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
 import Stats from 'stats.js';
-import { Environment, PerspectiveCamera, useCamera } from '@react-three/drei';
+import { PerspectiveCamera } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
 import { Physics, usePlane, useBox, Debug } from '@react-three/cannon';
 

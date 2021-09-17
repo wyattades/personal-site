@@ -114,6 +114,8 @@ export const Fade = ({
   disabled = false,
   ...rest
 }) => {
+  const nodeRef = React.useRef();
+
   if (!children) return null;
 
   const canInjectStyle = typeof children.type === 'string';
@@ -126,6 +128,7 @@ export const Fade = ({
       appear
       mountOnEnter={unmount}
       unmountOnExit={unmount}
+      nodeRef={nodeRef}
     >
       {(state) => {
         const hide = state === 'exited' || state === 'exiting';
@@ -141,13 +144,18 @@ export const Fade = ({
         if (canInjectStyle)
           return style
             ? React.cloneElement(children, {
+                ref: nodeRef,
                 style: children.props.style
                   ? { ...children.props.style, ...style }
                   : style,
               })
             : children;
 
-        return <div style={style}>{children}</div>;
+        return (
+          <div style={style} ref={nodeRef}>
+            {children}
+          </div>
+        );
       }}
     </Transition>
   );
