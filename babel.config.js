@@ -65,5 +65,14 @@ module.exports = {
       },
       'import-react-use',
     ],
+    [
+      'import',
+      {
+        libraryName: 'lodash',
+        libraryDirectory: '',
+        camel2DashComponentName: false,
+      },
+      'import-lodash',
+    ],
   ],
 };

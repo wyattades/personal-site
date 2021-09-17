@@ -208,16 +208,16 @@ ol {
   font-weight: 600;
 }
 
-.item-title :first-child {
+.item-title > :first-child {
   font-weight: 700;
   margin-right: 4px;
 }
 
-.item-title :nth-child(2) {
+.item-title > :nth-child(2) {
   font-weight: 600;
 }
 
-.item-title :nth-child(2):before {
+.item-title > :nth-child(2):before {
   content: '| ';
 }
 
@@ -397,27 +397,50 @@ dl.expertise-table {
     position: relative;
 
     flex: 1;
-
     width: 100%;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
     text-decoration: none;
-    color: var(--text-color);
+    display: block;
+    overflow: hidden;
 
-    opacity: 1;
-    transition: opacity 0.5s, background-color 0.5s;
+    span {
+      opacity: 1;
+      transition: all 0.5s ease; //, background-color 0.5s, transform 0.5s;
 
-    padding: 16px;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+      color: var(--text-color);
+
+      font-weight: normal;
+      $c: currentColor;
+      $s: 0.3px;
+      // text-shadow: 1px 0px 0px $c, 0px 1px 0px $c, -1px 0px 0px $c,
+      //   0px -1px 0px $c;
+      text-shadow: -$s -$s 0 $c, $s -$s 0 $c, -$s $s 0 $c, $s $s 0 $c;
+
+      padding: 16px;
+      box-sizing: border-box;
+    }
   }
 
   &:hover {
     a {
-      opacity: 0;
+      span {
+        // opacity: 0;
+        transform: translateY(40%);
+        color: #000000;
+        $c: #fff;
+        $s: 0.35px;
+        // text-shadow: 1px 0px 0px $c, 0px 1px 0px $c, -1px 0px 0px $c,
+        //   0px -1px 0px $c;
+        text-shadow: -$s -$s 0 $c, $s -$s 0 $c, -$s $s 0 $c, $s $s 0 $c;
+      }
     }
     & > div {
       opacity: 1;
@@ -429,6 +452,17 @@ dl.expertise-table {
   display: flex;
   flex-flow: row wrap;
   margin: 0 -1rem 0 -1rem;
+}
+
+.plain-button {
+  line-height: 1.5;
+  padding: 6px 16px;
+  border: 1px solid black;
+  background: white;
+  cursor: pointer;
+}
+.plain-button:hover {
+  background: #eee;
 }
 
 .go-back-link {

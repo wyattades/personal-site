@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { NextSeo } from 'next-seo';
 
 import projects from 'lib/projects';
@@ -7,18 +8,22 @@ import Layout from 'components/Layout';
 import Link from 'components/Link';
 import AnimatedItems from 'components/AnimatedItems';
 
+const HTMLPhysics = dynamic(() => import('components/HTMLPhysics'));
+
 const projectItems = projects.filter((p) => !p.noListing);
 
 const ProjectsPage = () => {
+  const [broken, setBroken] = useState(false);
+
   return (
     <div className="box-list">
       <AnimatedItems>
         <div
           className="content"
-          style={{ flexBasis: '100%', margin: '0 1rem 3rem' }}
+          style={{ flexBasis: '100%', margin: '0 1rem' }}
         >
-          <h1>Projects</h1>
-          <p>
+          <h1 style={{ marginBottom: 0, paddingBottom: '3rem' }}>Projects</h1>
+          <p style={{ paddingBottom: '3rem' }}>
             Here are some of my noteworthy projects that were mostly created in
             my spare time. You can also view all of them and more on my{' '}
             <a href="https://github.com/wyattades">github</a>.
@@ -30,11 +35,32 @@ const ProjectsPage = () => {
               {p.image ? (
                 <Image src={p.image} layout="fill" objectFit="cover" alt="" />
               ) : null}
-              <Link href={`/projects/${p.id}`}>{p.title}</Link>
+              <Link href={`/projects/${p.id}`}>
+                <span>{p.title}</span>
+              </Link>
             </div>
           );
         })}
+        <div
+          className="content"
+          style={{
+            flexBasis: '100%',
+            margin: '0 1rem',
+            paddingTop: '4rem',
+            textAlign: 'center',
+          }}
+        >
+          <button
+            className="plain-button"
+            style={{ zIndex: 5, position: 'relative' }}
+            onClick={() => setBroken((r) => !r)}
+          >
+            {broken ? 'Unbreak' : 'Break'} this page
+          </button>
+        </div>
       </AnimatedItems>
+
+      {broken && <HTMLPhysics />}
     </div>
   );
 };

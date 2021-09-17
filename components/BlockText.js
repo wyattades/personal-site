@@ -2,40 +2,15 @@ import React, { Suspense, useLayoutEffect, useMemo, useRef } from 'react';
 import { useEvent } from 'react-use';
 import { FontLoader, Vector3, MathUtils } from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
-import Stats from 'stats.js';
 import { PerspectiveCamera } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
-import { Physics, usePlane, useBox, Debug } from '@react-three/cannon';
+import { Physics, usePlane, useBox } from '@react-three/cannon';
 
 import { ErrorBoundary } from 'components/ErrorBoundary';
 import { useAnimatedSwitch } from 'components/AnimatedItems';
+import { debug, PhysicsDebug } from 'components/physics';
 
 import fontJson from 'fonts/helv.json';
-
-const IS_DEV = process.env.NODE_ENV === 'development';
-
-const PhysicsDebug =
-  IS_DEV &&
-  typeof window !== 'undefined' &&
-  localStorage.getItem('wa:physics_debug')
-    ? Debug
-    : (p) => p.children;
-
-const debug = IS_DEV
-  ? (...args) => console.debug('[blocktext]', ...args)
-  : () => {};
-
-// show FPS stats
-if (IS_DEV) {
-  const stats = new Stats();
-  stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.body.appendChild(stats.dom);
-  const animate = () => {
-    stats.update();
-    requestAnimationFrame(animate);
-  };
-  requestAnimationFrame(animate);
-}
 
 const REMOVE_DURATION = 1000;
 const SHOW_DURATION = 300;
