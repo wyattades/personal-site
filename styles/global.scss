@@ -1,37 +1,55 @@
 @use 'sass:math';
 
 $easing: ease;
+$transition: 300ms $easing;
 
 $bg-color: #ffffff;
 $text-color: #000000;
-$text-color2: #818181;
+$help-text-color: #818181;
 $link-color: #0039f3;
 $error-color: #cf2f2f;
 
 $container: 800px;
 
 $mobile-size: 512px;
+@mixin mobile {
+  @media (max-width: $mobile-size) {
+    @content;
+  }
+}
 
 @import './resume';
 
-:root {
+@mixin light-theme {
   --bg-color: #{$bg-color};
+  --offset-color: #cecece;
   --text-color: #{$text-color};
   --link-color: #{$link-color};
+  --error-color: #{$error-color};
+  --help-text-color: #{$help-text-color};
   --link-visited-color: var(--link-color);
-  --dots-color: #cecece;
+}
+@mixin dark-theme {
+  --bg-color: #0e1c36;
+  --offset-color: #261c53;
+  --text-color: #f5fbef;
+  --link-color: #f0a6ca;
+  --error-color: #{$error-color};
+  --help-text-color: #{$help-text-color};
+  --link-visited-color: var(--link-color);
 }
 
-// TODO: maybe
-// @media (prefers-color-scheme: dark) {
-//   :root {
-//     --bg-color: rgb(14, 28, 54);
-//     --text-color: rgb(245, 251, 239);
-//     --link-color: rgb(240, 166, 202);
-//     --link-visited-color: var(--link-color);
-//     --dots-color: rgb(38, 28, 83);
-//   }
-// }
+body {
+  @include light-theme;
+}
+@media (prefers-color-scheme: dark) {
+  body:not(.theme-light) {
+    @include dark-theme;
+  }
+}
+body.theme-dark {
+  @include dark-theme;
+}
 
 html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
@@ -56,6 +74,15 @@ html {
   color: var(--text-color);
 }
 
+.button-reset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: none;
+}
+
 .wrapper {
   background: var(--bg-color);
   position: relative;
@@ -68,7 +95,7 @@ html {
   padding: 72px 20px;
 }
 
-.index-page::before {
+.index-page .wrapper::before {
   content: '';
   display: block;
   position: absolute;
@@ -80,7 +107,7 @@ html {
 
   $d: 15px;
   $offset: 15px;
-  background-image: radial-gradient(var(--dots-color) 1px, transparent 0);
+  background-image: radial-gradient(var(--offset-color) 1px, transparent 0);
   background-size: ($d * 2) ($d * 2);
   background-position: ($offset - $d) ($offset - $d);
 
@@ -186,49 +213,40 @@ ol {
   font-size: 14px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  margin: 0;
 }
 
 .help {
-  // position: absolute;
-  // top: 100%;
-  // left: 0;
-  color: $text-color2;
+  color: var(--help-text-color);
   font-size: 80% !important;
   padding-top: 8px;
   margin: 0 !important;
-  // overflow-y: visible;
 }
 
 .error {
-  color: $error-color;
+  color: var(--error-color);
   padding: 24px;
 }
 
-.item-date {
+.exp-item__date {
   font-weight: 600;
 }
 
-.item-title > :first-child {
+.exp-item__title > :first-child {
   font-weight: 700;
   margin-right: 4px;
 }
 
-.item-title > :nth-child(2) {
+.exp-item__title > :nth-child(2) {
   font-weight: 600;
 }
 
-.item-title > :nth-child(2):before {
+.exp-item__title > :nth-child(2):before {
   content: '| ';
 }
 
 .vertical-margin {
   padding: 0.5in 0;
-}
-.item {
-  margin-top: 24px;
-}
-.item:first-child {
-  margin-top: 0;
 }
 
 a,
@@ -238,8 +256,12 @@ a * {
 a:not(:hover) {
   text-decoration: none;
 }
+
 .pad-horizontal {
   padding: 0 0.25in;
+}
+.pad-vertical + .pad-vertical {
+  padding-top: 24px;
 }
 
 .layers {
@@ -280,16 +302,22 @@ a:not(:hover) {
     li {
       display: flex;
       list-style: none;
-      a {
+      & > * {
         pointer-events: all;
         text-decoration: none;
         color: var(--text-color);
-        padding: 16px 0;
-        transition: box-shadow 0.3s $easing;
+        transition: box-shadow $transition;
+        height: 56px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        line-height: 1;
 
         font-weight: 700;
         font-size: 18px;
-        letter-spacing: 3px;
+        letter-spacing: 2.5px;
 
         &:hover,
         &:focus,
@@ -372,12 +400,14 @@ dl.expertise-table {
 }
 
 .box-link {
+  $transition: 0.5s $easing;
+
   display: flex;
 
   font-weight: bold;
   box-sizing: border-box;
 
-  transition: color 0.5s;
+  transition: color $transition;
   border: 1px solid var(--text-color);
   position: relative;
 
@@ -386,16 +416,15 @@ dl.expertise-table {
   margin: 1rem;
 
   & > div {
+    z-index: 0;
     position: absolute;
     opacity: 0;
-    transition: opacity 0.5s, background-color 0.5s;
+    transition: opacity $transition, background-color $transition;
 
     pointer-events: none;
   }
 
   a {
-    position: relative;
-
     flex: 1;
     width: 100%;
 
@@ -405,7 +434,8 @@ dl.expertise-table {
 
     span {
       opacity: 1;
-      transition: all 0.5s ease; //, background-color 0.5s, transform 0.5s;
+      transition: transform $transition, color $transition,
+        text-shadow $transition;
 
       width: 100%;
       height: 100%;
@@ -417,12 +447,7 @@ dl.expertise-table {
       text-align: center;
       color: var(--text-color);
 
-      font-weight: normal;
-      $c: currentColor;
-      $s: 0.3px;
-      // text-shadow: 1px 0px 0px $c, 0px 1px 0px $c, -1px 0px 0px $c,
-      //   0px -1px 0px $c;
-      text-shadow: -$s -$s 0 $c, $s -$s 0 $c, -$s $s 0 $c, $s $s 0 $c;
+      font-weight: 600;
 
       padding: 16px;
       box-sizing: border-box;
@@ -432,14 +457,11 @@ dl.expertise-table {
   &:hover {
     a {
       span {
-        // opacity: 0;
         transform: translateY(40%);
-        color: #000000;
+        color: #000;
         $c: #fff;
-        $s: 0.35px;
-        // text-shadow: 1px 0px 0px $c, 0px 1px 0px $c, -1px 0px 0px $c,
-        //   0px -1px 0px $c;
-        text-shadow: -$s -$s 0 $c, $s -$s 0 $c, -$s $s 0 $c, $s $s 0 $c;
+        $s: 1px;
+        text-shadow: (-$s) (-$s) 0 $c, $s (-$s) 0 $c, (-$s) $s 0 $c, $s $s 0 $c;
       }
     }
     & > div {
@@ -457,12 +479,13 @@ dl.expertise-table {
 .plain-button {
   line-height: 1.5;
   padding: 6px 16px;
-  border: 1px solid black;
-  background: white;
+  border: 1px solid var(--text-color);
+  background: var(--bg-color);
   cursor: pointer;
+  transition: background-color $transition;
 }
 .plain-button:hover {
-  background: #eee;
+  background: var(--offset-color);
 }
 
 .go-back-link {
@@ -472,7 +495,7 @@ dl.expertise-table {
   font-size: 3rem;
   cursor: pointer;
   color: var(--text-color) !important;
-  transition: margin-left 0.3s $easing;
+  transition: margin-left $transition;
   &:hover {
     margin-left: -5px;
   }
@@ -506,7 +529,7 @@ dl.expertise-table {
   }
 }
 
-@media (max-width: $mobile-size) {
+@include mobile {
   .box-link {
     flex-basis: 100%;
     height: 150px;
@@ -521,7 +544,8 @@ dl.expertise-table {
     padding: 0 16px;
   }
 
-  .nav a {
+  .nav ul li > * {
     letter-spacing: 1px;
+    font-size: 1rem;
   }
 }

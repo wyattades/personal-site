@@ -9,7 +9,9 @@ const Layout = ({
   wrapperClassName,
   pageClassName,
   noLayout = false,
+  // following 2 props are useful if we want things to unmount immediately on page change
   seo = null,
+  outsideTransition = null,
 }) => {
   return (
     <div className={clsx('wrapper', wrapperClassName)}>
@@ -20,6 +22,7 @@ const Layout = ({
       </PageTransition>
       <Nav />
       {seo}
+      {outsideTransition}
     </div>
   );
 };

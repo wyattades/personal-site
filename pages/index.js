@@ -5,6 +5,7 @@ import Layout from 'components/Layout';
 import BlockText from 'components/LazyBlockText';
 import { useHoveredLink } from 'components/Link';
 import AnimatedItems, { useOutTransition } from 'components/AnimatedItems';
+import { BodyProps } from 'components/BodyProps';
 
 const useDebounced = (val, wait) => {
   const [v, setV] = useState(val);
@@ -52,7 +53,7 @@ const IndexPage = () => {
 };
 
 IndexPage.getLayout = ({ children }) => (
-  <Layout wrapperClassName="index-page" noLayout noTransition>
+  <Layout noLayout outsideTransition={<BodyProps className="index-page" />}>
     {children}
   </Layout>
 );

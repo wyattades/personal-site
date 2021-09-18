@@ -1,15 +1,18 @@
 import React from 'react';
 import Head from 'next/head';
+import Script from 'next/script';
 import { DefaultSeo } from 'next-seo';
+
+import { ThemeProvider } from 'components/StyleTheme';
 
 import 'styles/global.scss';
 
 const HOST_URL = process.env.HOST_URL;
 
-const DefaultLayout = ({ children }) => children;
+const getDefaultLayout = (p) => p.children;
 
 const App = ({ Component, pageProps }) => {
-  const renderLayout = Component.getLayout || DefaultLayout;
+  const renderLayout = Component.getLayout || getDefaultLayout;
 
   return (
     <>
@@ -38,15 +41,13 @@ const App = ({ Component, pageProps }) => {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-        {process.env.NODE_ENV === 'production' ? (
-          <script
-            async
-            defer
-            data-website-id="583e2bc6-8606-4c14-a2be-70612377adff"
-            src="https://sip-umami.vercel.app/umami.js"
-          />
-        ) : null}
       </Head>
+      {process.env.NODE_ENV === 'production' ? (
+        <Script
+          data-website-id="583e2bc6-8606-4c14-a2be-70612377adff"
+          src="https://sip-umami.vercel.app/umami.js"
+        />
+      ) : null}
 
       <DefaultSeo
         title="Wyatt Ades - Portfolio"
@@ -71,10 +72,12 @@ const App = ({ Component, pageProps }) => {
         }}
       />
 
-      {
-        // render with function to prevent unmount/remount of `Layout`
-        renderLayout({ children: <Component {...pageProps} /> })
-      }
+      <ThemeProvider>
+        {
+          // render with function to prevent unmount/remount of `Layout`
+          renderLayout({ children: <Component {...pageProps} /> })
+        }
+      </ThemeProvider>
     </>
   );
 };
