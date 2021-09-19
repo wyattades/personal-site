@@ -34,13 +34,6 @@ const App = ({ Component, pageProps }) => {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
-          integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
-          crossOrigin="anonymous"
-          referrerPolicy="no-referrer"
-        />
       </Head>
       {process.env.NODE_ENV === 'production' ? (
         <Script

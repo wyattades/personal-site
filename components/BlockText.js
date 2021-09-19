@@ -26,28 +26,12 @@ const initialInnerPos = (vec3) => {
   return r.set(0, 0, 7).add(vec3).toArray();
 };
 
-const Char = ({
-  char,
-  textGeomConfig,
-  pos,
-  innerPos,
-  size,
-  boxRef,
-  animateIn,
-  // isInitial,
-}) => {
+const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
   const [ref, boxApi] = useBox(() => ({
     mass: 1,
     position: pos.toArray(),
     args: size.toArray(),
   }));
-
-  // allow movement after 1s
-  // useTimeoutFn(() => {
-  //   boxApi.mass.set(1);
-  // }, REMOVE_DELAY);
-
-  // boxRef?.(boxApi); // HACK
 
   const { opacity, innerPosAnimated } = useSpring({
     from: {
@@ -89,12 +73,7 @@ const Char = ({
   return (
     <group ref={ref}>
       <animated.mesh receiveShadow castShadow position={innerPosAnimated}>
-        <animated.meshNormalMaterial
-          // color="#333"
-          envMapIntensity={0.2}
-          transparent
-          opacity={opacity}
-        />
+        <animated.meshNormalMaterial transparent opacity={opacity} />
         <textGeometry args={[char, textGeomConfig]} />
       </animated.mesh>
     </group>
@@ -109,7 +88,6 @@ const Text = ({
   letterPadding = 3,
   animateIn,
   isInitial,
-  // onComplete,
 }) => {
   const letters = useMemo(() => {
     const arr = children.split('').map((char) => ({ char, id: seqId() }));
@@ -148,9 +126,6 @@ const Text = ({
     return arr;
   }, [children]);
 
-  /** @type {React.MutableRefObject<import('@react-three/cannon').PublicApi[]>} */
-  // const lettersRef = useRef([]);
-
   const textGeomConfig = useMemo(
     () => ({
       font: parsedFont,
@@ -168,10 +143,9 @@ const Text = ({
 
   return (
     <group>
-      {letters.map(({ id, char, pos, innerPos, size }, i) => (
+      {letters.map(({ id, char, pos, innerPos, size }) => (
         <Char
           key={id}
-          // boxRef={(el) => (lettersRef.current[i] = el)}
           char={char}
           pos={pos}
           innerPos={innerPos}

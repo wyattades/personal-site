@@ -75,7 +75,7 @@ const ChainLink = ({ children, chainSize, linkIndex, collides = false }) => {
     mass: 2,
     position: pos,
     rotation,
-    collisionFilterMask: 0,
+    collisionFilterMask: collides ? collisionFilterMask : 0,
   }));
 
   useConeTwistConstraint(p.ref, ref, constraint);
@@ -126,7 +126,6 @@ const ChainHandle = ({ children, position, radius = 1, startRotation = 0 }) => {
   const rotation = [0, 0, startRotation];
 
   const [ref] = useSphere(() => ({
-    // type: 'Static',
     mass: 20, // high mass so constraint doesn't stretch
     type: 'Dynamic',
     linearFactor: [0, 0, 0],
@@ -141,15 +140,9 @@ const ChainHandle = ({ children, position, radius = 1, startRotation = 0 }) => {
   const offset = [0, -radius, 0];
 
   return (
-    <>
-      {/* <mesh ref={ref} name="ChainHandle">
-        <sphereBufferGeometry args={[radius, 8, 8]} />
-        <meshStandardMaterial color="#0000ff" />
-      </mesh> */}
-      <parentCtx.Provider value={{ ref, pos: position, rotation, offset }}>
-        {children}
-      </parentCtx.Provider>
-    </>
+    <parentCtx.Provider value={{ ref, pos: position, rotation, offset }}>
+      {children}
+    </parentCtx.Provider>
   );
 };
 

@@ -18,8 +18,6 @@ $mobile-size: 512px;
   }
 }
 
-@import './resume';
-
 @mixin light-theme {
   --bg-color: #{$bg-color};
   --offset-color: #cecece;
@@ -38,6 +36,9 @@ $mobile-size: 512px;
   --help-text-color: #{$help-text-color};
   --link-visited-color: var(--link-color);
 }
+
+@import 'normalize.css';
+@import './resume';
 
 body {
   @include light-theme;
