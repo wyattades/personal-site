@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import { NextSeo } from 'next-seo';
 
 import projects from 'lib/projects';
 import Layout from 'components/Layout';
 import Link from 'components/Link';
 import AnimatedItems from 'components/AnimatedItems';
-
-const HTMLPhysics = dynamic(() => import('components/HTMLPhysics'));
+import { HTMLPhysics } from 'components/physicsImport';
 
 const projectItems = projects.filter((p) => !p.noListing);
 
@@ -22,7 +20,9 @@ const ProjectsPage = () => {
           className="content"
           style={{ flexBasis: '100%', margin: '0 1rem' }}
         >
-          <h1 style={{ marginBottom: 0, paddingBottom: '3rem' }}>Projects</h1>
+          <h1 style={{ marginBottom: 0, paddingBottom: '3rem' }}>
+            <span>Projects</span>
+          </h1>
           <p style={{ paddingBottom: '3rem' }}>
             Here are some of my noteworthy projects that were mostly created in
             my spare time. You can also view all of them and more on my{' '}
@@ -55,7 +55,7 @@ const ProjectsPage = () => {
             style={{ zIndex: 5, position: 'relative' }}
             onClick={() => setBroken((r) => !r)}
           >
-            {broken ? 'Unbreak' : 'Break'} this page
+            {broken ? '🛠 Fix' : '💣 Break'} this page?
           </button>
         </div>
       </AnimatedItems>

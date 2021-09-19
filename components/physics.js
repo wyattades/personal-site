@@ -1,6 +1,7 @@
-import Stats from 'stats.js';
-import { useEffect } from 'react';
-import { Debug, usePlane } from '@react-three/cannon';
+import { createContext, useContext, useEffect } from 'react';
+import { useAsync, useKeyPressEvent, useLocalStorage } from 'react-use';
+import { Euler, Vector3 } from 'three';
+import { Debug, usePlane, Physics as CannonPhysics } from '@react-three/cannon';
 
 export const IS_DEV = process.env.NODE_ENV === 'development';
 
@@ -9,6 +10,9 @@ export const COLLIDERS = {
   boundary: 2,
 };
 
+const t0 = new Vector3(),
+  t1 = new Vector3(),
+  e0 = new Euler();
 export const V = {
   add: (...vs) => {
     const s = [0, 0, 0];
@@ -19,11 +23,29 @@ export const V = {
     }
     return s;
   },
-  mult: (a, v) => [a[0] * v, a[1] * v, a[2] * v],
+  mult: (vec, scalar) =>
+    t0
+      .set(...vec)
+      .multiplyScalar(scalar)
+      .toArray(),
+  dist: (a, b) => t0.set(...a).distanceTo(t1.set(...b)),
+  applyRotate: (vec, rot) =>
+    t0
+      .set(...vec)
+      .applyEuler(e0.set(...rot, 'XYZ'))
+      .toArray(),
 };
 
-export const useStats = () => {
+export const useStats = (enabled = true) => {
+  const res = useAsync(
+    () => (enabled ? import('stats.js') : Promise.resolve(null)),
+    [enabled],
+  );
+  const Stats = res.value?.default;
+
   useEffect(() => {
+    if (!Stats) return;
+
     let mounted = true;
 
     // show FPS stats
@@ -40,13 +62,17 @@ export const useStats = () => {
       mounted = false;
       stats.dom.remove();
     };
-  }, []);
+  }, [Stats]);
 };
 
-export const FloorPlane = ({ size, ...props }) => {
-  const [ref, _api] = usePlane(() => props);
+const debugCtx = createContext(false);
 
-  if (IS_DEV)
+export const FloorPlane = ({ size, ...props }) => {
+  const [ref] = usePlane(() => props);
+
+  const isDebug = useContext(debugCtx);
+
+  if (isDebug)
     return (
       <mesh ref={ref}>
         <planeBufferGeometry args={size} />
@@ -56,13 +82,33 @@ export const FloorPlane = ({ size, ...props }) => {
   return null;
 };
 
-export const PhysicsDebug = IS_DEV
-  ? ({ children, enabled = true }) => {
-      useStats();
+const PhysicsDebug = IS_DEV
+  ? ({ children }) => {
+      const [enabled, setEnabled] = useLocalStorage('physics-debug', false);
 
-      return enabled ? <Debug color="#ff0000">{children}</Debug> : children;
+      useKeyPressEvent('d', () => {
+        setEnabled(!enabled);
+      });
+
+      useStats(enabled);
+
+      return enabled ? (
+        <debugCtx.Provider value={enabled}>
+          <Debug color="#ff0000">{children}</Debug>
+        </debugCtx.Provider>
+      ) : (
+        children
+      );
     }
   : (p) => p.children;
+
+export const Physics = ({ children, ...rest }) => {
+  return (
+    <CannonPhysics {...rest}>
+      <PhysicsDebug>{children}</PhysicsDebug>
+    </CannonPhysics>
+  );
+};
 
 export const debug = IS_DEV
   ? (...args) => console.debug('[debug]', ...args)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { IoSunny, IoMoon, MdSettingsBrightness } from '@react-icons';
 
 import { NavLink } from 'components/Link';
@@ -17,7 +17,7 @@ const StyleThemeButton = () => {
 
   return (
     <button
-      className="button-reset"
+      className="button-reset nav-item"
       onClick={theme.toggleMode}
       style={{ width: 56 }} // same as height
       aria-label="Toggle theme"
@@ -61,22 +61,22 @@ const Nav = () => {
       <nav className="nav">
         <ul>
           <li>
-            <NavLink exact href="/">
+            <NavLink exact href="/" className="nav-item">
               <span>Home</span>
             </NavLink>
           </li>
           <li>
-            <NavLink href="/projects">
+            <NavLink href="/projects" className="nav-item">
               <span>Projects</span>
             </NavLink>
           </li>
           <li>
-            <NavLink exact href="/about">
+            <NavLink exact href="/about" className="nav-item">
               <span>About</span>
             </NavLink>
           </li>
           <li>
-            <NavLink exact href="/contact">
+            <NavLink exact href="/contact" className="nav-item">
               <span>Contact</span>
             </NavLink>
           </li>

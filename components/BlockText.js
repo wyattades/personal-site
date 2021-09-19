@@ -1,14 +1,14 @@
-import React, { Suspense, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import { useEvent } from 'react-use';
 import { FontLoader, Vector3, MathUtils } from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
-import { Physics, useBox } from '@react-three/cannon';
+import { useBox } from '@react-three/cannon';
 
-import { ErrorBoundary, withErrorBoundary } from 'components/ErrorBoundary';
+import { withErrorBoundary } from 'components/ErrorBoundary';
 import { useAnimatedSwitch } from 'components/AnimatedItems';
-import { debug, PhysicsDebug, FloorPlane } from 'components/physics';
+import { debug, Physics, FloorPlane } from 'components/physics';
 
 import fontJson from 'fonts/helv.json';
 
@@ -23,8 +23,7 @@ const seqId = () => seqIdCounter++;
 /** @param {THREE.Vector3} vec3 */
 const r = new Vector3();
 const initialInnerPos = (vec3) => {
-  r.set(0, 0, 7);
-  return r.add(vec3).toArray();
+  return r.set(0, 0, 7).add(vec3).toArray();
 };
 
 const Char = ({
@@ -273,22 +272,20 @@ const BlockText = ({ text }) => {
           <ambientLight intensity={1} />
           {/* <ambientLight /> */}
           {/* <pointLight position={[10, 10, 10]} /> */}
-          <Suspense fallback={null}>
-            {/* <Environment preset="city" /> doesn't do anything */}
-            <Physics allowSleep step={1 / 30} gravity={[0, -20, 0]}>
-              <PhysicsDebug>
-                <SpringGroup changeKey={text}>
-                  <Text>{text}</Text>
-                </SpringGroup>
-                {/* this `y` is perfect for resting the letters on initially */}
-                <FloorPlane
-                  size={[100, 100]}
-                  position={[0, -8.25, 0]}
-                  rotation={[-Math.PI / 2, 0, 0]}
-                />
-              </PhysicsDebug>
-            </Physics>
-          </Suspense>
+          {/* <Suspense fallback={null}> */}
+          {/* <Environment preset="city" /> doesn't do anything */}
+          <Physics allowSleep step={1 / 30} gravity={[0, -20, 0]}>
+            <SpringGroup changeKey={text}>
+              <Text>{text}</Text>
+            </SpringGroup>
+            {/* this `y` is perfect for resting the letters on initially */}
+            <FloorPlane
+              size={[100, 100]}
+              position={[0, -8.25, 0]}
+              rotation={[-Math.PI / 2, 0, 0]}
+            />
+          </Physics>
+          {/* </Suspense> */}
         </Canvas>
       </div>
       <h1 className="sr-only">{text}</h1>

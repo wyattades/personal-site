@@ -1,5 +1,5 @@
-import BlockText from 'components/LazyBlockText';
 import Layout from 'components/Layout';
+import { BlockText } from 'components/physicsImport';
 
 const ErrorPage = ({ error }) => (
   <Layout>

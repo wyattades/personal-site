@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useDebounce as useDebounceFn } from 'react-use';
 
 import Layout from 'components/Layout';
-import BlockText from 'components/LazyBlockText';
 import { useHoveredLink } from 'components/Link';
 import AnimatedItems, { useOutTransition } from 'components/AnimatedItems';
 import { BodyProps } from 'components/BodyProps';
+import { BlockText } from 'components/physicsImport';
 
 const useDebounced = (val, wait) => {
   const [v, setV] = useState(val);
