@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import { useRef } from 'react';
 import { useIsomorphicLayoutEffect } from 'react-use';
 
 /*
@@ -5,24 +7,78 @@ import { useIsomorphicLayoutEffect } from 'react-use';
  * For now only supports `className`
  */
 
-let activeProps = null;
+// just used for SSR
+let activeProps = {};
 
-export const DocumentBody = ({ children }) => {
-  return <body {...(activeProps || {})}>{children}</body>;
+const isNonEmptyObj = (obj) => _.isPlainObject(obj) && !_.isEmpty(obj);
+const objJSON = {
+  stringify: (obj) => {
+    try {
+      if (isNonEmptyObj(obj)) return JSON.stringify(obj);
+    } catch {}
+    return undefined;
+  },
+  parse: (str) => {
+    try {
+      if (typeof str === 'string' && str) {
+        const obj = JSON.parse(str);
+        if (isNonEmptyObj(obj)) return obj;
+      }
+    } catch {}
+    return undefined;
+  },
 };
 
-export const BodyProps = ({ className }) => {
-  activeProps = {
-    className,
+export const DocumentBody = ({ children }) => {
+  const attrs = {
+    ...activeProps,
+    'data-ssr-props': objJSON.stringify(activeProps),
   };
 
-  // this code assumes we don't use `BodyProps` with the same `className` multiple times!
+  return <body {...attrs}>{children}</body>;
+};
+
+const getClassTokens = (...cls) => {
+  const tokens = new Set();
+
+  for (const cl of cls)
+    if (cl) for (const c of cl.split(/\s+/)) if (c) tokens.add(c);
+
+  return [...tokens].sort();
+};
+
+export const BodyProps = (props) => {
+  if (typeof window === 'undefined') {
+    if (props.className) {
+      activeProps.className = getClassTokens(
+        activeProps.className,
+        props.className,
+      ).join(' ');
+    }
+  }
+
+  const first = useRef(true);
   useIsomorphicLayoutEffect(() => {
-    document.body.classList.add(className);
+    if (first.current) {
+      first.current = false;
+
+      const ssrTokens = getClassTokens(
+        objJSON.parse(document.body.dataset.ssrProps)?.className,
+      );
+      document.body.classList.remove(...ssrTokens);
+      delete document.body.dataset.ssrProps;
+    }
+
+    // so we don't remove classes that were already active
+    const toAdd = _.difference(
+      getClassTokens(props.className),
+      getClassTokens(document.body.className),
+    );
+    document.body.classList.add(...toAdd);
     return () => {
-      document.body.classList.remove(className);
+      document.body.classList.remove(...toAdd);
     };
-  }, [className]);
+  }, [props.className]);
 
   return null;
 };

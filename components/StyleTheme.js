@@ -1,4 +1,11 @@
-import React, { createContext, useCallback, useContext, useRef } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useLocalStorage, useLatest } from 'react-use';
 
 import { BodyProps } from 'components/BodyProps';
@@ -14,8 +21,15 @@ const ORDER = supportsColorScheme
   ? ['light', 'dark', 'system']
   : ['light', 'dark'];
 
+const useIsFirstMount = () => {
+  const [first, setFirst] = useState(true);
+  useEffect(() => setFirst(false), []);
+  return first;
+};
+
 export const ThemeProvider = ({ children }) => {
   const [mode, setMode] = useLocalStorage('style-theme', ORDER[0]);
+
   const changeCounter = useRef(0);
 
   const latestMode = useLatest(mode);
@@ -25,9 +39,16 @@ export const ThemeProvider = ({ children }) => {
     setMode(ORDER[i >= ORDER.length - 1 || i < 0 ? 0 : i + 1]);
   }, []);
 
+  const isFirst = useIsFirstMount();
+
   return (
     <ThemeCtx.Provider
-      value={{ mode, setMode, toggleMode, changeCount: changeCounter.current }}
+      value={{
+        mode: isFirst ? ORDER[0] : mode,
+        setMode,
+        toggleMode,
+        changeCount: changeCounter.current,
+      }}
     >
       {children}
       <BodyProps className={`theme-${mode}`} />
