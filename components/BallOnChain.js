@@ -132,7 +132,7 @@ const ChainHandle = ({ children, position, radius = 1, startRotation = 0 }) => {
     angularFactor: [0, 0, 1],
     args: radius,
     position,
-    collisionFilterMask,
+    collisionFilterMask: 0,
     // angularDamping: 0.8, // rotational friction
     rotation,
   }));
@@ -146,10 +146,10 @@ const ChainHandle = ({ children, position, radius = 1, startRotation = 0 }) => {
   );
 };
 
-export const BallOnChain = () => {
+export const BallOnChain = ({ position, angle, chainCount }) => {
   return (
-    <ChainHandle position={[-1, 12, 0]} startRotation={-Math.PI / 2}>
-      <ChainLinks count={10} chainSize={[0.3, 2, 0.3]}>
+    <ChainHandle position={position} startRotation={angle}>
+      <ChainLinks count={chainCount} chainSize={[0.3, 2, 0.3]}>
         <ChainBall radius={3.5} />
       </ChainLinks>
     </ChainHandle>

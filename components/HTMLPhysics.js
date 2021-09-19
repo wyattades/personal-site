@@ -9,11 +9,7 @@ import { Canvas } from '@react-three/fiber';
 import { withErrorBoundary } from 'components/ErrorBoundary';
 import { Physics, FloorPlane, COLLIDERS } from 'components/physics';
 import { BallOnChain } from 'components/BallOnChain';
-
-/** @returns {HTMLElement | null} */
-const $ = (s, d) => (d ? s : document).querySelector(d || s);
-/** @returns {HTMLElement[]} */
-const $$ = (s, d) => Array.from((d ? s : document).querySelectorAll(d || s));
+import { $$, findFixedParent } from 'lib/utils/html';
 
 const scaleOut = 50;
 const scaleIn = 1 / scaleOut;
@@ -61,31 +57,26 @@ const ElementBody = ({ start, position, size, el }) => {
   return null;
 };
 
-const zoomOutScale = 1; // TODO: maybe later
-
 const getViewBounds = (scale = scaleIn) => {
   const { clientWidth: cw, clientHeight: ch } = document.body;
 
-  const offsetX = cw * ((1 - 1 / zoomOutScale) / 2);
-  const ox = offsetX * scale;
+  // const offsetX = cw * ((1 - 1 / zoomOutScale) / 2);
+  // const ox = offsetX * scale;
 
-  const csw = cw * scale - 2 * ox,
-    csh = ch * scale;
-
-  const bottomLeft = new Vector3(ox, -csh / 2, 0);
-  const bottomMiddle = new Vector3(ox + csw / 2, -csh / 2, 0);
-  const bottomRight = new Vector3(ox + csw, -csh / 2, 0);
-  const topLeft = new Vector3(ox, csh / 2, 0);
+  const w = cw * scale,
+    h = ch * scale;
+  const w2 = w / 2,
+    h2 = h / 2;
 
   return {
-    x: ox,
+    x: 0,
     y: 0,
-    width: csw,
-    height: csh,
-    bottomLeft,
-    bottomMiddle,
-    bottomRight,
-    topLeft,
+    width: w,
+    height: h,
+    bottomLeft: new Vector3(0, -h2, 0),
+    bottomMiddle: new Vector3(w2, -h2, 0),
+    bottomRight: new Vector3(w, -h2, 0),
+    topLeft: new Vector3(0, h2, 0),
   };
 };
 
@@ -115,7 +106,7 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
     };
   });
 
-  return (
+  return creatReactPortal(
     <Canvas
       camera={camera}
       style={
@@ -140,21 +131,9 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
       {...rest}
     >
       {children}
-    </Canvas>
+    </Canvas>,
+    document.body,
   );
-};
-
-/**
- *
- * @param {HTMLElement} el
- * @param {number} depth
- */
-const findFixedParent = (el, depth = 4) => {
-  if (depth <= 0) return null;
-  const parent = el.parentElement;
-  if (!parent || parent === document.body) return null;
-  if (window.getComputedStyle(parent).position === 'fixed') return parent;
-  return findFixedParent(parent, depth - 1);
 };
 
 const HTMLPhysics = ({
@@ -195,6 +174,8 @@ const HTMLPhysics = ({
 
     const viewBounds = getViewBounds();
 
+    const isSmall = document.documentElement.clientWidth < 1150;
+    const extraX = isSmall ? 8 : 0;
     const floors = [
       {
         position: viewBounds.bottomMiddle.toArray(),
@@ -202,12 +183,18 @@ const HTMLPhysics = ({
         rotation: [-Math.PI / 2, 0, 0],
       },
       {
-        position: viewBounds.bottomLeft.toArray(),
+        position: viewBounds.bottomLeft
+          .clone()
+          .setX(viewBounds.bottomLeft.x - extraX)
+          .toArray(),
         size: [viewBounds.width, depth],
         rotation: [-Math.PI / 2, Math.PI / 2, 0],
       },
       {
-        position: viewBounds.bottomRight.toArray(),
+        position: viewBounds.bottomRight
+          .clone()
+          .setX(viewBounds.bottomRight.x + extraX)
+          .toArray(),
         size: [viewBounds.width, depth],
         rotation: [-Math.PI / 2, -Math.PI / 2, 0],
       },
@@ -216,6 +203,7 @@ const HTMLPhysics = ({
     setState({
       els,
       floors,
+      isSmall,
     });
 
     return () => {
@@ -227,13 +215,15 @@ const HTMLPhysics = ({
         el.style.transform = '';
       }
 
-      for (const el of removeFixedEls) el.classList.remove('phys__no-fixed');
+      for (const el of removeFixedEls) {
+        el.classList.remove('phys__no-fixed');
+      }
     };
   }, []);
 
   if (!state) return null;
 
-  return creatReactPortal(
+  return (
     <FullPageCanvas>
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 0, 10]} />
@@ -249,7 +239,10 @@ const HTMLPhysics = ({
             collisionFilterGroup={COLLIDERS.boundary}
           />
         ))}
-        <BallOnChain />
+        <BallOnChain
+          angle={-Math.PI / 2}
+          position={[-1, state?.isSmall ? -10 : 12, 0]}
+        />
       </Physics>
 
       <style jsx global>{`
@@ -260,8 +253,7 @@ const HTMLPhysics = ({
           position: absolute !important;
         }
       `}</style>
-    </FullPageCanvas>,
-    document.body,
+    </FullPageCanvas>
   );
 };
 
