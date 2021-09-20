@@ -148,6 +148,8 @@ const HTMLPhysics = ({
 
     const { scrollTop, scrollHeight } = document.documentElement;
 
+    document.body.classList.add('phys__overflow-hidden');
+
     const els = $$(selector).map((el) => {
       if (window.getComputedStyle(el).display === 'inline')
         el.classList.add('phys__inline-block');
@@ -210,14 +212,16 @@ const HTMLPhysics = ({
       setState(null);
 
       for (const { el } of els) {
-        el.classList.remove('phys__element');
+        el.classList.remove('phys__inline-block');
 
         el.style.transform = '';
       }
 
       for (const el of removeFixedEls) {
-        el.classList.remove('phys__no-fixed');
+        el.classList.remove('phys__absolute');
       }
+
+      document.body.classList.remove('phys__overflow-hidden');
     };
   }, []);
 
@@ -239,13 +243,18 @@ const HTMLPhysics = ({
             collisionFilterGroup={COLLIDERS.boundary}
           />
         ))}
+
         <BallOnChain
           angle={-Math.PI / 2}
           position={[-1, state?.isSmall ? -10 : 12, 0]}
+          chainCount={10}
         />
       </Physics>
 
       <style jsx global>{`
+        .phys__overflow-hidden {
+          overflow: hidden !important;
+        }
         .phys__inline-block {
           display: inline-block !important;
         }
