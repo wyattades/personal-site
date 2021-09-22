@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useEvent } from 'react-use';
 import { FontLoader, Vector3, MathUtils } from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
@@ -182,7 +182,7 @@ const Resizer = ({ parentRef }) => {
 
     camera.aspect = w / h;
 
-    const objectsWidth = 90; // should be close to `moveX`
+    const objectsWidth = 70; // should be close to `moveX`
 
     // Set FOV so letters fit in screen with some margin (20deg)
     const fov =
@@ -197,19 +197,19 @@ const Resizer = ({ parentRef }) => {
 
   useEvent('resize', resize);
 
-  useLayoutEffect(resize, []);
+  useEffect(resize, [camera]);
 
   return null;
 };
 
 const BlockText = ({ text }) => {
-  const parent = useRef();
-  const camera = useRef();
+  const parentRef = useRef();
+  const cameraRef = useRef();
 
   return (
     <>
       <div
-        ref={parent}
+        ref={parentRef}
         style={{
           // Use min width and height to prevent webGL crash when size is 0
           minHeight: 10,
@@ -218,30 +218,30 @@ const BlockText = ({ text }) => {
           margin: '0 auto',
         }}
       >
-        {/* TODO: shadows */}
+        {/* TODO: cool shadows + lights */}
         <Canvas>
-          <Resizer parentRef={parent} />
+          <Resizer parentRef={parentRef} />
           <group name="Camera" position={[0, 0, cameraZ]}>
             <PerspectiveCamera
               makeDefault
               far={500}
               near={0.1}
               fov={42} // will be overridden by `<Resizer/>`
-              ref={camera}
-            >
-              <directionalLight
-                castShadow
-                position={[10, 20, 15]}
-                shadow-camera-right={8}
-                shadow-camera-top={8}
-                shadow-camera-left={-8}
-                shadow-camera-bottom={-8}
-                shadow-mapSize-width={1024}
-                shadow-mapSize-height={1024}
-                intensity={2}
-                shadow-bias={-0.0001}
-              />
-            </PerspectiveCamera>
+              ref={cameraRef}
+            />
+
+            {/* <directionalLight
+              castShadow
+              position={[10, 20, 15]}
+              shadow-camera-right={8}
+              shadow-camera-top={8}
+              shadow-camera-left={-8}
+              shadow-camera-bottom={-8}
+              shadow-mapSize-width={1024}
+              shadow-mapSize-height={1024}
+              intensity={2}
+              shadow-bias={-0.0001}
+            /> */}
           </group>
           <ambientLight intensity={1} />
           {/* <ambientLight /> */}

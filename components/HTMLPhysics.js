@@ -7,9 +7,15 @@ import { useBox } from '@react-three/cannon';
 import { Canvas } from '@react-three/fiber';
 
 import { withErrorBoundary } from 'components/ErrorBoundary';
-import { Physics, FloorPlane, COLLIDERS } from 'components/physics';
+import { Physics, FloorPlane } from 'components/physics';
 import { BallOnChain } from 'components/BallOnChain';
 import { $$, findFixedParent } from 'lib/utils/html';
+
+const COLLISION_GROUPS = {
+  all: 0xffffffff,
+  default: 1 << 0,
+  boundary: 1 << 1,
+};
 
 const scaleOut = 50;
 const scaleIn = 1 / scaleOut;
@@ -176,28 +182,30 @@ const HTMLPhysics = ({
 
     const viewBounds = getViewBounds();
 
-    const isSmall = document.documentElement.clientWidth < 1150;
-    const extraX = isSmall ? 8 : 0;
+    const minWidth = 30;
+    const floorsWidth = Math.max(minWidth, viewBounds.width);
+    const floorsExtraX = (floorsWidth - viewBounds.width) / 2;
+
     const floors = [
       {
         position: viewBounds.bottomMiddle.toArray(),
-        size: [viewBounds.width, depth],
+        size: [floorsWidth, depth],
         rotation: [-Math.PI / 2, 0, 0],
       },
       {
         position: viewBounds.bottomLeft
           .clone()
-          .setX(viewBounds.bottomLeft.x - extraX)
+          .setX(viewBounds.bottomLeft.x - floorsExtraX)
           .toArray(),
-        size: [viewBounds.width, depth],
+        size: [viewBounds.height, depth],
         rotation: [-Math.PI / 2, Math.PI / 2, 0],
       },
       {
         position: viewBounds.bottomRight
           .clone()
-          .setX(viewBounds.bottomRight.x + extraX)
+          .setX(viewBounds.bottomRight.x + floorsExtraX)
           .toArray(),
-        size: [viewBounds.width, depth],
+        size: [viewBounds.height, depth],
         rotation: [-Math.PI / 2, -Math.PI / 2, 0],
       },
     ];
@@ -205,7 +213,7 @@ const HTMLPhysics = ({
     setState({
       els,
       floors,
-      isSmall,
+      viewBounds,
     });
 
     return () => {
@@ -233,21 +241,24 @@ const HTMLPhysics = ({
       <pointLight position={[10, 0, 10]} />
 
       <Physics>
-        {state?.els.map((props, i) => (
+        {state.els.map((props, i) => (
           <ElementBody key={i} {...props} />
         ))}
-        {state?.floors.map((props, i) => (
+        {state.floors.map((props, i) => (
           <FloorPlane
             key={i}
             {...props}
-            collisionFilterGroup={COLLIDERS.boundary}
+            collisionFilterGroup={COLLISION_GROUPS.boundary}
           />
         ))}
 
         <BallOnChain
           angle={-Math.PI / 2}
-          position={[-1, state?.isSmall ? -10 : 12, 0]}
+          position={[-1, state.viewBounds.bottomMiddle.y + 32, 0]} // BallOnChain with 10 links is roughly 30 units tall
           chainCount={10}
+          collisionFilterMasks={{
+            ball: COLLISION_GROUPS.all & ~COLLISION_GROUPS.boundary, // don't collide ball with boundaries
+          }}
         />
       </Physics>
 

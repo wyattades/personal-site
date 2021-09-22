@@ -5,11 +5,6 @@ import { Debug, usePlane, Physics as CannonPhysics } from '@react-three/cannon';
 
 export const IS_DEV = process.env.NODE_ENV === 'development';
 
-export const COLLIDERS = {
-  default: 1,
-  boundary: 2,
-};
-
 const t0 = new Vector3(),
   t1 = new Vector3(),
   e0 = new Euler();

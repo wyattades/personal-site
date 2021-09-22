@@ -1,29 +1,24 @@
-import React, { createContext, createRef, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useBox, useConeTwistConstraint, useSphere } from '@react-three/cannon';
 
-import { COLLIDERS, V } from 'components/physics';
+import { V } from 'components/physics';
 
-const parentCtx = createContext({
-  ref: createRef(),
+const parentCtx = React.createContext({
+  ref: React.createRef(),
   pos: [0, 0, 0],
   offset: [0, 0, 0],
   rotation: [0, 0, 0],
 });
 
-const collisionFilterMask = COLLIDERS.default;
-
 const meshQuality = 4;
 
 /** @returns {{ constraint: import('@react-three/cannon').ConeTwistConstraintOpts }} */
 const getConstraintData = (parent, offset) => {
-  const pos = V.add(
-    parent.pos,
-    V.applyRotate(parent.offset, parent.rotation),
-    V.mult(V.applyRotate(offset, parent.rotation), -1),
-  );
-
   return {
-    pos,
+    pos: V.add(
+      parent.pos,
+      V.applyRotate(V.add(parent.offset, V.mult(offset, -1)), parent.rotation),
+    ),
     rotation: parent.rotation,
     offset: V.mult(offset, -1),
     constraint: {
@@ -37,7 +32,7 @@ const getConstraintData = (parent, offset) => {
   };
 };
 
-const ChainBall = ({ radius = 1 }) => {
+const ChainBall = ({ radius = 1, collisionFilterMask }) => {
   const p = useContext(parentCtx);
 
   const { constraint, pos, rotation } = getConstraintData(p, [0, radius, 0]);
@@ -61,7 +56,7 @@ const ChainBall = ({ radius = 1 }) => {
   );
 };
 
-const ChainLink = ({ children, chainSize, linkIndex, collides = false }) => {
+const ChainLink = ({ children, chainSize, linkIndex, collisionFilterMask }) => {
   const p = useContext(parentCtx);
 
   const { constraint, pos, rotation, offset } = getConstraintData(p, [
@@ -75,7 +70,7 @@ const ChainLink = ({ children, chainSize, linkIndex, collides = false }) => {
     mass: 2,
     position: pos,
     rotation,
-    collisionFilterMask: collides ? collisionFilterMask : 0,
+    collisionFilterMask,
   }));
 
   useConeTwistConstraint(p.ref, ref, constraint);
@@ -122,18 +117,24 @@ const ChainLinks = ({ count = 0, children, ...rest }) => {
   return content;
 };
 
-const ChainHandle = ({ children, position, radius = 1, startRotation = 0 }) => {
+const ChainHandle = ({
+  children,
+  position,
+  radius = 1,
+  startRotation = 0,
+  collisionFilterMask,
+}) => {
   const rotation = [0, 0, startRotation];
 
   const [ref] = useSphere(() => ({
     mass: 20, // high mass so constraint doesn't stretch
     type: 'Dynamic',
+    // angularDamping: 0.8, // rotational friction
     linearFactor: [0, 0, 0],
-    angularFactor: [0, 0, 1],
+    angularFactor: [0, 0, 1], // only rotates along Z axis
     args: radius,
     position,
-    collisionFilterMask: 0,
-    // angularDamping: 0.8, // rotational friction
+    collisionFilterMask,
     rotation,
   }));
 
@@ -146,11 +147,24 @@ const ChainHandle = ({ children, position, radius = 1, startRotation = 0 }) => {
   );
 };
 
-export const BallOnChain = ({ position, angle, chainCount }) => {
+export const BallOnChain = ({
+  position = [0, 0, 0],
+  angle = 0,
+  chainCount = 8,
+  collisionFilterMasks: { handle = 0, chain = 0, ball = -1 } = {},
+}) => {
   return (
-    <ChainHandle position={position} startRotation={angle}>
-      <ChainLinks count={chainCount} chainSize={[0.3, 2, 0.3]}>
-        <ChainBall radius={3.5} />
+    <ChainHandle
+      position={position}
+      startRotation={angle}
+      collisionFilterMask={handle}
+    >
+      <ChainLinks
+        count={chainCount}
+        chainSize={[0.3, 2, 0.3]}
+        collisionFilterMask={chain}
+      >
+        <ChainBall radius={3.5} collisionFilterMask={ball} />
       </ChainLinks>
     </ChainHandle>
   );
