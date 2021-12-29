@@ -376,7 +376,8 @@ dl.expertise-table {
 
 .content {
   &,
-  p {
+  p,
+  li {
     font-size: 18px;
   }
   h1 {
@@ -388,6 +389,9 @@ dl.expertise-table {
   p,
   .image {
     margin-bottom: 24px;
+  }
+  li {
+    margin-bottom: 8px;
   }
   a {
     color: var(--link-color);

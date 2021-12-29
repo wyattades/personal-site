@@ -8,6 +8,7 @@ import projects from 'lib/projects';
 import PlaySketch from 'components/PlaySketch';
 import { GoBackLink } from 'components/Link';
 import AnimatedItems from 'components/AnimatedItems';
+import { Markdown } from 'components/Markdown';
 
 export const getStaticProps = async ({ params: { project_id } }) => {
   const project = projects.find((p) => !p.noPage && p.id === project_id);
@@ -33,28 +34,6 @@ export const getStaticPaths = async () => {
       })),
     fallback: false,
   };
-};
-
-const Markdown = ({ content }) => {
-  return content
-    .trim()
-    .split(/\n{2,}/)
-    .map((p, i) => {
-      const parts = [];
-      let lastIndex = 0;
-      for (const m of p.matchAll(/\[(.*?)\]\((.*?)\)/g)) {
-        const before = p.substring(lastIndex, m.index);
-        if (before) parts.push(before);
-        parts.push(
-          <a key={parts.length} href={m[2]}>
-            {m[1]}
-          </a>,
-        );
-        lastIndex = m.index + m[0].length;
-      }
-      if (p.length > lastIndex) parts.push(p.substring(lastIndex, p.length));
-      return <p key={i}>{parts}</p>;
-    });
 };
 
 const ShowProjectPage = ({ project }) => {
@@ -148,7 +127,7 @@ const ShowProjectPage = ({ project }) => {
             ),
           ]
         ) : desc && typeof desc === 'string' ? (
-          <Markdown content={desc} />
+          <Markdown>{desc}</Markdown>
         ) : Array.isArray(desc) ? (
           desc
         ) : null}
