@@ -1,11 +1,12 @@
+import _ from 'lodash';
 import React, { useEffect, useRef } from 'react';
 import { useAsync } from 'react-use';
 
 import { withErrorBoundary } from 'components/ErrorBoundary';
+import { wait } from 'lib/utils';
+import { ScoardBoard } from 'lib/scoreBoard';
 
 const HEIGHT = 600;
-
-const wait = (millis) => new Promise((resolve) => setTimeout(resolve, millis));
 
 const PlaySketch = ({ game }) => {
   const {
@@ -18,7 +19,7 @@ const PlaySketch = ({ game }) => {
       import(`lib/sketches/${game.id}`),
       wait(1500), // wait for animation to finish
     ]);
-    return { p5: p5.default, sketch: sketch.default };
+    return { projectId: game.id, p5: p5.default, sketch: sketch.default };
   }, [game.id]);
 
   const containerRef = useRef();
@@ -30,15 +31,18 @@ const PlaySketch = ({ game }) => {
     const w = containerRef.current.clientWidth;
     // const h = containerRef.current.clientHeight;
 
-    const { sketch, p5: P5 } = modules;
+    const { projectId, sketch, p5: P5 } = modules;
+
+    const scoreBoard = new ScoardBoard(projectId);
 
     const sketchInstance = new P5(
-      (p5) => sketch(p5, w, HEIGHT, P5),
+      (p5) => sketch({ p5, width: w, height: HEIGHT, P5, scoreBoard }),
       sketchRef.current,
     );
 
     return () => {
       sketchInstance.remove();
+      scoreBoard.dispose();
     };
   }, [modules]);
 
