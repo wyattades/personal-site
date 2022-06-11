@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { useRef } from 'react';
 import { useIsomorphicLayoutEffect } from 'react-use';
 
@@ -8,7 +8,7 @@ import { useIsomorphicLayoutEffect } from 'react-use';
  */
 
 // just used for SSR
-let activeProps = {};
+const activeProps = {};
 
 const isNonEmptyObj = (obj) => _.isPlainObject(obj) && !_.isEmpty(obj);
 const objJSON = {

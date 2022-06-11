@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Link from 'components/Link';
 import projects from 'lib/projects';
 import gamesImage from 'images/project_images/games.gif';

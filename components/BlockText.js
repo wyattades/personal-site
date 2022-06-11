@@ -1,7 +1,20 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import {
+  cloneElement,
+  memo,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { useEvent } from 'react-use';
-import { FontLoader, Vector3, MathUtils } from 'three';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Vector3, MathUtils } from 'three';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import {
+  Canvas,
+  useThree,
+  extend as extendReactThree,
+} from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
 import { useBox } from '@react-three/cannon';
@@ -163,7 +176,7 @@ const SpringGroup = ({ children, changeKey }) => {
   const stack = useAnimatedSwitch(changeKey, children, REMOVE_DURATION);
 
   return stack.map((s, i) =>
-    React.cloneElement(s.children, {
+    cloneElement(s.children, {
       key: s.key,
       animateIn: i === 0,
       onComplete: s.remove,
@@ -202,6 +215,12 @@ const Resizer = ({ parentRef }) => {
   return null;
 };
 
+const ExtendReactThree = () => {
+  useMemo(() => extendReactThree({ TextGeometry }), []);
+
+  return null;
+};
+
 const BlockText = ({ text }) => {
   const parentRef = useRef();
   const cameraRef = useRef();
@@ -220,6 +239,7 @@ const BlockText = ({ text }) => {
       >
         {/* TODO: cool shadows + lights */}
         <Canvas>
+          <ExtendReactThree />
           <Resizer parentRef={parentRef} />
           <group name="Camera" position={[0, 0, cameraZ]}>
             <PerspectiveCamera
@@ -267,4 +287,4 @@ const BlockText = ({ text }) => {
   );
 };
 
-export default React.memo(withErrorBoundary(BlockText, null));
+export default memo(withErrorBoundary(BlockText, null));

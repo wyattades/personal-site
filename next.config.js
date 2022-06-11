@@ -8,7 +8,7 @@ const mode = process.env.NODE_ENV;
 if (!['production', 'development'].includes(mode))
   throw new Error(`Invalid NODE_ENV: ${mode}`);
 
-/** @type {import('next/dist/server/config').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 

@@ -1,6 +1,7 @@
-import React from 'react';
 import Image from 'next/image';
-import { FaCloudDownloadAlt, FaLink, FaCode } from '@react-icons';
+import { FaCloudDownloadAlt as DownloadIcon } from '@react-icons/all-files/fa/FaCloudDownloadAlt';
+import { FaLink as LinkIcon } from '@react-icons/all-files/fa/FaLink';
+import { FaCode as CodeIcon } from '@react-icons/all-files/fa/FaCode';
 import { NextSeo } from 'next-seo';
 
 import Layout from 'components/Layout';
@@ -79,7 +80,7 @@ const ShowProjectPage = ({ project }) => {
         {download && (
           <p>
             <a href={download}>
-              <FaCloudDownloadAlt className="icon-head" aria-hidden />
+              <DownloadIcon className="icon-head" aria-hidden />
               Download Link
             </a>
           </p>
@@ -87,7 +88,7 @@ const ShowProjectPage = ({ project }) => {
         {url && (
           <p>
             <a href={url}>
-              <FaLink className="icon-head" aria-hidden />
+              <LinkIcon className="icon-head" aria-hidden />
               {isNPM ? 'NPM Package' : 'Live Website'}
             </a>
           </p>
@@ -95,7 +96,7 @@ const ShowProjectPage = ({ project }) => {
         {source && (
           <p>
             <a href={source}>
-              <FaCode className="icon-head" aria-hidden />
+              <CodeIcon className="icon-head" aria-hidden />
               Source
             </a>
           </p>

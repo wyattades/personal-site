@@ -1,5 +1,7 @@
-import React from 'react';
-import { FaEnvelope, FaGithub, FaLinkedin, FaSpotify } from '@react-icons';
+import { FaGithub as GithubIcon } from '@react-icons/all-files/fa/FaGithub';
+import { FaEnvelope as EmailIcon } from '@react-icons/all-files/fa/FaEnvelope';
+import { FaLinkedin as LinkedinIcon } from '@react-icons/all-files/fa/FaLinkedin';
+import { FaSpotify as SpotifyIcon } from '@react-icons/all-files/fa/FaSpotify';
 import { NextSeo } from 'next-seo';
 
 import Layout from 'components/Layout';
@@ -11,7 +13,7 @@ const ContactPage = () => {
       <h1>Contact</h1>
       <p>
         <a href="mailto:me@wyattades.com">
-          <FaEnvelope className="icon-head" aria-hidden />
+          <EmailIcon className="icon-head" aria-hidden />
           me@wyattades.com
         </a>
         <br />
@@ -20,19 +22,19 @@ const ContactPage = () => {
       <h2>Other Links</h2>
       <p>
         <a href="https://github.com/wyattades">
-          <FaGithub className="icon-head" aria-hidden />
+          <GithubIcon className="icon-head" aria-hidden />
           github.com/wyattades
         </a>
       </p>
       <p>
         <a href="https://linkedin.com/in/wyattades/">
-          <FaLinkedin className="icon-head" aria-hidden />
+          <LinkedinIcon className="icon-head" aria-hidden />
           linkedin.com/in/wyattades
         </a>
       </p>
       <p>
         <a href="https://open.spotify.com/user/wyattades">
-          <FaSpotify className="icon-head" aria-hidden />
+          <SpotifyIcon className="icon-head" aria-hidden />
           open.spotify.com/user/wyattades
         </a>
       </p>

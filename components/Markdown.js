@@ -1,5 +1,6 @@
+import { memo } from 'react';
+
 import { matchAll } from 'lib/utils';
-import React from 'react';
 
 const withInliners = (str) => {
   const parts = [];
@@ -22,7 +23,7 @@ const withInliners = (str) => {
  * Simple and buggy markdown implementation.
  * Supports: links, ordered-lists, unordered-lists, paragraphs
  */
-export const Markdown = React.memo(({ children }) => {
+export const Markdown = memo(function InnerMarkdown({ children }) {
   if (typeof children !== 'string' || children.length === 0) return null;
 
   return children

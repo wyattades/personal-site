@@ -1,4 +1,6 @@
-import React, {
+import {
+  Children as ReactChildren,
+  cloneElement,
   createContext,
   useContext,
   useEffect,
@@ -24,6 +26,7 @@ export const useAnimatedSwitch = (value, children, removeDelay = 1000) => {
       value,
       children,
       isInitial: true,
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       remove: () => removeKey(0),
     },
   ]);
@@ -114,7 +117,7 @@ export const Fade = ({
   disabled = false,
   ...rest
 }) => {
-  const nodeRef = React.useRef();
+  const nodeRef = useRef();
 
   if (!children) return null;
 
@@ -143,7 +146,7 @@ export const Fade = ({
 
         if (canInjectStyle)
           return style
-            ? React.cloneElement(children, {
+            ? cloneElement(children, {
                 ref: nodeRef,
                 style: children.props.style
                   ? { ...children.props.style, ...style }
@@ -171,7 +174,7 @@ const ANIMATE_DIRS = {
 const AnimatedItems = ({ children, dist = 12 }) => {
   const outTransition = useOutTransition();
 
-  const validChildren = React.Children.toArray(children).filter(
+  const validChildren = ReactChildren.toArray(children).filter(
     (c) => c != null && c !== false,
   );
 

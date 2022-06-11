@@ -1,6 +1,6 @@
-import React from 'react';
 import * as ReactDOM from 'react-dom/server';
 import { parse as parseUrl } from 'url';
+
 import projects from 'lib/projects';
 
 const HOST_URL = process.env.HOST_URL;
@@ -10,8 +10,10 @@ const staticFileGetters = {
 Sitemap: ${HOST_URL}/sitemap.xml
 `,
   'sitemap.xml': () => {
-    const p = 60 * 60 * 1000; // milliseconds in an hour
-    const lastMod = new Date(Math.floor(Date.now() / p) * p).toISOString(); // get past hour
+    const hourMs = 60 * 60 * 1000; // milliseconds in an hour
+    const lastMod = new Date(
+      Math.floor(Date.now() / hourMs) * hourMs,
+    ).toISOString(); // get past hour
 
     const pathnames = [
       '/',

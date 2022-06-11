@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 
-export class ErrorBoundary extends React.Component {
+export class ErrorBoundary extends Component {
   state = {
     hasError: null,
   };
@@ -25,9 +25,11 @@ export class ErrorBoundary extends React.Component {
   }
 }
 
-export const withErrorBoundary = (Comp, fallback) => (props) =>
-  (
+export const withErrorBoundary = (Comp, fallback) => {
+  const ErrorBoundaryWrap = (props) => (
     <ErrorBoundary fallback={fallback}>
       <Comp {...props} />
     </ErrorBoundary>
   );
+  return ErrorBoundaryWrap;
+};

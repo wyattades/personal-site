@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDebounce as useDebounceFn } from 'react-use';
 
 import Layout from 'components/Layout';

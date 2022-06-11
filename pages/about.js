@@ -1,5 +1,4 @@
-import React from 'react';
-import { FaLink } from '@react-icons';
+import { FaLink as LinkIcon } from '@react-icons/all-files/fa/FaLink';
 import { NextSeo } from 'next-seo';
 
 import { getResumeItems } from 'lib/resumeItems';
@@ -14,7 +13,7 @@ const AboutPage = () => {
       <div className="space-between content">
         <h1>About Me</h1>
         <a href="/resume.pdf">
-          <FaLink className="icon-head" aria-hidden />
+          <LinkIcon className="icon-head" aria-hidden />
           Resume PDF
         </a>
       </div>

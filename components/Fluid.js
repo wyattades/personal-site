@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useRef } from 'react';
+import { useEffect, memo, useRef } from 'react';
 
 import createFluid from 'lib/fluid';
 

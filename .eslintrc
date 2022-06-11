@@ -1,16 +1,21 @@
 {
-  "extends": ["eslint:recommended", "next"],
-  "env": {
-    "node": true,
-    "es2021": true,
-    "browser": true
-  },
+  "extends": "@wyattades/eslint-config",
   "rules": {
-    "react/display-name": 0,
-    "no-empty": 0,
-    "no-unused-vars": [
-      1,
-      { "args": "all", "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
-    ]
-  }
+    "react/jsx-filename-extension": "off"
+  },
+  "overrides": [
+    {
+      "files": ["lib/sketches/**/*", "lib/fluid.js"],
+      "rules": {
+        "@typescript-eslint/no-use-before-define": "off",
+        "prefer-const": "off"
+      }
+    },
+    {
+      "files": ["scripts/**/*"],
+      "rules": {
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ]
 }

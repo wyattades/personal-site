@@ -1,5 +1,3 @@
-import React from 'react';
-
 // import 'styles/screensaver.scss';
 import Fluid from 'components/Fluid';
 

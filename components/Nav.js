@@ -1,13 +1,14 @@
-import React from 'react';
-import { IoSunny, IoMoon, MdSettingsBrightness } from '@react-icons';
+import { IoMoon as DarkIcon } from '@react-icons/all-files/io5/IoMoon';
+import { IoSunny as LightIcon } from '@react-icons/all-files/io5/IoSunny';
+import { MdSettingsBrightness as SystemIcon } from '@react-icons/all-files/md/MdSettingsBrightness';
 
 import { NavLink } from 'components/Link';
 import { useTheme } from 'components/StyleTheme';
 
 const themeIcons = {
-  light: IoSunny,
-  dark: IoMoon,
-  system: MdSettingsBrightness,
+  light: LightIcon,
+  dark: DarkIcon,
+  system: SystemIcon,
 };
 
 const StyleThemeButton = () => {

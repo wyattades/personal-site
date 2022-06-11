@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAsync } from 'react-use';
 
 import { withErrorBoundary } from 'components/ErrorBoundary';

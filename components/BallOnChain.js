@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import { createContext, useContext, createRef } from 'react';
 import { useBox, useConeTwistConstraint, useSphere } from '@react-three/cannon';
 
 import { V } from 'components/physics';
 
-const parentCtx = React.createContext({
-  ref: React.createRef(),
+const parentCtx = createContext({
+  ref: createRef(),
   pos: [0, 0, 0],
   offset: [0, 0, 0],
   rotation: [0, 0, 0],
@@ -38,7 +38,7 @@ const ChainBall = ({ radius = 1, collisionFilterMask }) => {
   const { constraint, pos, rotation } = getConstraintData(p, [0, radius, 0]);
 
   const [ref] = useSphere(() => ({
-    args: radius,
+    args: [radius],
     mass: radius * 10,
     linearFactor: [1, 1, 0],
     position: pos,
@@ -127,12 +127,12 @@ const ChainHandle = ({
   const rotation = [0, 0, startRotation];
 
   const [ref] = useSphere(() => ({
+    args: [radius],
     mass: 20, // high mass so constraint doesn't stretch
     type: 'Dynamic',
     // angularDamping: 0.8, // rotational friction
     linearFactor: [0, 0, 0],
     angularFactor: [0, 0, 1], // only rotates along Z axis
-    args: radius,
     position,
     collisionFilterMask,
     rotation,

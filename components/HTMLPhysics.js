@@ -1,7 +1,8 @@
-import _ from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import * as _ from 'lodash-es';
+import { memo, useEffect, useRef, useState } from 'react';
 import { createPortal as creatReactPortal } from 'react-dom';
 import { PerspectiveCamera, Vector3 } from 'three';
+// eslint-disable-next-line import/named
 import { frameCorners as frameCameraCorners } from 'three/examples/jsm/utils/CameraUtils';
 import { useBox } from '@react-three/cannon';
 import { Canvas } from '@react-three/fiber';
@@ -22,6 +23,36 @@ const scaleIn = 1 / scaleOut;
 
 const TWO_PI = 2 * Math.PI;
 
+// is `true` on modern browsers
+// const supportsSubPixels = (() => {
+//   const $testWrap = document.createElement('div');
+
+//   $testWrap.innerHTML =
+//     '<div style="width: 4px; height: 2px; position: absolute; right: 0; bottom: 0;">' +
+//     '<div id="subpixel-layout-1" style="width: 2.5px; height: 1px; float: left;"></div>' +
+//     '<div id="subpixel-layout-2" style="width: 2.5px; height: 1px; float: left;"></div>' +
+//     '</div>';
+
+//   document.body.appendChild($testWrap);
+
+//   const supported =
+//     document.getElementById('subpixel-layout-1').getBoundingClientRect().top !==
+//     document.getElementById('subpixel-layout-2').getBoundingClientRect().top;
+
+//   $testWrap.remove();
+
+//   return supported;
+// })();
+
+// fast rounding to nearest 1 digit
+const roundPixelNum = (number) => {
+  return ((number * 10) | 0) * 0.1;
+};
+// fast rounding to nearest 3 digits
+const roundAngleNum = (number) => {
+  return ((number * 1000) | 0) * 0.001;
+};
+
 const ElementBody = ({ start, position, size, el }) => {
   const [_ref, bodyApi] = useBox(() => ({
     mass: 1,
@@ -40,11 +71,13 @@ const ElementBody = ({ start, position, size, el }) => {
 
     const { p, r } = tmp.current;
 
-    el.style.transform = `translate(${
-      (p[0] - w * 0.5) * scaleOut - start.x
-    }px, ${(p[1] - h * 0.5) * -scaleOut - start.y}px) rotate(${
-      r[0] === 0 && r[1] === 0 ? TWO_PI - r[2] : TWO_PI + r[2]
-    }rad)`;
+    const x = (p[0] - w * 0.5) * scaleOut - start.x,
+      y = (p[1] - h * 0.5) * -scaleOut - start.y,
+      angle = r[0] === 0 && r[1] === 0 ? TWO_PI - r[2] : TWO_PI + r[2];
+
+    el.style.transform = `translate(${roundPixelNum(x)}px, ${roundPixelNum(
+      y,
+    )}px) rotate(${roundAngleNum(angle)}rad)`;
   };
 
   useEffect(() =>
@@ -91,10 +124,10 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
   const [{ camera, style }] = useState(() => {
     const viewBounds = getViewBounds();
 
-    const camera = new PerspectiveCamera();
-    camera.position.z = 500; // give a arbitrarily far camera z so scene looks more orthographic
+    const cam = new PerspectiveCamera();
+    cam.position.z = 500; // give a arbitrarily far camera z so scene looks more orthographic
     frameCameraCorners(
-      camera,
+      cam,
       viewBounds.bottomLeft,
       viewBounds.bottomRight,
       viewBounds.topLeft,
@@ -102,7 +135,7 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
     );
 
     return {
-      camera,
+      camera: cam,
       style: {
         width: viewBounds.width * scaleOut,
         height: viewBounds.height * scaleOut,
@@ -277,4 +310,4 @@ const HTMLPhysics = ({
   );
 };
 
-export default React.memo(withErrorBoundary(HTMLPhysics, null));
+export default memo(withErrorBoundary(HTMLPhysics, null));
