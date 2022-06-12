@@ -35,5 +35,5 @@ const nextConfig = {
 };
 
 module.exports = require('@next/bundle-analyzer')({
-  enabled: mode === 'production' && !process.env.VERCEL_URL,
+  enabled: !!process.env.ANALYZE,
 })(nextConfig);
