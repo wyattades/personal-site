@@ -96,6 +96,9 @@ html {
   padding: 72px 20px;
 }
 
+.index-page .wrapper {
+  overflow: hidden;
+}
 .index-page .wrapper::before {
   content: '';
   display: block;
@@ -112,8 +115,11 @@ html {
   background-size: ($d * 2) ($d * 2);
   background-position: ($offset - $d) ($offset - $d);
 
-  animation: fadeInOpacity 2s ease;
-  animation-fill-mode: forwards;
+  transform: scale(1);
+
+  animation: fadeInOpacity 2s ease,
+    breath 6s cubic-bezier(0.42, -0.02, 0.5, 0.97) infinite alternate;
+  animation-fill-mode: forwards, none;
 }
 .index-page .nav-container {
   background: none;
@@ -125,6 +131,20 @@ html {
   }
   to {
     opacity: 1;
+  }
+}
+@keyframes breath {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.02);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
