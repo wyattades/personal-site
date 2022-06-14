@@ -244,7 +244,7 @@ const BlockText = ({ text }) => {
           <group name="Camera" position={[0, 0, cameraZ]}>
             <PerspectiveCamera
               makeDefault
-              far={500}
+              far={3000}
               near={0.1}
               fov={42} // will be overridden by `<Resizer/>`
               ref={cameraRef}
