@@ -125,6 +125,7 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
     const viewBounds = getViewBounds();
 
     const cam = new PerspectiveCamera();
+    cam.manual = true; // tell `@react-three/fiber` not to update our camera
     cam.position.z = 500; // give a arbitrarily far camera z so scene looks more orthographic
     frameCameraCorners(
       cam,
@@ -133,6 +134,11 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
       viewBounds.topLeft,
       true,
     );
+    // `cam.updateProjectionMatrix()` should not be called after this!
+    // for debugging:
+    // cam.updateProjectionMatrix = () => {
+    //   throw new Error('Not allowed');
+    // };
 
     return {
       camera: cam,

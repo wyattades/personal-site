@@ -97,6 +97,7 @@ const PhysicsDebug = IS_DEV
     }
   : (p) => p.children;
 
+/** @type {typeof CannonPhysics} */
 export const Physics = ({ children, ...rest }) => {
   return (
     <CannonPhysics {...rest}>
