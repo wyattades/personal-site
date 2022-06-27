@@ -37,7 +37,7 @@ const App = ({ Component, pageProps }) => {
       {process.env.NODE_ENV === 'production' ? (
         <Script
           data-website-id="583e2bc6-8606-4c14-a2be-70612377adff"
-          src="https://sip-umami.vercel.app/umami.js"
+          src="https://sip-umami.vercel.app/sip.js"
         />
       ) : null}
 
