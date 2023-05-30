@@ -122,9 +122,9 @@ const ShowProjectPage = ({ project }) => {
           [
             <PlaySketch key="play_sketch" game={project} />,
             project.help && (
-              <p key="game_help" className="help">
-                {project.help}
-              </p>
+              <div key="game_help" className="help">
+                <Markdown>{project.help}</Markdown>
+              </div>
             ),
           ]
         ) : desc && typeof desc === 'string' ? (
