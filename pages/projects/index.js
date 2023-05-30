@@ -33,7 +33,14 @@ const ProjectsPage = () => {
           return (
             <div key={p.id} className="box-link">
               {p.image ? (
-                <Image src={p.image} layout="fill" objectFit="cover" alt="" />
+                <Image
+                  src={p.image}
+                  fill
+                  // https://nextjs.org/docs/pages/api-reference/components/image#sizes
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: 'cover' }}
+                  alt=""
+                />
               ) : null}
               <Link href={`/projects/${p.id}`}>
                 <span>{p.title}</span>

@@ -7,8 +7,8 @@ export const useHoveredLink = createGlobalState();
 
 const Link = ({ href, children, ...rest }) => {
   return (
-    <NextLink href={href} passHref>
-      <a {...rest}>{children}</a>
+    <NextLink {...rest} href={href}>
+      {children}
     </NextLink>
   );
 };

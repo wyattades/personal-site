@@ -7,7 +7,13 @@ import {
   useRef,
 } from 'react';
 import { useEvent } from 'react-use';
-import { Vector3, MathUtils } from 'three';
+import {
+  Vector3,
+  MathUtils,
+  WireframeGeometry,
+  LineSegments,
+  BoxGeometry,
+} from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import {
@@ -21,7 +27,7 @@ import { useBox } from '@react-three/cannon';
 
 import { withErrorBoundary } from 'components/ErrorBoundary';
 import { useAnimatedSwitch } from 'components/AnimatedItems';
-import { debug, Physics, FloorPlane } from 'components/physics';
+import { debug, Physics, FloorPlane, IS_DEV } from 'components/physics';
 
 import fontJson from 'fonts/helv.json';
 
@@ -46,16 +52,23 @@ const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
     args: size.toArray(),
   }));
 
-  const { opacity, innerPosAnimated } = useSpring({
-    from: {
-      opacity: animateIn ? 0 : 1,
-      innerPosAnimated: initialInnerPos(innerPos),
-    },
-    to: { opacity: animateIn ? 1 : 0, innerPosAnimated: innerPos.toArray() },
-    config: {
-      duration: animateIn ? SHOW_DURATION : REMOVE_DURATION,
-    },
-  });
+  const [springs, _api] = useSpring(
+    () => ({
+      from: {
+        opacity: animateIn ? 0 : 1,
+        innerPosAnimated: initialInnerPos(innerPos),
+      },
+      to: {
+        opacity: animateIn ? 1 : 0,
+        innerPosAnimated: innerPos.toArray(),
+      },
+      config: {
+        duration: animateIn ? SHOW_DURATION : REMOVE_DURATION,
+        // precision: 0.001,
+      },
+    }),
+    [char, animateIn],
+  );
 
   const explodeLetter = (strength = 2) => {
     debug('explodeLetter', char);
@@ -83,12 +96,37 @@ const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
     explodeLetter();
   });
 
+  // show a box representing the letter's bounding box for debugging
+  // TODO: somehow render this via JSX. the following doesn't work yet:
+  // <animated.lineSegments position={innerPosAnimated}>
+  //   <wireframeGeometry>
+  //     <boxGeometry args={size.toArray()} />
+  //   </wireframeGeometry>
+  // </animated.lineSegments>;
+  const dev = useRef();
+  if (IS_DEV && !dev.current) {
+    const geometry = new BoxGeometry(...size.toArray());
+
+    const wireframe = new WireframeGeometry(geometry);
+
+    const line = new LineSegments(wireframe);
+    line.material.depthTest = false;
+    line.material.color.setHex(0x777777);
+
+    dev.current = line;
+  }
+
   return (
     <group ref={ref}>
-      <animated.mesh receiveShadow castShadow position={innerPosAnimated}>
-        <animated.meshNormalMaterial transparent opacity={opacity} />
+      <animated.mesh
+        receiveShadow
+        castShadow
+        position={springs.innerPosAnimated}
+      >
+        <animated.meshNormalMaterial transparent opacity={springs.opacity} />
         <textGeometry args={[char, textGeomConfig]} />
       </animated.mesh>
+      {dev.current ? <primitive object={dev.current} /> : null}
     </group>
   );
 };
@@ -154,6 +192,8 @@ const Text = ({
     [fontSize, depth, bevelThickness],
   );
 
+  console.log('Text', { letters, animateIn, isInitial });
+
   return (
     <group>
       {letters.map(({ id, char, pos, innerPos, size }) => (
@@ -179,8 +219,8 @@ const SpringGroup = ({ children, changeKey }) => {
     cloneElement(s.children, {
       key: s.key,
       animateIn: i === 0,
-      onComplete: s.remove,
       isInitial: s.isInitial,
+      // onComplete: s.remove,
     }),
   );
 };

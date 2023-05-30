@@ -50,7 +50,7 @@ const ChainBall = ({ radius = 1, collisionFilterMask }) => {
 
   return (
     <mesh ref={ref} name="ChainBall">
-      <sphereBufferGeometry args={[radius, meshQuality * 4, meshQuality * 4]} />
+      <sphereGeometry args={[radius, meshQuality * 4, meshQuality * 4]} />
       <meshStandardMaterial color="#666" />
     </mesh>
   );

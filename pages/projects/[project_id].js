@@ -109,7 +109,7 @@ const ShowProjectPage = ({ project }) => {
             <Image
               width={800}
               height={imageW && imageH ? (800 * imageH) / imageW : 600}
-              objectFit="cover"
+              style={{ objectFit: 'cover' }}
               placeholder={imageBlurDataURL ? 'blur' : 'empty'}
               blurDataURL={imageBlurDataURL || undefined}
               src={image}

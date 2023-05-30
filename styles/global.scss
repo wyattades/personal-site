@@ -440,7 +440,7 @@ dl.expertise-table {
   height: 200px;
   margin: 1rem;
 
-  & > span:first-child {
+  img {
     z-index: 0;
     opacity: 0 !important;
     visibility: hidden;
@@ -499,7 +499,7 @@ dl.expertise-table {
         text-shadow: (-$s) (-$s) 0 $c, $s (-$s) 0 $c, (-$s) $s 0 $c, $s $s 0 $c;
       }
     }
-    & > span:first-child {
+    img {
       visibility: visible;
       opacity: 1 !important;
     }
