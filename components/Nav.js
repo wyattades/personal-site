@@ -18,6 +18,7 @@ const StyleThemeButton = () => {
 
   return (
     <button
+      type="button"
       className="button-reset nav-item"
       onClick={theme.toggleMode}
       style={{ width: 56 }} // same as height

@@ -58,6 +58,7 @@ const ProjectsPage = () => {
           }}
         >
           <button
+            type="button"
             className="plain-button"
             style={{ zIndex: 5, position: 'relative' }}
             onClick={() => setBroken((r) => !r)}
