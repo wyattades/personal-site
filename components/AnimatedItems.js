@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import Transition from 'react-transition-group/Transition';
+import { Transition } from 'react-transition-group';
 import { useInterval, useUpdate } from 'react-use';
 import { useRouter } from 'next/router';
 
