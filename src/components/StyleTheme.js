@@ -5,21 +5,21 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import { useLocalStorage, useLatest } from 'react-use';
+} from "react";
+import { useLatest, useLocalStorage } from "react-use";
 
-import { BodyProps } from 'components/BodyProps';
+import { BodyProps } from "~/components/BodyProps";
 
 const ThemeCtx = createContext(null);
 
 const supportsColorScheme =
-  typeof window === 'undefined'
+  typeof window === "undefined"
     ? true
-    : window.matchMedia?.('(prefers-color-scheme)')?.matches ?? false;
+    : (window.matchMedia?.("(prefers-color-scheme)")?.matches ?? false);
 
 const ORDER = supportsColorScheme
-  ? ['light', 'dark', 'system']
-  : ['light', 'dark'];
+  ? ["light", "dark", "system"]
+  : ["light", "dark"];
 
 const useIsFirstMount = () => {
   const [first, setFirst] = useState(true);
@@ -28,7 +28,7 @@ const useIsFirstMount = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [mode, setMode] = useLocalStorage('style-theme', ORDER[0]);
+  const [mode, setMode] = useLocalStorage("style-theme", ORDER[0]);
 
   const changeCounter = useRef(0);
 

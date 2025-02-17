@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import Image from 'next/image';
-import { NextSeo } from 'next-seo';
+import { NextSeo } from "next-seo";
+import Image from "next/image";
+import { useState } from "react";
 
-import projects from 'lib/projects';
-import Layout from 'components/Layout';
-import Link from 'components/Link';
-import AnimatedItems from 'components/AnimatedItems';
-import { HTMLPhysics } from 'components/physicsImport';
+import AnimatedItems from "~/components/AnimatedItems";
+import Layout from "~/components/Layout";
+import Link from "~/components/Link";
+import { HTMLPhysics } from "~/components/physicsImport";
+import projects from "~/lib/projects";
 
 const projectItems = projects.filter((p) => !p.noListing);
 
@@ -18,14 +18,14 @@ const ProjectsPage = () => {
       <AnimatedItems>
         <div
           className="content"
-          style={{ flexBasis: '100%', margin: '0 1rem' }}
+          style={{ flexBasis: "100%", margin: "0 1rem" }}
         >
-          <h1 style={{ marginBottom: 0, paddingBottom: '3rem' }}>
+          <h1 style={{ marginBottom: 0, paddingBottom: "3rem" }}>
             <span>Projects</span>
           </h1>
-          <p style={{ paddingBottom: '3rem' }}>
+          <p style={{ paddingBottom: "3rem" }}>
             Here are some of my noteworthy projects that were mostly created in
-            my spare time. You can also view all of them and more on my{' '}
+            my spare time. You can also view all of them and more on my{" "}
             <a href="https://github.com/wyattades">github</a>.
           </p>
         </div>
@@ -38,7 +38,7 @@ const ProjectsPage = () => {
                   fill
                   // https://nextjs.org/docs/pages/api-reference/components/image#sizes
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  style={{ objectFit: 'cover' }}
+                  style={{ objectFit: "cover" }}
                   alt=""
                 />
               ) : null}
@@ -51,19 +51,19 @@ const ProjectsPage = () => {
         <div
           className="content"
           style={{
-            flexBasis: '100%',
-            margin: '0 1rem',
-            paddingTop: '4rem',
-            textAlign: 'center',
+            flexBasis: "100%",
+            margin: "0 1rem",
+            paddingTop: "4rem",
+            textAlign: "center",
           }}
         >
           <button
             type="button"
             className="plain-button"
-            style={{ zIndex: 5, position: 'relative' }}
+            style={{ zIndex: 5, position: "relative" }}
             onClick={() => setBroken((r) => !r)}
           >
-            {broken ? '🛠 Fix' : '💣 Break'} this page?
+            {broken ? "🛠 Fix" : "💣 Break"} this page?
           </button>
         </div>
       </AnimatedItems>

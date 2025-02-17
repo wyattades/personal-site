@@ -1,4 +1,4 @@
-import { Vector3, Quaternion, Euler } from 'three';
+import { Euler, Quaternion, Vector3 } from "three";
 
 export default function listenToOrientation(onEnable, onRender) {
   const scope = {};
@@ -45,7 +45,7 @@ export default function listenToOrientation(onEnable, onRender) {
     return (alpha, beta, gamma, orient) => {
       const quaternion = new Quaternion();
 
-      euler.set(beta, alpha, -gamma, 'YXZ'); // 'ZXY' for the device, but 'YXZ' for us
+      euler.set(beta, alpha, -gamma, "YXZ"); // 'ZXY' for the device, but 'YXZ' for us
 
       quaternion.setFromEuler(euler); // orient the device
 
@@ -61,12 +61,12 @@ export default function listenToOrientation(onEnable, onRender) {
     onScreenOrientationChangeEvent(); // run once on load
 
     window.addEventListener(
-      'orientationchange',
+      "orientationchange",
       onScreenOrientationChangeEvent,
       false,
     );
     window.addEventListener(
-      'deviceorientation',
+      "deviceorientation",
       onDeviceOrientationChangeEvent,
       false,
     );
@@ -74,12 +74,12 @@ export default function listenToOrientation(onEnable, onRender) {
 
   scope.disconnect = () => {
     window.removeEventListener(
-      'orientationchange',
+      "orientationchange",
       onScreenOrientationChangeEvent,
       false,
     );
     window.removeEventListener(
-      'deviceorientation',
+      "deviceorientation",
       onDeviceOrientationChangeEvent,
       false,
     );

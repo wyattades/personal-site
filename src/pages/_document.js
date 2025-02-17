@@ -1,6 +1,6 @@
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
+import NextDocument, { Head, Html, Main, NextScript } from "next/document";
 
-import { DocumentBody } from 'components/BodyProps';
+import { DocumentBody } from "~/components/BodyProps";
 
 class Document extends NextDocument {
   static async getInitialProps(ctx) {

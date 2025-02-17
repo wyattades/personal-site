@@ -1,6 +1,6 @@
-import { NextSeo } from 'next-seo';
+import { NextSeo } from "next-seo";
 
-import { getResumeItems } from 'lib/resumeItems';
+import { getResumeItems } from "~/lib/resumeItems";
 
 const resumeItems = getResumeItems(4);
 
@@ -16,22 +16,22 @@ const ResumePage = () => {
       <section
         className="pad-horizontal"
         style={{
-          paddingTop: '0.5rem',
-          paddingBottom: '1rem',
+          paddingTop: "0.5rem",
+          paddingBottom: "1rem",
         }}
       >
         <div className="pdf-columns">
           <div className="column">
             <div
               className="logo"
-              style={{ userSelect: 'none' }}
+              style={{ userSelect: "none" }}
               aria-label="logo of initials"
             >
               <span>W</span>
               <span>A</span>
             </div>
           </div>
-          <div className="column center-text" style={{ padding: '0 100px' }}>
+          <div className="column center-text" style={{ padding: "0 100px" }}>
             <h1>
               <a href="https://wyattades.com">Wyatt Ades</a>
             </h1>

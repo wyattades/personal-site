@@ -13,6 +13,6 @@ export const findFixedParent = (el, depth = 4) => {
   if (depth <= 0) return null;
   const parent = el.parentElement;
   if (!parent || parent === document.body) return null;
-  if (window.getComputedStyle(parent).position === 'fixed') return parent;
+  if (window.getComputedStyle(parent).position === "fixed") return parent;
   return findFixedParent(parent, depth - 1);
 };

@@ -1,25 +1,25 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import {
   addDoc,
+  query as buildQuery,
   collection as getCollection,
   getDocs,
   getFirestore,
-  orderBy as orderQuery,
-  where as whereQuery,
   limit as limitQuery,
   limitToLast as limitToLastQuery,
-  query as buildQuery,
+  orderBy as orderQuery,
   Timestamp,
-} from 'firebase/firestore';
+  where as whereQuery,
+} from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCbqLdQG5J3MhPbYtzjoxcRzb_5M_xwuMs',
-  authDomain: 'hobbies-db.firebaseapp.com',
-  databaseURL: 'https://hobbies-db.firebaseio.com',
-  projectId: 'hobbies-db',
-  storageBucket: 'hobbies-db.appspot.com',
-  messagingSenderId: '568269658314',
-  appId: '1:568269658314:web:7b1c25607c2ecc86',
+  apiKey: "AIzaSyCbqLdQG5J3MhPbYtzjoxcRzb_5M_xwuMs",
+  authDomain: "hobbies-db.firebaseapp.com",
+  databaseURL: "https://hobbies-db.firebaseio.com",
+  projectId: "hobbies-db",
+  storageBucket: "hobbies-db.appspot.com",
+  messagingSenderId: "568269658314",
+  appId: "1:568269658314:web:7b1c25607c2ecc86",
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -51,7 +51,7 @@ class Collection {
 
     if (where)
       for (const fieldPath in where) {
-        let op = '==';
+        let op = "==";
         let val = where[fieldPath];
         if (Array.isArray(val)) [op, val] = val;
         queries.push(whereQuery(fieldPath, op, val));

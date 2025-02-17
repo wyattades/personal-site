@@ -1,8 +1,8 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const HOST_URL = process.env.VERCEL_URL
-  ? 'https://wyattades.com'
-  : 'http://localhost:3000';
+  ? "https://wyattades.com"
+  : "http://localhost:3000";
 
 const nextConfig: NextConfig = {
   env: {
@@ -12,8 +12,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/projects/games/:game_id',
-        destination: '/projects/:game_id',
+        source: "/projects/games/:game_id",
+        destination: "/projects/:game_id",
         permanent: true,
       },
     ];

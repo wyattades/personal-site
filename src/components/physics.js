@@ -1,9 +1,9 @@
-import { createContext, useContext, useEffect } from 'react';
-import { useAsync, useKeyPressEvent, useLocalStorage } from 'react-use';
-import { Euler, Vector3 } from 'three';
-import { Debug, usePlane, Physics as CannonPhysics } from '@react-three/cannon';
+import { Physics as CannonPhysics, Debug, usePlane } from "@react-three/cannon";
+import { createContext, useContext, useEffect } from "react";
+import { useAsync, useKeyPressEvent, useLocalStorage } from "react-use";
+import { Euler, Vector3 } from "three";
 
-export const IS_DEV = process.env.NODE_ENV === 'development';
+export const IS_DEV = process.env.NODE_ENV === "development";
 
 const t0 = new Vector3(),
   t1 = new Vector3(),
@@ -27,13 +27,13 @@ export const V = {
   applyRotate: (vec, rot) =>
     t0
       .set(...vec)
-      .applyEuler(e0.set(...rot, 'XYZ'))
+      .applyEuler(e0.set(...rot, "XYZ"))
       .toArray(),
 };
 
 export const useStats = (enabled = true) => {
   const res = useAsync(
-    () => (enabled ? import('stats.js') : Promise.resolve(null)),
+    () => (enabled ? import("stats.js") : Promise.resolve(null)),
     [enabled],
   );
   const Stats = res.value?.default;
@@ -79,9 +79,9 @@ export const FloorPlane = ({ size, ...props }) => {
 
 const PhysicsDebug = IS_DEV
   ? ({ children }) => {
-      const [enabled, setEnabled] = useLocalStorage('physics-debug', false);
+      const [enabled, setEnabled] = useLocalStorage("physics-debug", false);
 
-      useKeyPressEvent('d', () => {
+      useKeyPressEvent("d", () => {
         setEnabled(!enabled);
       });
 
@@ -107,5 +107,5 @@ export const Physics = ({ children, ...rest }) => {
 };
 
 export const debug = IS_DEV
-  ? (...args) => console.debug('[debug]', ...args)
+  ? (...args) => console.debug("[debug]", ...args)
   : () => {};

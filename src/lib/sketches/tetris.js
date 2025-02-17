@@ -2,7 +2,7 @@
 export default function tetris({ p5, width, height }) {
   const SHAPES = [
     {
-      name: 'Cube',
+      name: "Cube",
       points: [
         [0, 0],
         [0, 1],
@@ -11,7 +11,7 @@ export default function tetris({ p5, width, height }) {
       ],
     },
     {
-      name: 'Hockey',
+      name: "Hockey",
       points: [
         [0, -1],
         [0, 0],
@@ -20,7 +20,7 @@ export default function tetris({ p5, width, height }) {
       ],
     },
     {
-      name: 'Stick',
+      name: "Stick",
       points: [
         [0, -1],
         [0, 0],
@@ -29,7 +29,7 @@ export default function tetris({ p5, width, height }) {
       ],
     },
     {
-      name: 'ZigZag',
+      name: "ZigZag",
       points: [
         [0, -1],
         [0, 0],
@@ -51,7 +51,7 @@ export default function tetris({ p5, width, height }) {
     if (rotation === 1) return [y, -x];
     if (rotation === 2) return [-x, -y];
     if (rotation === 3) return [-y, x];
-    throw new Error('oops');
+    throw new Error("oops");
   }
 
   class Piece {
@@ -164,10 +164,10 @@ export default function tetris({ p5, width, height }) {
       drawPieces();
       p5.textSize(42);
       p5.fill(0, 100, 50);
-      p5.text('GAME OVER', p5.width / 2, p5.height / 2);
+      p5.text("GAME OVER", p5.width / 2, p5.height / 2);
       p5.textSize(20);
       p5.fill(0, 100, 100);
-      p5.text('Press [SPACE] to restart', p5.width / 2, p5.height / 2 + 40);
+      p5.text("Press [SPACE] to restart", p5.width / 2, p5.height / 2 + 40);
     } else {
       const autoDropEvery = p5.map(completedPieces, 0, 10, 300, 70, true);
       const manualDropEvery = Math.min(autoDropEvery, 100);
@@ -195,7 +195,7 @@ export default function tetris({ p5, width, height }) {
 
   function dropPiece(dirY = 1) {
     if (activePiece.outOfBounds(0, dirY)) {
-      console.log('hit rock bottom');
+      console.log("hit rock bottom");
 
       for (const [sx, sy] of activePiece.iteratePoints()) {
         if (voxels[sy]?.[sx] === undefined) {
@@ -255,7 +255,7 @@ export default function tetris({ p5, width, height }) {
 
   p5.keyPressed = () => {
     if (gameOver) {
-      if (p5.key === ' ') {
+      if (p5.key === " ") {
         p5.setup();
       }
       return;
@@ -267,9 +267,9 @@ export default function tetris({ p5, width, height }) {
       movePiece(1);
     } else if (p5.keyCode === p5.DOWN_ARROW) {
       dropPiece();
-    } else if (p5.key === 'z') {
+    } else if (p5.key === "z") {
       rotatePiece(-1);
-    } else if (p5.key === 'x') {
+    } else if (p5.key === "x") {
       rotatePiece(1);
     }
   };

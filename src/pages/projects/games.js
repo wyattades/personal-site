@@ -1,8 +1,8 @@
-import Link from 'components/Link';
-import projects from 'lib/projects';
-import gamesImage from 'images/project_images/games.gif';
+import gamesImage from "images/project_images/games.gif";
+import Link from "~/components/Link";
+import projects from "~/lib/projects";
 
-import ShowProjectPage from './[project_id]';
+import ShowProjectPage from "./[project_id]";
 
 const games = projects.filter((p) => p.isGame);
 
@@ -10,8 +10,8 @@ const GamesPage = () => {
   return (
     <ShowProjectPage
       project={{
-        id: 'games',
-        title: 'Games!',
+        id: "games",
+        title: "Games!",
         image: gamesImage.src,
         hideImage: true,
         desc: [

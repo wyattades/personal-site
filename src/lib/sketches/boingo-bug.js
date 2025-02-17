@@ -23,7 +23,7 @@ export default function boingoBug({ p5, height }) {
   };
 
   p5.draw = () => {
-    p5.background('#52C8FC');
+    p5.background("#52C8FC");
     if ((on === true) & (dead === false)) {
       pipe1.move();
       pipe2.move();
@@ -34,24 +34,24 @@ export default function boingoBug({ p5, height }) {
     bug.display();
     pipe2.display();
     pipe1.display();
-    p5.fill('#AF8730');
+    p5.fill("#AF8730");
     p5.noStroke();
     p5.rectMode(p5.CORNERS);
     p5.rect(0, p5.height - 30, p5.width, p5.height);
-    p5.fill('#15D320');
+    p5.fill("#15D320");
     p5.rect(0, p5.height - 30, p5.width, p5.height - 25);
     pipe2.displayground();
     if ((on === false) & (dead === true)) {
       p5.fill(0);
       p5.textSize(40);
-      p5.text('YOU ARE DEAD', p5.width / 2, 190);
+      p5.text("YOU ARE DEAD", p5.width / 2, 190);
       p5.textSize(20);
-      p5.text('Press [SPACE] to Restart', p5.width / 2, 225);
+      p5.text("Press [SPACE] to Restart", p5.width / 2, 225);
     }
     if (on === false && dead === false) {
       p5.textSize(20);
       p5.fill(0);
-      p5.text('Press [SPACE] to Boing', p5.width / 2, 70);
+      p5.text("Press [SPACE] to Boing", p5.width / 2, 70);
     }
     p5.fill(0);
     p5.textSize(20);
@@ -104,7 +104,7 @@ export default function boingoBug({ p5, height }) {
     }
     display() {
       p5.rectMode(p5.CENTER);
-      p5.fill('#E02F02');
+      p5.fill("#E02F02");
       p5.stroke(0, 0, 0, 100);
       p5.push();
       p5.translate(this.x, this.y);
@@ -187,7 +187,7 @@ export default function boingoBug({ p5, height }) {
       }
     }
     display() {
-      p5.fill('#177C04');
+      p5.fill("#177C04");
       p5.noStroke();
       p5.rectMode(p5.CENTER);
       p5.rect(this.x, this.y, 60, 455);
@@ -196,7 +196,7 @@ export default function boingoBug({ p5, height }) {
       p5.rect(this.x, this.y + 240, 70, 20);
     }
     displayground() {
-      p5.fill('#25892B');
+      p5.fill("#25892B");
       p5.rectMode(p5.CORNERS);
       for (let i = -50; i < 50; i++) {
         p5.rect(

@@ -1,11 +1,11 @@
 export class JsonStorage {
-  constructor(type = 'local', prefix = null) {
+  constructor(type = "local", prefix = null) {
     this.type = type;
     this.prefix = prefix;
   }
 
   get storage() {
-    return this.type === 'session'
+    return this.type === "session"
       ? window.sessionStorage
       : window.localStorage;
   }
@@ -42,4 +42,4 @@ export class JsonStorage {
   }
 }
 
-export const sessionJsonStorage = new JsonStorage('session');
+export const sessionJsonStorage = new JsonStorage("session");

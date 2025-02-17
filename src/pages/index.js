@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useDebounce as useDebounceFn } from 'react-use';
+import { useState } from "react";
+import { useDebounce as useDebounceFn } from "react-use";
 
-import Layout from 'components/Layout';
-import { useHoveredLink } from 'components/Link';
-import AnimatedItems, { useOutTransition } from 'components/AnimatedItems';
-import { BodyProps } from 'components/BodyProps';
-import { BlockText } from 'components/physicsImport';
+import AnimatedItems, { useOutTransition } from "~/components/AnimatedItems";
+import { BodyProps } from "~/components/BodyProps";
+import Layout from "~/components/Layout";
+import { useHoveredLink } from "~/components/Link";
+import { BlockText } from "~/components/physicsImport";
 
 const useDebounced = (val, wait) => {
   const [v, setV] = useState(val);
@@ -19,10 +19,10 @@ const IndexPage = () => {
   const [hoveredLink] = useHoveredLink();
 
   let text = useDebounced(
-    hoveredLink && hoveredLink !== 'Home' ? hoveredLink : 'WYATT',
+    hoveredLink && hoveredLink !== "Home" ? hoveredLink : "WYATT",
     200,
   );
-  if (outTransition) text = '';
+  if (outTransition) text = "";
 
   return (
     <div className="layers">

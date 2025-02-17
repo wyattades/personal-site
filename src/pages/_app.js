@@ -2,7 +2,7 @@ import { DefaultSeo } from "next-seo";
 import Head from "next/head";
 import Script from "next/script";
 
-import { ThemeProvider } from "components/StyleTheme";
+import { ThemeProvider } from "~/components/StyleTheme";
 
 import "normalize.css";
 import "styles/global.css";

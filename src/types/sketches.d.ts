@@ -1,6 +1,6 @@
 import type P5 from "p5";
 
-import type { ScoreBoard } from "lib/scoreBoard";
+import type { ScoreBoard } from "~/lib/scoreBoard";
 
 declare global {
   type SketchFactory = (args: {

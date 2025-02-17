@@ -1,4 +1,4 @@
-import * as _ from 'lodash-es';
+import * as _ from "lodash-es";
 
 export const wait = (millis) =>
   new Promise((resolve) => setTimeout(resolve, millis));

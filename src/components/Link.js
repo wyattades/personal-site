@@ -1,7 +1,7 @@
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import NextLink from 'next/link';
-import { createGlobalState } from 'react-use/lib/factory/createGlobalState';
+import clsx from "clsx";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { createGlobalState } from "react-use/lib/factory/createGlobalState";
 
 export const useHoveredLink = createGlobalState();
 
@@ -15,12 +15,12 @@ const Link = ({ href, children, ...rest }) => {
 
 const textContent = (r) =>
   !r
-    ? ''
+    ? ""
     : Array.isArray(r)
-    ? r.map(textContent).join('')
-    : typeof r === 'string'
-    ? r
-    : textContent(r.props.children);
+      ? r.map(textContent).join("")
+      : typeof r === "string"
+        ? r
+        : textContent(r.props.children);
 
 export const NavLink = ({ href, exact, className, ...rest }) => {
   const router = useRouter();
@@ -38,7 +38,7 @@ export const NavLink = ({ href, exact, className, ...rest }) => {
       href={href}
       onMouseEnter={() => setHoveredLink(linkText)}
       onMouseLeave={() => setHoveredLink(null)}
-      className={clsx(className, active && 'active')}
+      className={clsx(className, active && "active")}
       {...rest}
     />
   );

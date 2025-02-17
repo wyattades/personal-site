@@ -1,4 +1,4 @@
-import { ArrayList } from 'java-to-javascript/lib/polyfills';
+import { ArrayList } from "java-to-javascript/lib/polyfills";
 
 // This source code was converted directly from Java (specifically Processing)
 // using npm module `java-to-javascript`
@@ -93,7 +93,7 @@ export default function hitBlockDie({ p5, width, height, P5 }) {
     p5.pop();
     p5.fill(255);
     p5.text(
-      'Use left and right arrow keys to turn, and press both to boost.',
+      "Use left and right arrow keys to turn, and press both to boost.",
       p5.width / 2,
       30,
     );

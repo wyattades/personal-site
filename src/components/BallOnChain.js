@@ -1,7 +1,7 @@
-import { createContext, useContext, createRef } from 'react';
-import { useBox, useConeTwistConstraint, useSphere } from '@react-three/cannon';
+import { useBox, useConeTwistConstraint, useSphere } from "@react-three/cannon";
+import { createContext, createRef, useContext } from "react";
 
-import { V } from 'components/physics';
+import { V } from "~/components/physics";
 
 const parentCtx = createContext({
   ref: createRef(),
@@ -129,7 +129,7 @@ const ChainHandle = ({
   const [ref] = useSphere(() => ({
     args: [radius],
     mass: 20, // high mass so constraint doesn't stretch
-    type: 'Dynamic',
+    type: "Dynamic",
     // angularDamping: 0.8, // rotational friction
     linearFactor: [0, 0, 0],
     angularFactor: [0, 0, 1], // only rotates along Z axis

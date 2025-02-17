@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { useAsync } from 'react-use';
+import { useEffect, useRef } from "react";
+import { useAsync } from "react-use";
 
-import { withErrorBoundary } from 'components/ErrorBoundary';
-import { wait } from 'lib/utils';
-import { ScoardBoard } from 'lib/scoreBoard';
+import { withErrorBoundary } from "~/components/ErrorBoundary";
+import { ScoardBoard } from "~/lib/scoreBoard";
+import { wait } from "~/lib/utils";
 
 const HEIGHT = 600;
 
@@ -14,7 +14,7 @@ const PlaySketch = ({ game }) => {
     value: modules,
   } = useAsync(async () => {
     const [p5, sketch] = await Promise.all([
-      import('p5'),
+      import("p5"),
       import(`lib/sketches/${game.id}`),
       wait(1500), // wait for animation to finish
     ]);
@@ -56,7 +56,7 @@ const PlaySketch = ({ game }) => {
       <div
         ref={sketchRef}
         className="shadowed"
-        style={{ height: HEIGHT, display: 'inline-block', margin: '0 auto' }}
+        style={{ height: HEIGHT, display: "inline-block", margin: "0 auto" }}
       />
     );
 

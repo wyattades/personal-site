@@ -1,4 +1,4 @@
-import { ArrayList } from 'java-to-javascript/lib/polyfills';
+import { ArrayList } from "java-to-javascript/lib/polyfills";
 
 // This source code was converted directly from Java (specifically Processing)
 // using npm module `java-to-javascript`
@@ -134,11 +134,11 @@ export default function arcDodger({ p5, width, height, scoreBoard }) {
     if (!play && scoreBoard.topScores?.length) {
       p5.textSize(30);
       p5.fill(255, 230);
-      p5.text('Top Scores:', p5.width / 2, center.y / 2 + 40);
+      p5.text("Top Scores:", p5.width / 2, center.y / 2 + 40);
       let i = 0;
       for (const { score, place, username } of scoreBoard.topScores) {
         p5.text(
-          `${place}. ${username || '???'} - ${score}s`,
+          `${place}. ${username || "???"} - ${score}s`,
           p5.width / 2,
           center.y / 2 + 75 + i * 32,
         );

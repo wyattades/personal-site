@@ -1,9 +1,9 @@
-import { IoMoon as DarkIcon } from '@react-icons/all-files/io5/IoMoon';
-import { IoSunny as LightIcon } from '@react-icons/all-files/io5/IoSunny';
-import { MdSettingsBrightness as SystemIcon } from '@react-icons/all-files/md/MdSettingsBrightness';
+import { IoMoon as DarkIcon } from "@react-icons/all-files/io5/IoMoon";
+import { IoSunny as LightIcon } from "@react-icons/all-files/io5/IoSunny";
+import { MdSettingsBrightness as SystemIcon } from "@react-icons/all-files/md/MdSettingsBrightness";
 
-import { NavLink } from 'components/Link';
-import { useTheme } from 'components/StyleTheme';
+import { NavLink } from "~/components/Link";
+import { useTheme } from "~/components/StyleTheme";
 
 const themeIcons = {
   light: LightIcon,
@@ -29,8 +29,8 @@ const StyleThemeButton = () => {
 
       <i
         style={{
-          padding: '2px 0',
-          transition: 'transform 300ms ease',
+          padding: "2px 0",
+          transition: "transform 300ms ease",
           transform: `scaleX(${theme.changeCount % 2 === 0 ? 1 : -1})`,
         }}
       >

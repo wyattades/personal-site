@@ -1,3 +1,11 @@
+import { animated, useSpring } from "@react-spring/three";
+import { useBox } from "@react-three/cannon";
+import { PerspectiveCamera } from "@react-three/drei";
+import {
+  Canvas,
+  extend as extendReactThree,
+  useThree,
+} from "@react-three/fiber";
 import {
   cloneElement,
   memo,
@@ -5,31 +13,23 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
-} from 'react';
-import { useEvent } from 'react-use';
+} from "react";
+import { useEvent } from "react-use";
 import {
-  Vector3,
-  MathUtils,
-  WireframeGeometry,
-  LineSegments,
   BoxGeometry,
-} from 'three';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
-import {
-  Canvas,
-  useThree,
-  extend as extendReactThree,
-} from '@react-three/fiber';
-import { PerspectiveCamera } from '@react-three/drei';
-import { useSpring, animated } from '@react-spring/three';
-import { useBox } from '@react-three/cannon';
+  LineSegments,
+  MathUtils,
+  Vector3,
+  WireframeGeometry,
+} from "three";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 
-import { withErrorBoundary } from 'components/ErrorBoundary';
-import { useAnimatedSwitch } from 'components/AnimatedItems';
-import { debug, Physics, FloorPlane, IS_DEV } from 'components/physics';
+import { useAnimatedSwitch } from "~/components/AnimatedItems";
+import { withErrorBoundary } from "~/components/ErrorBoundary";
+import { debug, FloorPlane, IS_DEV, Physics } from "~/components/physics";
 
-import fontJson from 'fonts/helv.json';
+import fontJson from "fonts/helv.json";
 
 const REMOVE_DURATION = 1000;
 const SHOW_DURATION = 300;
@@ -71,7 +71,7 @@ const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
   );
 
   const explodeLetter = (strength = 2) => {
-    debug('explodeLetter', char);
+    debug("explodeLetter", char);
 
     boxApi.applyImpulse(
       [
@@ -92,7 +92,7 @@ const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
     }
   }, [animateIn]);
 
-  useEvent('click', () => {
+  useEvent("click", () => {
     explodeLetter();
   });
 
@@ -141,7 +141,7 @@ const Text = ({
   isInitial,
 }) => {
   const letters = useMemo(() => {
-    const arr = children.split('').map((char) => ({ char, id: seqId() }));
+    const arr = children.split("").map((char) => ({ char, id: seqId() }));
 
     let moveX = 0;
     let i = 0;
@@ -192,7 +192,7 @@ const Text = ({
     [fontSize, depth, bevelThickness],
   );
 
-  console.log('Text', { letters, animateIn, isInitial });
+  console.log("Text", { letters, animateIn, isInitial });
 
   return (
     <group>
@@ -248,7 +248,7 @@ const Resizer = ({ parentRef }) => {
     camera.updateProjectionMatrix();
   };
 
-  useEvent('resize', resize);
+  useEvent("resize", resize);
 
   useEffect(resize, [camera]);
 
@@ -274,7 +274,7 @@ const BlockText = ({ text }) => {
           minHeight: 10,
           minWidth: 10,
           maxWidth: 1600,
-          margin: '0 auto',
+          margin: "0 auto",
         }}
       >
         {/* TODO: cool shadows + lights */}

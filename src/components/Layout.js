@@ -1,7 +1,7 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 
-import Nav from 'components/Nav';
-import { PageTransition } from 'components/AnimatedItems';
+import { PageTransition } from "~/components/AnimatedItems";
+import Nav from "~/components/Nav";
 
 const Layout = ({
   children,
@@ -13,9 +13,9 @@ const Layout = ({
   outsideTransition = null,
 }) => {
   return (
-    <div className={clsx('wrapper', wrapperClassName)}>
+    <div className={clsx("wrapper", wrapperClassName)}>
       <PageTransition>
-        <main className={clsx(!noLayout && 'page', pageClassName)}>
+        <main className={clsx(!noLayout && "page", pageClassName)}>
           {children}
         </main>
       </PageTransition>

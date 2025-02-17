@@ -1,4 +1,4 @@
-import ErrorPage from './_error';
+import ErrorPage from "./_error";
 
 const NotFoundErrorPage = () => <ErrorPage error={{ code: 404 }} />;
 

@@ -1,11 +1,11 @@
-import { FaGithub as GithubIcon } from '@react-icons/all-files/fa/FaGithub';
-import { FaEnvelope as EmailIcon } from '@react-icons/all-files/fa/FaEnvelope';
-import { FaLinkedin as LinkedinIcon } from '@react-icons/all-files/fa/FaLinkedin';
-import { FaSpotify as SpotifyIcon } from '@react-icons/all-files/fa/FaSpotify';
-import { NextSeo } from 'next-seo';
+import { FaEnvelope as EmailIcon } from "@react-icons/all-files/fa/FaEnvelope";
+import { FaGithub as GithubIcon } from "@react-icons/all-files/fa/FaGithub";
+import { FaLinkedin as LinkedinIcon } from "@react-icons/all-files/fa/FaLinkedin";
+import { FaSpotify as SpotifyIcon } from "@react-icons/all-files/fa/FaSpotify";
+import { NextSeo } from "next-seo";
 
-import Layout from 'components/Layout';
-import AnimatedItems from 'components/AnimatedItems';
+import AnimatedItems from "~/components/AnimatedItems";
+import Layout from "~/components/Layout";
 
 const ContactPage = () => {
   return (

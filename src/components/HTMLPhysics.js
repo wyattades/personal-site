@@ -1,16 +1,16 @@
-import * as _ from 'lodash-es';
-import { memo, useEffect, useRef, useState } from 'react';
-import { createPortal as creatReactPortal } from 'react-dom';
-import { PerspectiveCamera, Vector3 } from 'three';
+import * as _ from "lodash-es";
+import { memo, useEffect, useRef, useState } from "react";
+import { createPortal as creatReactPortal } from "react-dom";
+import { PerspectiveCamera, Vector3 } from "three";
 // eslint-disable-next-line import/named
-import { frameCorners as frameCameraCorners } from 'three/examples/jsm/utils/CameraUtils';
-import { useBox } from '@react-three/cannon';
-import { Canvas } from '@react-three/fiber';
+import { useBox } from "@react-three/cannon";
+import { Canvas } from "@react-three/fiber";
+import { frameCorners as frameCameraCorners } from "three/examples/jsm/utils/CameraUtils";
 
-import { withErrorBoundary } from 'components/ErrorBoundary';
-import { Physics, FloorPlane } from 'components/physics';
-import { BallOnChain } from 'components/BallOnChain';
-import { $$, findFixedParent } from 'lib/utils/html';
+import { BallOnChain } from "~/components/BallOnChain";
+import { withErrorBoundary } from "~/components/ErrorBoundary";
+import { FloorPlane, Physics } from "~/components/physics";
+import { $$, findFixedParent } from "~/lib/utils/html";
 
 const COLLISION_GROUPS = {
   all: 0xffffffff,
@@ -157,19 +157,19 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
       style={
         hide
           ? {
-              position: 'absolute',
+              position: "absolute",
               top: 0,
               left: 0,
-              pointerEvents: 'none',
+              pointerEvents: "none",
               width: 100,
               height: 100,
-              overflow: 'hidden',
-              visibility: 'hidden',
+              overflow: "hidden",
+              visibility: "hidden",
               zIndex: -1000,
             }
           : {
-              position: 'absolute',
-              pointerEvents: 'none',
+              position: "absolute",
+              pointerEvents: "none",
               ...style,
             }
       }
@@ -182,7 +182,7 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
 };
 
 const HTMLPhysics = ({
-  selector = '.box-link, .content > p, .content > h1 > span, .plain-button',
+  selector = ".box-link, .content > p, .content > h1 > span, .plain-button",
 }) => {
   const [state, setState] = useState(null);
 
@@ -193,11 +193,11 @@ const HTMLPhysics = ({
 
     const { scrollTop, scrollHeight } = document.documentElement;
 
-    document.body.classList.add('phys__overflow-hidden');
+    document.body.classList.add("phys__overflow-hidden");
 
     const els = $$(selector).map((el) => {
-      if (window.getComputedStyle(el).display === 'inline')
-        el.classList.add('phys__inline-block');
+      if (window.getComputedStyle(el).display === "inline")
+        el.classList.add("phys__inline-block");
 
       const fixedParent = findFixedParent(el);
       if (fixedParent) removeFixedEls.push(fixedParent);
@@ -216,7 +216,7 @@ const HTMLPhysics = ({
 
     removeFixedEls = _.uniq(removeFixedEls);
     for (const el of removeFixedEls) {
-      el.classList.add('phys__no-fixed');
+      el.classList.add("phys__no-fixed");
     }
 
     const viewBounds = getViewBounds();
@@ -259,16 +259,16 @@ const HTMLPhysics = ({
       setState(null);
 
       for (const { el } of els) {
-        el.classList.remove('phys__inline-block');
+        el.classList.remove("phys__inline-block");
 
-        el.style.transform = '';
+        el.style.transform = "";
       }
 
       for (const el of removeFixedEls) {
-        el.classList.remove('phys__absolute');
+        el.classList.remove("phys__absolute");
       }
 
-      document.body.classList.remove('phys__overflow-hidden');
+      document.body.classList.remove("phys__overflow-hidden");
     };
   }, []);
 

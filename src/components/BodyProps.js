@@ -1,6 +1,6 @@
-import * as _ from 'lodash-es';
-import { useRef } from 'react';
-import { useIsomorphicLayoutEffect } from 'react-use';
+import * as _ from "lodash-es";
+import { useRef } from "react";
+import { useIsomorphicLayoutEffect } from "react-use";
 
 /*
  * Add attributes to `<body/>` during SSR and when page changes.
@@ -20,7 +20,7 @@ const objJSON = {
   },
   parse: (str) => {
     try {
-      if (typeof str === 'string' && str) {
+      if (typeof str === "string" && str) {
         const obj = JSON.parse(str);
         if (isNonEmptyObj(obj)) return obj;
       }
@@ -32,7 +32,7 @@ const objJSON = {
 export const DocumentBody = ({ children }) => {
   const attrs = {
     ...activeProps,
-    'data-ssr-props': objJSON.stringify(activeProps),
+    "data-ssr-props": objJSON.stringify(activeProps),
   };
 
   return <body {...attrs}>{children}</body>;
@@ -48,12 +48,12 @@ const getClassTokens = (...cls) => {
 };
 
 export const BodyProps = (props) => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     if (props.className) {
       activeProps.className = getClassTokens(
         activeProps.className,
         props.className,
-      ).join(' ');
+      ).join(" ");
     }
   }
 

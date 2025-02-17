@@ -1,7 +1,7 @@
-import * as _ from 'lodash-es';
+import * as _ from "lodash-es";
 
-import { sessionJsonStorage } from 'lib/utils/jsonStorage';
-import { collection, dbNow } from 'lib/db';
+import { collection, dbNow } from "~/lib/db";
+import { sessionJsonStorage } from "~/lib/utils/jsonStorage";
 
 export class ScoardBoard {
   topScores = null;
@@ -15,17 +15,17 @@ export class ScoardBoard {
     this.topScores = null;
 
     const username = sessionJsonStorage.fetch(
-      'sketch-leaderboard-username',
+      "sketch-leaderboard-username",
       () => {
-        return window.prompt('Enter a username for the scoreboard:') || null;
+        return window.prompt("Enter a username for the scoreboard:") || null;
       },
     );
 
     let savedScoreId = null;
     if (username && score != null) {
       const session = sessionJsonStorage.fetch(
-        'sketch-leaderboard-session',
-        () => Math.random().toString().slice(2) + '-' + Date.now().toString(),
+        "sketch-leaderboard-session",
+        () => Math.random().toString().slice(2) + "-" + Date.now().toString(),
       );
 
       savedScoreId = await this.db.add({
@@ -37,7 +37,7 @@ export class ScoardBoard {
     }
 
     let scores = await this.db.get({
-      order: { score: 'desc', created_at: 'desc' },
+      order: { score: "desc", created_at: "desc" },
     });
 
     let latest = null;
@@ -47,7 +47,7 @@ export class ScoardBoard {
       latest = {
         id: null,
         score,
-        username: username || 'YOU',
+        username: username || "YOU",
       };
     }
 

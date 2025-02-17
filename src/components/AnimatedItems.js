@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   Children as ReactChildren,
   cloneElement,
@@ -6,12 +7,11 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import { Transition } from 'react-transition-group';
-import { useInterval, useUpdate } from 'react-use';
-import { useRouter } from 'next/router';
+} from "react";
+import { Transition } from "react-transition-group";
+import { useInterval, useUpdate } from "react-use";
 
-import { useReducedMotion } from 'lib/hooks';
+import { useReducedMotion } from "~/lib/hooks";
 
 const OutTransition = createContext(null);
 export const useOutTransition = () => useContext(OutTransition);
@@ -83,7 +83,7 @@ export const PageTransition = ({ children }) => {
                 }
           }
         >
-          <div className={i === 0 ? undefined : 'page-transition-out'}>
+          <div className={i === 0 ? undefined : "page-transition-out"}>
             {s.children}
           </div>
         </OutTransition.Provider>
@@ -121,7 +121,7 @@ export const Fade = ({
 
   if (!children) return null;
 
-  const canInjectStyle = typeof children.type === 'string';
+  const canInjectStyle = typeof children.type === "string";
 
   return (
     <Transition
@@ -134,14 +134,14 @@ export const Fade = ({
       nodeRef={nodeRef}
     >
       {(state) => {
-        const hide = state === 'exited' || state === 'exiting';
+        const hide = state === "exited" || state === "exiting";
         const style =
-          state === 'entered' || disabled
+          state === "entered" || disabled
             ? undefined
             : {
                 transition: `opacity ${timeout}ms ease, transform ${timeout}ms ease`,
                 opacity: hide ? 0 : 1,
-                transform: hide ? `translate(${toX}px, ${toY}px)` : 'none',
+                transform: hide ? `translate(${toX}px, ${toY}px)` : "none",
               };
 
         if (canInjectStyle)
@@ -191,7 +191,7 @@ const AnimatedItems = ({ children, dist = 12 }) => {
   return (
     <>
       {validChildren.map((item, i) => {
-        const dir = item.props['data-animate-dir'];
+        const dir = item.props["data-animate-dir"];
 
         const [ax, ay] = (dir && ANIMATE_DIRS[dir]) || ANIMATE_DIRS.down;
 

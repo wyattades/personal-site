@@ -1,6 +1,6 @@
-import AggregateListener from 'lib/AggregateListener';
+import AggregateListener from "~/lib/AggregateListener";
 
-const ldrRgbImage = new URL('images/LDR_RGB1_0.png', import.meta.url).pathname;
+const ldrRgbImage = new URL("images/LDR_RGB1_0.png", import.meta.url).pathname;
 
 function PointerPrototype() {
   this.id = -1;
@@ -68,21 +68,21 @@ function getWebGLContext(canvas) {
     preserveDrawingBuffer: false,
   };
 
-  let gl = canvas.getContext('webgl2', params);
+  let gl = canvas.getContext("webgl2", params);
   const isWebGL2 = !!gl;
   if (!isWebGL2)
     gl =
-      canvas.getContext('webgl', params) ||
-      canvas.getContext('experimental-webgl', params);
+      canvas.getContext("webgl", params) ||
+      canvas.getContext("experimental-webgl", params);
 
   let halfFloat;
   let supportLinearFiltering;
   if (isWebGL2) {
-    gl.getExtension('EXT_color_buffer_float');
-    supportLinearFiltering = gl.getExtension('OES_texture_float_linear');
+    gl.getExtension("EXT_color_buffer_float");
+    supportLinearFiltering = gl.getExtension("OES_texture_float_linear");
   } else {
-    halfFloat = gl.getExtension('OES_texture_half_float');
-    supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
+    halfFloat = gl.getExtension("OES_texture_half_float");
+    supportLinearFiltering = gl.getExtension("OES_texture_half_float_linear");
   }
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -1643,20 +1643,20 @@ const FluidInit = (canvas) => {
 
   const aggLis = new AggregateListener();
 
-  aggLis.add(window, 'mouseup', () => {
+  aggLis.add(window, "mouseup", () => {
     pointers[0].down = false;
   });
 
-  aggLis.add(window, 'touchend', (e) => {
+  aggLis.add(window, "touchend", (e) => {
     const touches = e.changedTouches;
     for (let i = 0; i < touches.length; i++)
       for (let j = 0; j < pointers.length; j++)
         if (touches[i].identifier === pointers[j].id) pointers[j].down = false;
   });
 
-  aggLis.add(window, 'keydown', (e) => {
-    if (e.code === 'KeyP') config.PAUSED = !config.PAUSED;
-    if (e.key === ' ') splatStack.push(Math.floor(Math.random() * 20) + 5);
+  aggLis.add(window, "keydown", (e) => {
+    if (e.code === "KeyP") config.PAUSED = !config.PAUSED;
+    if (e.key === " ") splatStack.push(Math.floor(Math.random() * 20) + 5);
   });
 
   // startGUI();
@@ -1664,7 +1664,7 @@ const FluidInit = (canvas) => {
 
   start();
 
-  aggLis.add(canvas, 'mousemove', (e) => {
+  aggLis.add(canvas, "mousemove", (e) => {
     pointers[0].moved = pointers[0].down;
     pointers[0].dx = (e.offsetX - pointers[0].x) * 5.0;
     pointers[0].dy = (e.offsetY - pointers[0].y) * 5.0;
@@ -1674,7 +1674,7 @@ const FluidInit = (canvas) => {
 
   aggLis.add(
     canvas,
-    'touchmove',
+    "touchmove",
     (e) => {
       e.preventDefault();
       const touches = e.targetTouches;
@@ -1690,12 +1690,12 @@ const FluidInit = (canvas) => {
     false,
   );
 
-  aggLis.add(canvas, 'mousedown', () => {
+  aggLis.add(canvas, "mousedown", () => {
     pointers[0].down = true;
     pointers[0].color = generateColor();
   });
 
-  aggLis.add(canvas, 'touchstart', (e) => {
+  aggLis.add(canvas, "touchstart", (e) => {
     e.preventDefault();
     const touches = e.targetTouches;
     for (let i = 0; i < touches.length; i++) {

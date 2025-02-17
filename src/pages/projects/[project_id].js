@@ -1,15 +1,15 @@
-import Image from 'next/image';
-import { FaCloudDownloadAlt as DownloadIcon } from '@react-icons/all-files/fa/FaCloudDownloadAlt';
-import { FaLink as LinkIcon } from '@react-icons/all-files/fa/FaLink';
-import { FaCode as CodeIcon } from '@react-icons/all-files/fa/FaCode';
-import { NextSeo } from 'next-seo';
+import { FaCloudDownloadAlt as DownloadIcon } from "@react-icons/all-files/fa/FaCloudDownloadAlt";
+import { FaCode as CodeIcon } from "@react-icons/all-files/fa/FaCode";
+import { FaLink as LinkIcon } from "@react-icons/all-files/fa/FaLink";
+import { NextSeo } from "next-seo";
+import Image from "next/image";
 
-import Layout from 'components/Layout';
-import projects from 'lib/projects';
-import PlaySketch from 'components/PlaySketch';
-import { GoBackLink } from 'components/Link';
-import AnimatedItems from 'components/AnimatedItems';
-import { Markdown } from 'components/Markdown';
+import AnimatedItems from "~/components/AnimatedItems";
+import Layout from "~/components/Layout";
+import { GoBackLink } from "~/components/Link";
+import { Markdown } from "~/components/Markdown";
+import PlaySketch from "~/components/PlaySketch";
+import projects from "~/lib/projects";
 
 export const getStaticProps = async ({ params: { project_id } }) => {
   const project = projects.find((p) => !p.noPage && p.id === project_id);
@@ -51,7 +51,7 @@ const ShowProjectPage = ({ project }) => {
     hideImage,
   } = project;
 
-  const isNPM = !!url?.includes('npmjs.com');
+  const isNPM = !!url?.includes("npmjs.com");
 
   return (
     <>
@@ -89,7 +89,7 @@ const ShowProjectPage = ({ project }) => {
           <p>
             <a href={url}>
               <LinkIcon className="icon-head" aria-hidden />
-              {isNPM ? 'NPM Package' : 'Live Website'}
+              {isNPM ? "NPM Package" : "Live Website"}
             </a>
           </p>
         )}
@@ -104,13 +104,13 @@ const ShowProjectPage = ({ project }) => {
         {!hideImage && image && (
           <div
             className="shadowed image-wrapper"
-            style={{ marginBottom: '2rem' }}
+            style={{ marginBottom: "2rem" }}
           >
             <Image
               width={800}
               height={imageW && imageH ? (800 * imageH) / imageW : 600}
-              style={{ objectFit: 'cover' }}
-              placeholder={imageBlurDataURL ? 'blur' : 'empty'}
+              style={{ objectFit: "cover" }}
+              placeholder={imageBlurDataURL ? "blur" : "empty"}
               blurDataURL={imageBlurDataURL || undefined}
               src={image}
               alt={`Image of ${title}`}
@@ -127,7 +127,7 @@ const ShowProjectPage = ({ project }) => {
               </div>
             ),
           ]
-        ) : desc && typeof desc === 'string' ? (
+        ) : desc && typeof desc === "string" ? (
           <Markdown>{desc}</Markdown>
         ) : Array.isArray(desc) ? (
           desc

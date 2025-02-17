@@ -1,4 +1,4 @@
-import { ArrayList } from 'java-to-javascript/lib/polyfills';
+import { ArrayList } from "java-to-javascript/lib/polyfills";
 
 // This source code was converted directly from Java (specifically Processing)
 // using npm module `java-to-javascript`
@@ -188,16 +188,16 @@ export default function asteroidsGame({ p5, width, height }) {
         p5.textSize(60);
         p5.stroke(255);
         p5.fill(255);
-        p5.text('Press [SPACE] to Restart', p5.width / 2, p5.height / 2);
+        p5.text("Press [SPACE] to Restart", p5.width / 2, p5.height / 2);
       }
     }
     if (game === false && dead === false) {
       p5.textSize(60);
       p5.stroke(255);
-      p5.text('Press [SPACE] to Begin', p5.width / 2, p5.height / 2);
+      p5.text("Press [SPACE] to Begin", p5.width / 2, p5.height / 2);
       p5.textSize(40);
       p5.text(
-        'HINT: use WASD to move your player, \nand use the mouse to shoot asteroids',
+        "HINT: use WASD to move your player, \nand use the mouse to shoot asteroids",
         p5.width / 2,
         p5.height / 2 + 200,
       );
@@ -211,8 +211,8 @@ export default function asteroidsGame({ p5, width, height }) {
     p5.text(score, 60, 80);
     p5.text(highscore, p5.width - 80, 80);
     p5.textSize(25);
-    p5.text('Score:', 60, 40);
-    p5.text('HighScore:', p5.width - 80, 40);
+    p5.text("Score:", 60, 40);
+    p5.text("HighScore:", p5.width - 80, 40);
   };
 
   p5.mousePressed = () => {

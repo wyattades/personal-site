@@ -1,5 +1,5 @@
-import Layout from 'components/Layout';
-import { BlockText } from 'components/physicsImport';
+import Layout from "~/components/Layout";
+import { BlockText } from "~/components/physicsImport";
 
 const ErrorPage = ({ error }) => (
   <Layout>

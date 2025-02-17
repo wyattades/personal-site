@@ -1,59 +1,59 @@
 const experienceItems = [
   {
-    title: 'Vanly',
-    link: 'https://vanly.app',
-    role: 'Co-founder & CTO',
-    from: '2019',
+    title: "Vanly",
+    link: "https://vanly.app",
+    role: "Co-founder & CTO",
+    from: "2019",
     to: null,
     desc: [
-      'A two-sided marketplace for homeowners to Share Driveway Space™ with vanlifers',
-      'Top performing SEO PWA website, cross-platform mobile app, ML prediction service, suite of admin tools',
+      "A two-sided marketplace for homeowners to Share Driveway Space™ with vanlifers",
+      "Top performing SEO PWA website, cross-platform mobile app, ML prediction service, suite of admin tools",
     ],
   },
   {
-    title: 'Triplebyte',
-    link: 'https://triplebyte.com',
-    role: 'Full-stack Engineer',
-    from: 'April 2019',
-    to: 'April 2021',
+    title: "Triplebyte",
+    link: "https://triplebyte.com",
+    role: "Full-stack Engineer",
+    from: "April 2019",
+    to: "April 2021",
     desc: [
-      'Project lead for the most vital company capstone projects: jobs directory, Triplebyte Screen, profile editor',
-      'Added sub 30ms React server-side-rendering system in Rails',
-      'Moved all web infrastructure and test suites to parallelized Docker containers for a tremendous increase in speed, caching and reliability',
+      "Project lead for the most vital company capstone projects: jobs directory, Triplebyte Screen, profile editor",
+      "Added sub 30ms React server-side-rendering system in Rails",
+      "Moved all web infrastructure and test suites to parallelized Docker containers for a tremendous increase in speed, caching and reliability",
     ],
   },
   {
-    title: 'Rootid',
-    link: 'https://rootid.com',
-    role: 'Dev-ops Intern',
-    from: '2018',
-    to: '2019',
+    title: "Rootid",
+    link: "https://rootid.com",
+    role: "Dev-ops Intern",
+    from: "2018",
+    to: "2019",
     desc: [
-      'Moved to Docker infrastructure and created automated integration testing suite for >20 client websites',
+      "Moved to Docker infrastructure and created automated integration testing suite for >20 client websites",
     ],
   },
   {
-    title: 'Baskin School of Engineering',
-    link: 'https://soe.ucsc.edu',
-    role: 'Full-stack Engineer',
-    from: '2017',
-    to: '2018',
+    title: "Baskin School of Engineering",
+    link: "https://soe.ucsc.edu",
+    role: "Full-stack Engineer",
+    from: "2017",
+    to: "2018",
     desc: [
-      'Created automated tools for bulk content migration and testing that are still used today to manage hundreds of enterprise Drupal sites',
+      "Created automated tools for bulk content migration and testing that are still used today to manage hundreds of enterprise Drupal sites",
       'Built reusable web "modules", interactive building maps and company org charts, used on campus kiosks',
-      'Developed responsive Drupal CSS theme used on most School of Engineering websites',
+      "Developed responsive Drupal CSS theme used on most School of Engineering websites",
     ],
   },
   {
-    title: 'MVCode',
-    link: 'https://web.archive.org/web/20210127040716/https://www.mvcode.com/',
-    role: 'Coordinator and Lead Instructor',
-    from: '2015',
-    to: '2017',
+    title: "MVCode",
+    link: "https://web.archive.org/web/20210127040716/https://www.mvcode.com/",
+    role: "Coordinator and Lead Instructor",
+    from: "2015",
+    to: "2017",
     desc: [
-      'Developed and taught coding and design challenges for teens in JavaScript, HTML/CSS, Arduino, Unity/C#',
-      'Clearly communicated with coworkers and parents by documenting performance and progress of students',
-      'Managed 3 other instructors at a time',
+      "Developed and taught coding and design challenges for teens in JavaScript, HTML/CSS, Arduino, Unity/C#",
+      "Clearly communicated with coworkers and parents by documenting performance and progress of students",
+      "Managed 3 other instructors at a time",
     ],
   },
 ];
@@ -106,7 +106,7 @@ export const getResumeItems = (maxExperience = null) => {
     ...shownExpItems.map((exp, i) => (
       <section className="pad-horizontal pad-vertical" key={`exp-${i}`}>
         <p className="exp-item__date">
-          {exp.from} - {exp.to || 'Present'}
+          {exp.from} - {exp.to || "Present"}
         </p>
         <p className="exp-item__title">
           <a href={exp.link}>{exp.title}</a>
