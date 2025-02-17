@@ -1,10 +1,10 @@
-@use 'sass:math';
+:root {
+  --resume-gap: 0.25in;
+}
 
-$gap: 0.25in;
-
-// ideally this would only apply on the resume page
+/* ideally this would only apply on the resume page */
 @page {
-  margin: $gap;
+  margin: var(--resume-gap);
   size: letter portrait;
 }
 
@@ -12,7 +12,7 @@ $gap: 0.25in;
   display: block;
 
   margin: 0 auto;
-  padding: $gap;
+  padding: var(--resume-gap);
   width: 8.5in;
 
   @media print {
@@ -28,7 +28,7 @@ $gap: 0.25in;
   p,
   li,
   dl {
-    // tweak these values to make the content fit on 1 page:
+    /* tweak these values to make the content fit on 1 page: */
     font-size: 13px;
     line-height: 22px;
   }
@@ -39,7 +39,7 @@ $gap: 0.25in;
 
   .vertical-margin {
     padding: 0;
-    margin: ($gap - 0.1) 0 $gap 0;
+    margin: calc(var(--resume-gap) - 0.1) 0 var(--resume-gap) 0;
   }
 
   .text-hr {
@@ -53,7 +53,7 @@ $gap: 0.25in;
     overflow: visible;
     > * {
       background-color: white;
-      padding: 0 math.div($gap, 2);
+      padding: 0 calc(var(--resume-gap) / 2);
     }
   }
 
@@ -90,7 +90,7 @@ $gap: 0.25in;
     }
 
     &:before {
-      content: '';
+      content: "";
       width: 2px;
       height: 100%;
       position: absolute;
@@ -105,12 +105,11 @@ $gap: 0.25in;
   }
 
   .contact-link {
-    // font-weight: 400;
     font-size: 12px;
   }
 
-  // .column-divider {
-  //   // border-left: 1px solid lightgrey;
-  //   margin: 0 $gap;
-  // }
+  /* .column-divider {
+    // border-left: 1px solid lightgrey;
+    margin: 0 $gap;
+  } */
 }

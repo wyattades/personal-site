@@ -1,33 +1,23 @@
-@use 'sass:math';
-
-$easing: ease;
-$transition: 300ms $easing;
-
-$bg-color: #ffffff;
-$text-color: #000000;
-$help-text-color: #818181;
-$link-color: #0039f3;
-$error-color: #cf2f2f;
-
-$container: 800px;
-
-$mobile-size: 768px;
-@mixin mobile {
-  @media (max-width: $mobile-size) {
-    @content;
-  }
-}
-
-@mixin light-theme {
-  --bg-color: #{$bg-color};
+:root {
+  --default-easing: ease;
+  --default-transition: 300ms var(--default-easing);
+  --container-w: 800px;
+  --mobile-w: 768px;
+  --bg-color: #ffffff;
   --offset-color: #cecece;
-  --text-color: #{$text-color};
-  --link-color: #{$link-color};
-  --error-color: #{$error-color};
-  --help-text-color: #{$help-text-color};
+  --text-color: #000000;
+  --link-color: #0039f3;
+  --error-color: #cf2f2f;
+  --help-text-color: #818181;
   --link-visited-color: var(--link-color);
 }
-@mixin dark-theme {
+
+/* @media (prefers-color-scheme: dark) { */
+/* body:not(.theme-light) { */
+/* @include dark-theme; */
+/* } */
+/* } */
+body.theme-dark {
   --bg-color: #0e1c36;
   --offset-color: #261c53;
   --text-color: #f5fbef;
@@ -37,39 +27,25 @@ $mobile-size: 768px;
   --link-visited-color: var(--link-color);
 }
 
-@import 'normalize.css';
-@import './resume';
-
-body {
-  @include light-theme;
-}
-@media (prefers-color-scheme: dark) {
-  body:not(.theme-light) {
-    @include dark-theme;
-  }
-}
-body.theme-dark {
-  @include dark-theme;
-}
-
 html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
   min-width: 250px;
 }
 
-// fix: hiding/showing the scrollbar shifts page layout
-// @media screen and (min-width: $mobile-size) {
-//   html {
-//     margin-left: calc(100vw - 100%) !important;
-//   }
-//   body {
-//     margin-left: calc(100% - 100vw) !important;
-//   }
-// }
+/* fix: hiding/showing the scrollbar shifts page layout
+@media screen and (min-width: $mobile-size) {
+  html {
+    margin-left: calc(100vw - 100%) !important;
+  }
+  body {
+    margin-left: calc(100% - 100vw) !important;
+  }
+} */
 
 body {
   color: var(--text-color);
@@ -92,7 +68,7 @@ body {
 
 .page {
   margin: 0 auto;
-  max-width: $container;
+  max-width: var(--container-w);
   padding: 72px 20px;
 }
 
@@ -100,7 +76,7 @@ body {
   overflow: hidden;
 }
 .index-page .wrapper::before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   left: 0;
@@ -109,15 +85,17 @@ body {
   height: 100%;
   opacity: 0;
 
-  $d: 15px;
-  $offset: 15px;
+  --d: 15px;
+  --offset: 15px;
   background-image: radial-gradient(var(--offset-color) 1px, transparent 0);
-  background-size: ($d * 2) ($d * 2);
-  background-position: ($offset - $d) ($offset - $d);
+  background-size: calc(var(--d) * 2) calc(var(--d) * 2);
+  background-position: calc(var(--offset) - var(--d))
+    calc(var(--offset) - var(--d));
 
   transform: scale(1);
 
-  animation: fadeInOpacity 2s ease,
+  animation:
+    fadeInOpacity 2s ease,
     breath 6s cubic-bezier(0.42, -0.02, 0.5, 0.97) infinite alternate;
   animation-fill-mode: forwards, none;
 }
@@ -148,7 +126,7 @@ body {
   }
 }
 
-// credit to FontAwesome:
+/* credit to FontAwesome: */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -220,7 +198,7 @@ li {
   line-height: 24px;
 
   &::marker {
-    content: '• ';
+    content: "• ";
   }
 }
 ul,
@@ -266,7 +244,7 @@ ol {
 }
 
 .exp-item__title > :nth-child(2):before {
-  content: '| ';
+  content: "| ";
 }
 
 .vertical-margin {
@@ -306,9 +284,7 @@ a:not(:hover) {
 
 .nav {
   display: flex;
-  // flex-direction: row;
-  // flex-basis: $container;
-  max-width: $container;
+  max-width: var(--container-w);
   justify-content: space-between;
   padding: 0 20px;
   margin: 0 auto;
@@ -330,7 +306,7 @@ a:not(:hover) {
         pointer-events: all;
         text-decoration: none;
         color: var(--text-color);
-        transition: box-shadow $transition;
+        transition: box-shadow var(--default-transition);
         height: 56px;
         display: flex;
         flex-direction: column;
@@ -428,14 +404,14 @@ dl.expertise-table {
 }
 
 .box-link {
-  $transition: 0.5s $easing;
+  --transition: 0.5s var(--default-easing);
 
   display: flex;
 
   font-weight: bold;
   box-sizing: border-box;
 
-  transition: color $transition;
+  transition: color var(--default-transition);
   border: 1px solid var(--text-color);
   position: relative;
 
@@ -447,7 +423,8 @@ dl.expertise-table {
     z-index: 0;
     opacity: 0 !important;
     visibility: hidden;
-    transition: opacity $transition, visibility $transition;
+    transition: var(--default-transition);
+    transition-property: opacity, visibility;
 
     pointer-events: none;
   }
@@ -461,13 +438,10 @@ dl.expertise-table {
     overflow: hidden;
     z-index: 0;
 
-    // transition: background $transition;
-
     span {
       opacity: 1;
-      // transition: transform $transition;
-      transition: transform $transition, text-shadow $transition,
-        color $transition;
+      transition: var(--default-transition);
+      transition-property: transform, text-shadow, color;
 
       width: 100%;
       height: 100%;
@@ -488,18 +462,22 @@ dl.expertise-table {
 
   &:hover {
     a {
-      // background: linear-gradient(
-      //   to bottom,
-      //   transparent 80%,
-      //   var(--bg-color) 100%
-      // );
+      /* background: linear-gradient(
+         to bottom,
+         transparent 80%,
+         var(--bg-color) 100%
+       );*/
 
       span {
         transform: translateY(40%);
         color: #000;
-        $c: #fff;
-        $s: 1px;
-        text-shadow: (-$s) (-$s) 0 $c, $s (-$s) 0 $c, (-$s) $s 0 $c, $s $s 0 $c;
+        --c: #fff;
+        --s: 1px;
+        text-shadow:
+          calc(-1 * var(--s)) calc(-1 * var(--s)) 0 var(--c),
+          var(--s) calc(-1 * var(--s)) 0 var(--c),
+          calc(-1 * var(--s)) var(--s) 0 var(--c),
+          var(--s) var(--s) 0 var(--c);
       }
     }
     img {
@@ -521,7 +499,7 @@ dl.expertise-table {
   border: 1px solid var(--text-color);
   background: var(--bg-color);
   cursor: pointer;
-  transition: background-color $transition;
+  transition: background-color var(--default-transition);
 }
 .plain-button:hover {
   background: var(--offset-color);
@@ -534,7 +512,7 @@ dl.expertise-table {
   font-size: 3rem;
   cursor: pointer;
   color: var(--text-color) !important;
-  transition: margin-left $transition;
+  transition: margin-left var(--default-transition);
   &:hover {
     margin-left: -5px;
   }
@@ -544,18 +522,18 @@ dl.expertise-table {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-// Add to any element to overlay a spinner
+/* Add to any element to overlay a spinner */
 .loading::before {
-  $size: 40px;
-  content: '';
+  --size: 40px;
+  content: "";
   box-sizing: border-box;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: $size;
-  height: $size;
-  margin-top: math.div(-$size, 2);
-  margin-left: math.div(-$size, 2);
+  width: var(--size);
+  height: var(--size);
+  margin-top: calc(-1 * var(--size) / 2);
+  margin-left: calc(-1 * var(--size) / 2);
   border-radius: 50%;
   border: 2px solid #ccc;
   border-top-color: #333;
@@ -568,7 +546,7 @@ dl.expertise-table {
   }
 }
 
-@include mobile {
+@media (max-width: 768px) {
   .box-link {
     flex-basis: 100%;
     height: 150px;

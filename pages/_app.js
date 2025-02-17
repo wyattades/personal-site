@@ -1,10 +1,12 @@
-import Head from 'next/head';
-import Script from 'next/script';
-import { DefaultSeo } from 'next-seo';
+import { DefaultSeo } from "next-seo";
+import Head from "next/head";
+import Script from "next/script";
 
-import { ThemeProvider } from 'components/StyleTheme';
+import { ThemeProvider } from "components/StyleTheme";
 
-import 'styles/global.scss';
+import "normalize.css";
+import "styles/global.css";
+import "styles/resume.css";
 
 const HOST_URL = process.env.HOST_URL;
 
@@ -34,7 +36,7 @@ const App = ({ Component, pageProps }) => {
           href="/favicon-16x16.png"
         />
       </Head>
-      {process.env.NODE_ENV === 'production' ? (
+      {process.env.NODE_ENV === "production" ? (
         <Script
           data-website-id="583e2bc6-8606-4c14-a2be-70612377adff"
           src="https://sip-umami.vercel.app/sip.js"
@@ -45,22 +47,22 @@ const App = ({ Component, pageProps }) => {
         title="Wyatt Ades - Portfolio"
         description="A website for my projects and contact information"
         openGraph={{
-          type: 'website',
-          locale: 'en_US',
+          type: "website",
+          locale: "en_US",
           url: HOST_URL,
-          site_name: 'Wyatt Ades Portfolio',
+          site_name: "Wyatt Ades Portfolio",
           images: [
             {
-              url: HOST_URL + '/cover-1200x630.png',
+              url: HOST_URL + "/cover-1200x630.png",
               width: 1200,
               height: 630,
-              alt: 'Wyatt Ades portfolio cover',
+              alt: "Wyatt Ades portfolio cover",
             },
           ],
         }}
         twitter={{
-          handle: '@wyattades',
-          cardType: 'summary_large_image',
+          handle: "@wyattades",
+          cardType: "summary_large_image",
         }}
       />
 
