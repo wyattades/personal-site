@@ -171,7 +171,7 @@ const ANIMATE_DIRS = {
   down: [0, 1],
 };
 
-const AnimatedItems = ({ children, dist = 12 }) => {
+export const AnimatedItems = ({ children, dist = 12 }) => {
   const outTransition = useOutTransition();
 
   const validChildren = ReactChildren.toArray(children).filter(
@@ -214,5 +214,3 @@ const AnimatedItems = ({ children, dist = 12 }) => {
     </>
   );
 };
-
-export default AnimatedItems;

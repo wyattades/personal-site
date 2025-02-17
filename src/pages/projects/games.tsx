@@ -1,6 +1,6 @@
 import gamesImage from "images/project_images/games.gif";
-import Link from "~/components/Link";
-import projects from "~/lib/projects";
+import { Link } from "~/components/link";
+import { projects } from "~/lib/projects";
 
 import ShowProjectPage from "./[project_id]";
 

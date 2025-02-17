@@ -7,8 +7,8 @@ import { useBox } from "@react-three/cannon";
 import { Canvas } from "@react-three/fiber";
 import { frameCorners as frameCameraCorners } from "three/examples/jsm/utils/CameraUtils";
 
-import { BallOnChain } from "~/components/BallOnChain";
-import { withErrorBoundary } from "~/components/ErrorBoundary";
+import { BallOnChain } from "~/components/ball-on-chain";
+import { withErrorBoundary } from "~/components/error-boundary";
 import { FloorPlane, Physics } from "~/components/physics";
 import { $$, findFixedParent } from "~/lib/utils/html";
 
@@ -181,7 +181,7 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
   );
 };
 
-const HTMLPhysics = ({
+const HTMLPhysics_ = ({
   selector = ".box-link, .content > p, .content > h1 > span, .plain-button",
 }) => {
   const [state, setState] = useState(null);
@@ -316,4 +316,4 @@ const HTMLPhysics = ({
   );
 };
 
-export default memo(withErrorBoundary(HTMLPhysics, null));
+export const HTMLPhysics = memo(withErrorBoundary(HTMLPhysics_, null));

@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useAsync } from "react-use";
 
-import { withErrorBoundary } from "~/components/ErrorBoundary";
-import { ScoardBoard } from "~/lib/scoreBoard";
+import { withErrorBoundary } from "~/components/error-boundary";
+import { ScoreBoard } from "~/lib/score-board";
 import { wait } from "~/lib/utils";
 
 const HEIGHT = 600;
 
-const PlaySketch = ({ game }) => {
+const PlaySketch_ = ({ game }) => {
   const {
     loading,
     error,
@@ -15,7 +15,7 @@ const PlaySketch = ({ game }) => {
   } = useAsync(async () => {
     const [p5, sketch] = await Promise.all([
       import("p5"),
-      import(`lib/sketches/${game.id}`),
+      import(`~/lib/sketches/${game.id}`),
       wait(1500), // wait for animation to finish
     ]);
     return { projectId: game.id, p5: p5.default, sketch: sketch.default };
@@ -32,7 +32,7 @@ const PlaySketch = ({ game }) => {
 
     const { projectId, sketch, p5: P5 } = modules;
 
-    const scoreBoard = new ScoardBoard(projectId);
+    const scoreBoard = new ScoreBoard(projectId);
 
     const sketchInstance = new P5(
       (p5) => sketch({ p5, width: w, height: HEIGHT, P5, scoreBoard }),
@@ -67,4 +67,4 @@ const PlaySketch = ({ game }) => {
   );
 };
 
-export default withErrorBoundary(PlaySketch);
+export const PlaySketch = withErrorBoundary(PlaySketch_);

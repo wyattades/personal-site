@@ -1,17 +1,9 @@
 import clsx from "clsx";
-import NextLink from "next/link";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { createGlobalState } from "react-use/lib/factory/createGlobalState";
 
 export const useHoveredLink = createGlobalState();
-
-const Link = ({ href, children, ...rest }) => {
-  return (
-    <NextLink {...rest} href={href}>
-      {children}
-    </NextLink>
-  );
-};
 
 const textContent = (r) =>
   !r
@@ -53,4 +45,4 @@ export const GoBackLink = ({ href }) => {
   );
 };
 
-export default Link;
+export { Link };

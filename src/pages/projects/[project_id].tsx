@@ -4,12 +4,12 @@ import { FaLink as LinkIcon } from "@react-icons/all-files/fa/FaLink";
 import { NextSeo } from "next-seo";
 import Image from "next/image";
 
-import AnimatedItems from "~/components/AnimatedItems";
-import Layout from "~/components/Layout";
-import { GoBackLink } from "~/components/Link";
-import { Markdown } from "~/components/Markdown";
-import PlaySketch from "~/components/PlaySketch";
-import projects from "~/lib/projects";
+import { AnimatedItems } from "~/components/animated-items";
+import { Layout } from "~/components/layout";
+import { GoBackLink } from "~/components/link";
+import { Markdown } from "~/components/markdown";
+import { PlaySketch } from "~/components/play-sketch";
+import { projects } from "~/lib/projects";
 
 export const getStaticProps = async ({ params: { project_id } }) => {
   const project = projects.find((p) => !p.noPage && p.id === project_id);

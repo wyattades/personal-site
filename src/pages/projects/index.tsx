@@ -2,11 +2,11 @@ import { NextSeo } from "next-seo";
 import Image from "next/image";
 import { useState } from "react";
 
-import AnimatedItems from "~/components/AnimatedItems";
-import Layout from "~/components/Layout";
-import Link from "~/components/Link";
-import { HTMLPhysics } from "~/components/physicsImport";
-import projects from "~/lib/projects";
+import { AnimatedItems } from "~/components/animated-items";
+import { Layout } from "~/components/layout";
+import { Link } from "~/components/link";
+import { HTMLPhysics } from "~/components/physics-import";
+import { projects } from "~/lib/projects";
 
 const projectItems = projects.filter((p) => !p.noListing);
 

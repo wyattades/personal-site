@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        // TEMP: support legacy routes
         source: "/projects/games/:game_id",
         destination: "/projects/:game_id",
         permanent: true,

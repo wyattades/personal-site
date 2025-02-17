@@ -22,9 +22,6 @@ body.theme-dark {
   --offset-color: #261c53;
   --text-color: #f5fbef;
   --link-color: #f0a6ca;
-  --error-color: #{$error-color};
-  --help-text-color: #{$help-text-color};
-  --link-visited-color: var(--link-color);
 }
 
 html {
@@ -116,10 +113,10 @@ body {
     transform: scale(1);
   }
   25% {
-    transform: scale(1.02);
+    transform: scale(1.03);
   }
   50% {
-    transform: scale(1.025);
+    transform: scale(1.035);
   }
   100% {
     transform: scale(1);
@@ -330,7 +327,9 @@ a:not(:hover) {
 }
 
 dl.expertise-table {
-  @extend p;
+  font-size: 14px;
+  margin-bottom: 0;
+  line-height: 24px;
   display: block;
   dt {
     display: inline-block;

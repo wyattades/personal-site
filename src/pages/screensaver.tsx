@@ -1,5 +1,5 @@
 // import 'styles/screensaver.scss';
-import Fluid from "~/components/Fluid";
+import { Fluid } from "~/components/fluid";
 
 const getSplashInfo = () => {
   return {

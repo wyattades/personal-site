@@ -1,6 +1,6 @@
 import { Euler, Quaternion, Vector3 } from "three";
 
-export default function listenToOrientation(onEnable, onRender) {
+export function listenToOrientation(onEnable, onRender) {
   const scope = {};
   let once = true;
 

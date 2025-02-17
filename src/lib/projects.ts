@@ -1,4 +1,4 @@
-const r = require.context("images/project_images", true);
+const r = require.context("~/images/project_images", true);
 const imageManifest = {};
 for (const k of r.keys()) {
   imageManifest[k.replace(/(^[^/]+\/|\.\w+$)/g, "")] = r(k).default;
@@ -252,7 +252,7 @@ Compile the tiny source-code on your OS to try it out!`,
 
 for (const p of projects) {
   if (p.p5Sketch && !p.source) {
-    p.source = `https://github.com/wyattades/personal-site/blob/main/lib/sketches/${p.id}.js`;
+    p.source = `https://github.com/wyattades/personal-site/blob/main/src/lib/sketches/${p.id}.js`;
   }
 
   if (p.image === null) continue;
@@ -270,4 +270,4 @@ for (const p of projects) {
   p.imageBlurDataURL = m.blurDataURL || null;
 }
 
-export default projects;
+export { projects };

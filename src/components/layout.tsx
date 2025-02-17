@@ -1,9 +1,9 @@
 import clsx from "clsx";
 
-import { PageTransition } from "~/components/AnimatedItems";
-import Nav from "~/components/Nav";
+import { PageTransition } from "~/components/animated-items";
+import { Nav } from "~/components/nav";
 
-const Layout = ({
+export const Layout = ({
   children,
   wrapperClassName,
   pageClassName,
@@ -25,5 +25,3 @@ const Layout = ({
     </div>
   );
 };
-
-export default Layout;

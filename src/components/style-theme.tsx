@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useLatest, useLocalStorage } from "react-use";
 
-import { BodyProps } from "~/components/BodyProps";
+import { BodyProps } from "~/components/body-props";
 
 const ThemeCtx = createContext(null);
 

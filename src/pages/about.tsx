@@ -1,9 +1,9 @@
 import { FaLink as LinkIcon } from "@react-icons/all-files/fa/FaLink";
 import { NextSeo } from "next-seo";
 
-import AnimatedItems from "~/components/AnimatedItems";
-import Layout from "~/components/Layout";
-import { getResumeItems } from "~/lib/resumeItems";
+import { AnimatedItems } from "~/components/animated-items";
+import { Layout } from "~/components/layout";
+import { getResumeItems } from "~/lib/resume-items";
 
 const resumeItems = getResumeItems();
 

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import projects from "~/lib/projects";
+import { projects } from "~/lib/projects";
 
 const HOST_URL = process.env.HOST_URL!;
 

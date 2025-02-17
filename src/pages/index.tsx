@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useDebounce as useDebounceFn } from "react-use";
 
-import AnimatedItems, { useOutTransition } from "~/components/AnimatedItems";
-import { BodyProps } from "~/components/BodyProps";
-import Layout from "~/components/Layout";
-import { useHoveredLink } from "~/components/Link";
-import { BlockText } from "~/components/physicsImport";
+import { AnimatedItems, useOutTransition } from "~/components/animated-items";
+import { BodyProps } from "~/components/body-props";
+import { Layout } from "~/components/layout";
+import { useHoveredLink } from "~/components/link";
+import { BlockText } from "~/components/physics-import";
 
-const useDebounced = (val, wait) => {
+const useDebounced = <T,>(val: T, wait: number) => {
   const [v, setV] = useState(val);
   useDebounceFn(() => setV(val), wait, [val]);
   return v;

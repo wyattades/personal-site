@@ -2,8 +2,8 @@ import { IoMoon as DarkIcon } from "@react-icons/all-files/io5/IoMoon";
 import { IoSunny as LightIcon } from "@react-icons/all-files/io5/IoSunny";
 import { MdSettingsBrightness as SystemIcon } from "@react-icons/all-files/md/MdSettingsBrightness";
 
-import { NavLink } from "~/components/Link";
-import { useTheme } from "~/components/StyleTheme";
+import { NavLink } from "~/components/link";
+import { useTheme } from "~/components/style-theme";
 
 const themeIcons = {
   light: LightIcon,
@@ -57,7 +57,7 @@ const StyleThemeButton = () => {
   );
 };
 
-const Nav = () => {
+export const Nav = () => {
   return (
     <div className="nav-container">
       <nav className="nav">
@@ -90,5 +90,3 @@ const Nav = () => {
     </div>
   );
 };
-
-export default Nav;

@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef } from "react";
 
-import createFluid from "~/lib/fluid";
+import { FluidInit as createFluid } from "~/lib/fluid";
 
 // const useEvent = (watcher, name, listener) => {
 //   useEffect(() => {
@@ -10,7 +10,7 @@ import createFluid from "~/lib/fluid";
 //   }, [watcher, name, listener]);
 // };
 
-const Fluid = ({ getSplashInfo }) => {
+const Fluid_ = ({ getSplashInfo }) => {
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -52,5 +52,4 @@ const Fluid = ({ getSplashInfo }) => {
     </>
   );
 };
-
-export default memo(Fluid);
+export const Fluid = memo(Fluid_);

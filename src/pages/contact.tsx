@@ -4,8 +4,8 @@ import { FaLinkedin as LinkedinIcon } from "@react-icons/all-files/fa/FaLinkedin
 import { FaSpotify as SpotifyIcon } from "@react-icons/all-files/fa/FaSpotify";
 import { NextSeo } from "next-seo";
 
-import AnimatedItems from "~/components/AnimatedItems";
-import Layout from "~/components/Layout";
+import { AnimatedItems } from "~/components/animated-items";
+import { Layout } from "~/components/layout";
 
 const ContactPage = () => {
   return (

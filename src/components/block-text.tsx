@@ -25,11 +25,11 @@ import {
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 
-import { useAnimatedSwitch } from "~/components/AnimatedItems";
-import { withErrorBoundary } from "~/components/ErrorBoundary";
+import { useAnimatedSwitch } from "~/components/animated-items";
+import { withErrorBoundary } from "~/components/error-boundary";
 import { debug, FloorPlane, IS_DEV, Physics } from "~/components/physics";
 
-import fontJson from "fonts/helv.json";
+import fontJson from "~/fonts/helv.json";
 
 const REMOVE_DURATION = 1000;
 const SHOW_DURATION = 300;
@@ -261,7 +261,7 @@ const ExtendReactThree = () => {
   return null;
 };
 
-const BlockText = ({ text }) => {
+const BlockText_ = ({ text }) => {
   const parentRef = useRef();
   const cameraRef = useRef();
 
@@ -327,4 +327,10 @@ const BlockText = ({ text }) => {
   );
 };
 
-export default memo(withErrorBoundary(BlockText, null));
+export const BlockText = memo(
+  withErrorBoundary(BlockText_, ({ error }) => {
+    if (!IS_DEV) return null;
+    console.error("BlockText error", error);
+    return <p>Error: {error.message}</p>;
+  }),
+);

@@ -1,4 +1,4 @@
-export default class AggregateListener {
+export class AggregateListener {
   constructor() {
     this.listeners = [];
   }

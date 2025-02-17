@@ -1,6 +1,6 @@
 import { NextSeo } from "next-seo";
 
-import { getResumeItems } from "~/lib/resumeItems";
+import { getResumeItems } from "~/lib/resume-items";
 
 const resumeItems = getResumeItems(4);
 

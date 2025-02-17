@@ -2,11 +2,11 @@ import { DefaultSeo } from "next-seo";
 import Head from "next/head";
 import Script from "next/script";
 
-import { ThemeProvider } from "~/components/StyleTheme";
+import { ThemeProvider } from "~/components/style-theme";
 
 import "normalize.css";
-import "styles/global.css";
-import "styles/resume.css";
+import "~/styles/global.css";
+import "~/styles/resume.css";
 
 const HOST_URL = process.env.HOST_URL;
 

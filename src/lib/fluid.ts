@@ -1,4 +1,4 @@
-import AggregateListener from "~/lib/AggregateListener";
+import { AggregateListener } from "~/lib/aggregate-listener";
 
 const ldrRgbImage = new URL("images/LDR_RGB1_0.png", import.meta.url).pathname;
 
@@ -1718,4 +1718,4 @@ const FluidInit = (canvas) => {
   };
 };
 
-export default FluidInit;
+export { FluidInit };
