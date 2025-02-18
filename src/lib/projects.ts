@@ -1,10 +1,37 @@
 const r = require.context("~/images/project_images", true);
-const imageManifest = {};
+const imageManifest: Record<
+  string,
+  {
+    src: string;
+    width: number;
+    height: number;
+    blurDataURL?: string;
+  }
+> = {};
 for (const k of r.keys()) {
   imageManifest[k.replace(/(^[^/]+\/|\.\w+$)/g, "")] = r(k).default;
 }
 
-const projects = [
+export type ProjectItem = {
+  id: string;
+  title: string;
+  source?: string;
+  url?: string;
+  download?: string;
+  desc?: string | React.ReactNode[];
+  help?: string;
+  hideImage?: boolean;
+  image?: string | null;
+  imageW?: number;
+  imageH?: number;
+  imageBlurDataURL?: string | null;
+  isGame?: boolean;
+  noListing?: boolean;
+  noPage?: boolean;
+  p5Sketch?: boolean;
+};
+
+const projects: ProjectItem[] = [
   {
     id: "vanly",
     title: "Vanly",
@@ -256,7 +283,7 @@ for (const p of projects) {
   }
 
   if (p.image === null) continue;
-  if (p.image && p.image.startsWith("/")) continue;
+  if (p.image?.startsWith("/")) continue;
 
   const m = imageManifest[p.image || p.id];
   if (!m) {

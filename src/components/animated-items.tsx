@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
-import {
+import React, {
   Children as ReactChildren,
   cloneElement,
   createContext,
+  isValidElement,
   useContext,
   useEffect,
   useRef,
@@ -13,10 +14,16 @@ import { useInterval, useUpdate } from "react-use";
 
 import { useReducedMotion } from "~/lib/hooks";
 
-const OutTransition = createContext(null);
+const OutTransition = createContext<{
+  onComplete: () => void;
+} | null>(null);
 export const useOutTransition = () => useContext(OutTransition);
 
-export const useAnimatedSwitch = (value, children, removeDelay = 1000) => {
+export const useAnimatedSwitch = <Children extends React.ReactElement>(
+  value: string,
+  children: Children,
+  removeDelay = 1000,
+) => {
   const update = useUpdate();
 
   const counter = useRef(1);
@@ -28,11 +35,12 @@ export const useAnimatedSwitch = (value, children, removeDelay = 1000) => {
       isInitial: true,
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       remove: () => removeKey(0),
+      timeout: null as NodeJS.Timeout | null,
     },
   ]);
-  const first = stack.current[0];
+  const first = stack.current[0]!;
 
-  const removeKey = (key) => {
+  const removeKey = (key: number) => {
     const i = stack.current.findIndex((s) => s.key === key);
     if (i !== -1) {
       stack.current.splice(i, 1);
@@ -46,9 +54,11 @@ export const useAnimatedSwitch = (value, children, removeDelay = 1000) => {
       key,
       value,
       children,
+      isInitial: false,
       remove: () => removeKey(key),
+      timeout: null,
     });
-    const next = stack.current[1];
+    const next = stack.current[1]!;
     next.timeout = setTimeout(() => {
       next.timeout = null;
       next.remove();
@@ -65,7 +75,9 @@ export const useAnimatedSwitch = (value, children, removeDelay = 1000) => {
   return stack.current;
 };
 
-export const PageTransition = ({ children }) => {
+export const PageTransition: React.FC<{
+  children: React.ReactElement;
+}> = ({ children }) => {
   const { asPath: page } = useRouter();
 
   const stack = useAnimatedSwitch(page, children);
@@ -107,7 +119,21 @@ export const PageTransition = ({ children }) => {
   );
 };
 
-export const Fade = ({
+function canInjectStyle(
+  children: React.ReactNode,
+): children is React.ReactHTMLElement<HTMLElement> {
+  return isValidElement(children) && typeof children.type === "string";
+}
+
+export const Fade: React.FC<{
+  children: React.ReactNode;
+  show?: boolean;
+  timeout?: number;
+  toX?: number;
+  toY?: number;
+  unmount?: boolean;
+  disabled?: boolean;
+}> = ({
   children,
   show = true,
   timeout = 500,
@@ -117,11 +143,9 @@ export const Fade = ({
   disabled = false,
   ...rest
 }) => {
-  const nodeRef = useRef();
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   if (!children) return null;
-
-  const canInjectStyle = typeof children.type === "string";
 
   return (
     <Transition
@@ -144,7 +168,7 @@ export const Fade = ({
                 transform: hide ? `translate(${toX}px, ${toY}px)` : "none",
               };
 
-        if (canInjectStyle)
+        if (canInjectStyle(children))
           return style
             ? cloneElement(children, {
                 ref: nodeRef,
@@ -169,14 +193,16 @@ const ANIMATE_DIRS = {
   right: [1, 0],
   up: [0, -1],
   down: [0, 1],
-};
+} as const;
+type AnimateDir = keyof typeof ANIMATE_DIRS;
 
-export const AnimatedItems = ({ children, dist = 12 }) => {
+export const AnimatedItems: React.FC<{
+  children: React.ReactNode;
+  dist?: number;
+}> = ({ children, dist = 12 }) => {
   const outTransition = useOutTransition();
 
-  const validChildren = ReactChildren.toArray(children).filter(
-    (c) => c != null && c !== false,
-  );
+  const validChildren = ReactChildren.toArray(children).filter(isValidElement);
 
   const [animatedI, setAnimatedI] = useState(-1);
   useInterval(() => {
@@ -191,7 +217,9 @@ export const AnimatedItems = ({ children, dist = 12 }) => {
   return (
     <>
       {validChildren.map((item, i) => {
-        const dir = item.props["data-animate-dir"];
+        const dir = (item.props as { ["data-animate-dir"]?: AnimateDir })[
+          "data-animate-dir"
+        ];
 
         const [ax, ay] = (dir && ANIMATE_DIRS[dir]) || ANIMATE_DIRS.down;
 

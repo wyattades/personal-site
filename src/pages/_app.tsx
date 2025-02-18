@@ -1,7 +1,7 @@
 import { DefaultSeo } from "next-seo";
+import type { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
-
 import { ThemeProvider } from "~/components/style-theme";
 
 import "normalize.css";
@@ -10,11 +10,7 @@ import "~/styles/resume.css";
 
 const HOST_URL = process.env.HOST_URL;
 
-const getDefaultLayout = (p) => p.children;
-
-const App = ({ Component, pageProps }) => {
-  const renderLayout = Component.getLayout || getDefaultLayout;
-
+const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
@@ -67,10 +63,7 @@ const App = ({ Component, pageProps }) => {
       />
 
       <ThemeProvider>
-        {
-          // render with function to prevent unmount/remount of `Layout`
-          renderLayout({ children: <Component {...pageProps} /> })
-        }
+        <Component {...pageProps} />
       </ThemeProvider>
     </>
   );

@@ -1,20 +1,30 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { isValidElement } from "react";
 import { createGlobalState } from "react-use/lib/factory/createGlobalState";
 
-export const useHoveredLink = createGlobalState();
+export { default as Link } from "next/link";
 
-const textContent = (r) =>
-  !r
+export const useHoveredLink = createGlobalState<string | null>(null);
+
+const textContent = (r: React.ReactNode): string =>
+  r == null
     ? ""
     : Array.isArray(r)
       ? r.map(textContent).join("")
-      : typeof r === "string"
-        ? r
-        : textContent(r.props.children);
+      : typeof r === "string" || typeof r === "number"
+        ? r.toString()
+        : isValidElement(r)
+          ? textContent((r.props as { children?: React.ReactNode }).children)
+          : "";
 
-export const NavLink = ({ href, exact, className, ...rest }) => {
+export const NavLink: React.FC<{
+  href: string;
+  exact?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}> = ({ href, exact, className, ...rest }) => {
   const router = useRouter();
 
   const active = exact
@@ -36,7 +46,7 @@ export const NavLink = ({ href, exact, className, ...rest }) => {
   );
 };
 
-export const GoBackLink = ({ href }) => {
+export const GoBackLink: React.FC<{ href: string }> = ({ href }) => {
   return (
     <Link className="go-back-link" href={href}>
       <span>←</span>
@@ -44,5 +54,3 @@ export const GoBackLink = ({ href }) => {
     </Link>
   );
 };
-
-export { Link };

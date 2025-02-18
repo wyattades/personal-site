@@ -10,14 +10,21 @@ import { useLatest, useLocalStorage } from "react-use";
 
 import { BodyProps } from "~/components/body-props";
 
-const ThemeCtx = createContext(null);
+const ThemeCtx = createContext<{
+  mode: ThemeKey;
+  setMode: (next: ThemeKey) => void;
+  toggleMode: () => void;
+  changeCount: number;
+} | null>(null);
 
 const supportsColorScheme =
   typeof window === "undefined"
     ? true
     : (window.matchMedia?.("(prefers-color-scheme)")?.matches ?? false);
 
-const ORDER = supportsColorScheme
+type ThemeKey = "light" | "dark" | "system";
+
+const ORDER: [ThemeKey, ...ThemeKey[]] = supportsColorScheme
   ? ["light", "dark", "system"]
   : ["light", "dark"];
 
@@ -27,12 +34,16 @@ const useIsFirstMount = () => {
   return first;
 };
 
-export const ThemeProvider = ({ children }) => {
-  const [mode, setMode] = useLocalStorage("style-theme", ORDER[0]);
+export const ThemeProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
+  let [mode, setMode] = useLocalStorage<ThemeKey>("style-theme", ORDER[0]);
+  mode ||= ORDER[0];
 
   const changeCounter = useRef(0);
 
   const latestMode = useLatest(mode);
+
   const toggleMode = useCallback(() => {
     changeCounter.current++;
     const i = ORDER.indexOf(latestMode.current);

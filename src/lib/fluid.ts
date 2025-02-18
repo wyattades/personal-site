@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/prefer-for-of */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { AggregateListener } from "~/lib/aggregate-listener";
 
-const ldrRgbImage = new URL("images/LDR_RGB1_0.png", import.meta.url).pathname;
+const ldrRgbImage = new URL("~/images/LDR_RGB1_0.png", import.meta.url)
+  .pathname;
 
 function PointerPrototype() {
   this.id = -1;

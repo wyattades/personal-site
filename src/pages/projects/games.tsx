@@ -1,12 +1,12 @@
-import gamesImage from "images/project_images/games.gif";
+import { Layout } from "~/components/layout";
 import { Link } from "~/components/link";
+import gamesImage from "~/images/project_images/games.gif";
 import { projects } from "~/lib/projects";
-
 import ShowProjectPage from "./[project_id]";
 
 const games = projects.filter((p) => p.isGame);
 
-const GamesPage = () => {
+const GamesPageInner = () => {
   return (
     <ShowProjectPage
       project={{
@@ -29,7 +29,11 @@ const GamesPage = () => {
               ) : (
                 <Link href={`/projects/${game.id}`}>{game.title}</Link>
               )}
-              {game.desc && `: ${game.desc}`}
+              {game.desc && typeof game.desc === "string"
+                ? `: ${game.desc}`
+                : Array.isArray(game.desc)
+                  ? game.desc
+                  : null}
             </p>
           )),
         ],
@@ -38,6 +42,10 @@ const GamesPage = () => {
   );
 };
 
-GamesPage.getLayout = ShowProjectPage.getLayout;
-
-export default GamesPage;
+export default function GamesPage() {
+  return (
+    <Layout pageClassName="content">
+      <GamesPageInner />
+    </Layout>
+  );
+}

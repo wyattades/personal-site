@@ -8,17 +8,21 @@ import { useIsomorphicLayoutEffect } from "react-use";
  */
 
 // just used for SSR
-const activeProps = {};
+const activeProps: {
+  className?: string;
+} = {};
 
-const isNonEmptyObj = (obj) => _.isPlainObject(obj) && !_.isEmpty(obj);
+const isNonEmptyObj = (obj: unknown): obj is Record<string, unknown> =>
+  _.isPlainObject(obj) && !_.isEmpty(obj);
+
 const objJSON = {
-  stringify: (obj) => {
+  stringify: (obj: unknown) => {
     try {
       if (isNonEmptyObj(obj)) return JSON.stringify(obj);
     } catch {}
     return undefined;
   },
-  parse: (str) => {
+  parse: (str: unknown) => {
     try {
       if (typeof str === "string" && str) {
         const obj = JSON.parse(str);
@@ -29,7 +33,9 @@ const objJSON = {
   },
 };
 
-export const DocumentBody = ({ children }) => {
+export const DocumentBody: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const attrs = {
     ...activeProps,
     "data-ssr-props": objJSON.stringify(activeProps),
@@ -38,16 +44,17 @@ export const DocumentBody = ({ children }) => {
   return <body {...attrs}>{children}</body>;
 };
 
-const getClassTokens = (...cls) => {
-  const tokens = new Set();
+const getClassTokens = (...cls: unknown[]) => {
+  const tokens = new Set<string>();
 
   for (const cl of cls)
-    if (cl) for (const c of cl.split(/\s+/)) if (c) tokens.add(c);
+    if (typeof cl === "string" && cl.length > 0)
+      for (const c of cl.split(/\s+/)) if (c.length > 0) tokens.add(c);
 
   return [...tokens].sort();
 };
 
-export const BodyProps = (props) => {
+export const BodyProps: React.FC<{ className?: string }> = (props) => {
   if (typeof window === "undefined") {
     if (props.className) {
       activeProps.className = getClassTokens(

@@ -2,12 +2,13 @@ import { useEffect, useRef } from "react";
 import { useAsync } from "react-use";
 
 import { withErrorBoundary } from "~/components/error-boundary";
+import type { ProjectItem } from "~/lib/projects";
 import { ScoreBoard } from "~/lib/score-board";
 import { wait } from "~/lib/utils";
 
 const HEIGHT = 600;
 
-const PlaySketch_ = ({ game }) => {
+const PlaySketch_: React.FC<{ game: ProjectItem }> = ({ game }) => {
   const {
     loading,
     error,
@@ -21,13 +22,13 @@ const PlaySketch_ = ({ game }) => {
     return { projectId: game.id, p5: p5.default, sketch: sketch.default };
   }, [game.id]);
 
-  const containerRef = useRef();
-  const sketchRef = useRef();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sketchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!modules) return;
 
-    const w = containerRef.current.clientWidth;
+    const w = containerRef.current!.clientWidth;
     // const h = containerRef.current.clientHeight;
 
     const { projectId, sketch, p5: P5 } = modules;
@@ -36,7 +37,7 @@ const PlaySketch_ = ({ game }) => {
 
     const sketchInstance = new P5(
       (p5) => sketch({ p5, width: w, height: HEIGHT, P5, scoreBoard }),
-      sketchRef.current,
+      sketchRef.current!,
     );
 
     return () => {

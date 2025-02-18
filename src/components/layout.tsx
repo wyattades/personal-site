@@ -3,7 +3,14 @@ import clsx from "clsx";
 import { PageTransition } from "~/components/animated-items";
 import { Nav } from "~/components/nav";
 
-export const Layout = ({
+export const Layout: React.FC<{
+  children: React.ReactNode;
+  wrapperClassName?: string;
+  pageClassName?: string;
+  noLayout?: boolean;
+  seo?: React.ReactNode;
+  outsideTransition?: React.ReactNode;
+}> = ({
   children,
   wrapperClassName,
   pageClassName,

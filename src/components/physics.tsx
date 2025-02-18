@@ -1,4 +1,11 @@
-import { Physics as CannonPhysics, Debug, usePlane } from "@react-three/cannon";
+import {
+  Physics as CannonPhysics,
+  Debug,
+  usePlane,
+  type PlaneProps,
+  type Triplet,
+} from "@react-three/cannon";
+import type { PhysicsProviderProps } from "@react-three/cannon/dist/physics-provider";
 import { createContext, useContext, useEffect } from "react";
 import { useAsync, useKeyPressEvent, useLocalStorage } from "react-use";
 import { Euler, Vector3 } from "three";
@@ -9,8 +16,8 @@ const t0 = new Vector3(),
   t1 = new Vector3(),
   e0 = new Euler();
 export const V = {
-  add: (...vs) => {
-    const s = [0, 0, 0];
+  add: (...vs: Triplet[]) => {
+    const s: Triplet = [0, 0, 0];
     for (const v of vs) {
       s[0] += v[0];
       s[1] += v[1];
@@ -18,13 +25,13 @@ export const V = {
     }
     return s;
   },
-  mult: (vec, scalar) =>
+  mult: (vec: Triplet, scalar: number) =>
     t0
       .set(...vec)
       .multiplyScalar(scalar)
       .toArray(),
-  dist: (a, b) => t0.set(...a).distanceTo(t1.set(...b)),
-  applyRotate: (vec, rot) =>
+  dist: (a: Triplet, b: Triplet) => t0.set(...a).distanceTo(t1.set(...b)),
+  applyRotate: (vec: Triplet, rot: Triplet) =>
     t0
       .set(...vec)
       .applyEuler(e0.set(...rot, "XYZ"))
@@ -62,7 +69,10 @@ export const useStats = (enabled = true) => {
 
 const debugCtx = createContext(false);
 
-export const FloorPlane = ({ size, ...props }) => {
+export const FloorPlane: React.FC<PlaneProps & { size: Triplet }> = ({
+  size,
+  ...props
+}) => {
   const [ref] = usePlane(() => props);
 
   const isDebug = useContext(debugCtx);
@@ -70,14 +80,14 @@ export const FloorPlane = ({ size, ...props }) => {
   if (isDebug)
     return (
       <mesh ref={ref}>
-        <planeBufferGeometry args={size} />
+        <planeGeometry args={size} />
       </mesh>
     );
 
   return null;
 };
 
-const PhysicsDebug = IS_DEV
+const PhysicsDebug: React.FC<{ children: React.ReactNode }> = IS_DEV
   ? ({ children }) => {
       const [enabled, setEnabled] = useLocalStorage("physics-debug", false);
 
@@ -89,6 +99,7 @@ const PhysicsDebug = IS_DEV
 
       return enabled ? (
         <debugCtx.Provider value={enabled}>
+          {/* @ts-expect-error waiting for ^ */}
           <Debug color="#ff0000">{children}</Debug>
         </debugCtx.Provider>
       ) : (
@@ -97,9 +108,11 @@ const PhysicsDebug = IS_DEV
     }
   : (p) => p.children;
 
-/** @type {typeof CannonPhysics} */
-export const Physics = ({ children, ...rest }) => {
+export const Physics: React.FC<
+  PhysicsProviderProps & { children: React.ReactNode }
+> = ({ children, ...rest }) => {
   return (
+    // @ts-expect-error waiting for ^
     <CannonPhysics {...rest}>
       <PhysicsDebug>{children}</PhysicsDebug>
     </CannonPhysics>
@@ -107,5 +120,5 @@ export const Physics = ({ children, ...rest }) => {
 };
 
 export const debug = IS_DEV
-  ? (...args) => console.debug("[debug]", ...args)
+  ? (...args: unknown[]) => console.debug("[debug]", ...args)
   : () => {};

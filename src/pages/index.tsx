@@ -13,7 +13,7 @@ const useDebounced = <T,>(val: T, wait: number) => {
   return v;
 };
 
-const IndexPage = () => {
+const IndexPageInner = () => {
   const outTransition = useOutTransition();
 
   const [hoveredLink] = useHoveredLink();
@@ -52,10 +52,10 @@ const IndexPage = () => {
   );
 };
 
-IndexPage.getLayout = ({ children }) => (
-  <Layout noLayout outsideTransition={<BodyProps className="index-page" />}>
-    {children}
-  </Layout>
-);
-
-export default IndexPage;
+export default function IndexPage() {
+  return (
+    <Layout noLayout outsideTransition={<BodyProps className="index-page" />}>
+      <IndexPageInner />
+    </Layout>
+  );
+}

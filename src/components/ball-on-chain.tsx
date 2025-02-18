@@ -1,10 +1,22 @@
-import { useBox, useConeTwistConstraint, useSphere } from "@react-three/cannon";
-import { createContext, createRef, useContext } from "react";
-
+import {
+  useBox,
+  useConeTwistConstraint,
+  useSphere,
+  type ConeTwistConstraintOpts,
+  type Triplet,
+} from "@react-three/cannon";
+import { createContext, createRef, useContext, type RefObject } from "react";
+import type { Object3D, Object3DEventMap } from "three";
 import { V } from "~/components/physics";
 
-const parentCtx = createContext({
-  ref: createRef(),
+type ParentCtx = {
+  ref: RefObject<Object3D<Object3DEventMap> | null>;
+  pos: Triplet;
+  offset: Triplet;
+  rotation: Triplet;
+};
+const parentCtx = createContext<ParentCtx>({
+  ref: createRef<Object3D<Object3DEventMap>>(),
   pos: [0, 0, 0],
   offset: [0, 0, 0],
   rotation: [0, 0, 0],
@@ -12,8 +24,15 @@ const parentCtx = createContext({
 
 const meshQuality = 4;
 
-/** @returns {{ constraint: import('@react-three/cannon').ConeTwistConstraintOpts }} */
-const getConstraintData = (parent, offset) => {
+const getConstraintData = (
+  parent: ParentCtx,
+  offset: Triplet,
+): {
+  pos: Triplet;
+  rotation: Triplet;
+  offset: Triplet;
+  constraint: ConeTwistConstraintOpts;
+} => {
   return {
     pos: V.add(
       parent.pos,
@@ -32,7 +51,10 @@ const getConstraintData = (parent, offset) => {
   };
 };
 
-const ChainBall = ({ radius = 1, collisionFilterMask }) => {
+const ChainBall: React.FC<{
+  radius: number;
+  collisionFilterMask: number;
+}> = ({ radius = 1, collisionFilterMask }) => {
   const p = useContext(parentCtx);
 
   const { constraint, pos, rotation } = getConstraintData(p, [0, radius, 0]);
@@ -56,7 +78,12 @@ const ChainBall = ({ radius = 1, collisionFilterMask }) => {
   );
 };
 
-const ChainLink = ({ children, chainSize, linkIndex, collisionFilterMask }) => {
+const ChainLink: React.FC<{
+  children: React.ReactNode;
+  chainSize: Triplet;
+  linkIndex: number;
+  collisionFilterMask: number;
+}> = ({ children, chainSize, linkIndex, collisionFilterMask }) => {
   const p = useContext(parentCtx);
 
   const { constraint, pos, rotation, offset } = getConstraintData(p, [
@@ -79,7 +106,7 @@ const ChainLink = ({ children, chainSize, linkIndex, collisionFilterMask }) => {
     <>
       <group ref={ref} name="ChainLink">
         <mesh rotation={[0, linkIndex % 2 === 1 ? Math.PI / 2 : 0, 0]}>
-          <torusBufferGeometry
+          <torusGeometry
             args={[
               chainSize[1] / 2 + chainSize[0],
               chainSize[0],
@@ -105,7 +132,12 @@ const ChainLink = ({ children, chainSize, linkIndex, collisionFilterMask }) => {
   );
 };
 
-const ChainLinks = ({ count = 0, children, ...rest }) => {
+const ChainLinks: React.FC<{
+  count?: number;
+  children: React.ReactNode;
+  chainSize: Triplet;
+  collisionFilterMask: number;
+}> = ({ count = 0, children, ...rest }) => {
   let content = children;
   for (let i = 0; i < count; i++) {
     content = (
@@ -117,14 +149,20 @@ const ChainLinks = ({ count = 0, children, ...rest }) => {
   return content;
 };
 
-const ChainHandle = ({
+const ChainHandle: React.FC<{
+  children: React.ReactNode;
+  position: Triplet;
+  radius?: number;
+  startRotation?: number;
+  collisionFilterMask: number;
+}> = ({
   children,
   position,
   radius = 1,
   startRotation = 0,
   collisionFilterMask,
 }) => {
-  const rotation = [0, 0, startRotation];
+  const rotation: Triplet = [0, 0, startRotation];
 
   const [ref] = useSphere(() => ({
     args: [radius],
@@ -138,7 +176,7 @@ const ChainHandle = ({
     rotation,
   }));
 
-  const offset = [0, -radius, 0];
+  const offset: Triplet = [0, -radius, 0];
 
   return (
     <parentCtx.Provider value={{ ref, pos: position, rotation, offset }}>
@@ -147,7 +185,12 @@ const ChainHandle = ({
   );
 };
 
-export const BallOnChain = ({
+export const BallOnChain: React.FC<{
+  position?: Triplet;
+  angle?: number;
+  chainCount?: number;
+  collisionFilterMasks?: { handle?: number; chain?: number; ball?: number };
+}> = ({
   position = [0, 0, 0],
   angle = 0,
   chainCount = 8,

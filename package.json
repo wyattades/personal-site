@@ -4,24 +4,28 @@
   "version": "2.0.0",
   "description": "The portfolio website of Wyatt Ades",
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "next lint",
     "build-resume": "node scripts/buildResume.js",
     "dev": "pnpm i && next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^15.1.7",
-    "@react-icons/all-files": "^4.1.0",
-    "@react-spring/three": "^9.7.2",
+    "@react-spring/three": "^10.0.0-alpha.1",
     "@react-three/cannon": "^6.5.2",
-    "@react-three/drei": "^9.70.0",
-    "@react-three/fiber": "^8.13.0",
+    "@react-three/drei": "^10.0.0-rc.2",
+    "@react-three/fiber": "^9.0.0-rc.8",
+    "@types/p5": "~0.9.0",
+    "@types/react-dom": "^19.0.4",
     "@types/react-transition-group": "^4.4.6",
+    "@types/webpack-env": "^1.18.8",
     "clsx": "^2.1.1",
     "firebase": "^11.3.1",
     "java-to-javascript": "^0.1.15",
     "lodash-es": "^4.17.21",
+    "lucide-react": "^0.475.0",
     "next": "^15.1.7",
     "next-seo": "^6.0.0",
     "normalize.css": "^8.0.1",
@@ -32,7 +36,8 @@
     "react-use": "^17.4.0",
     "sass": "^1.85.0",
     "stats.js": "^0.17.0",
-    "three": "^0.173.0"
+    "three": "^0.173.0",
+    "three-stdlib": "^2.35.13"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",

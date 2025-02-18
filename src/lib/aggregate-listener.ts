@@ -1,9 +1,20 @@
 export class AggregateListener {
+  private listeners: {
+    observer: EventTarget;
+    name: string;
+    cb: EventListener;
+  }[] = [];
+
   constructor() {
     this.listeners = [];
   }
 
-  add(observer, name, cb, useCapture) {
+  add(
+    observer: EventTarget,
+    name: string,
+    cb: EventListener,
+    useCapture = false,
+  ) {
     observer.addEventListener(name, cb, useCapture);
 
     this.listeners.push({
@@ -17,7 +28,7 @@ export class AggregateListener {
     };
   }
 
-  remove(observer, name, cb) {
+  remove(observer: EventTarget, name: string, cb: EventListener) {
     if (cb) {
       this.listeners = this.listeners.filter((lis) => {
         if (lis.observer === observer && lis.name === name && lis.cb === cb) {

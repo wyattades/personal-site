@@ -10,7 +10,7 @@ import { projects } from "~/lib/projects";
 
 const projectItems = projects.filter((p) => !p.noListing);
 
-const ProjectsPage = () => {
+const ProjectsPageInner = () => {
   const [broken, setBroken] = useState(false);
 
   return (
@@ -73,8 +73,10 @@ const ProjectsPage = () => {
   );
 };
 
-ProjectsPage.getLayout = ({ children }) => (
-  <Layout seo={<NextSeo title="Projects" />}>{children}</Layout>
-);
-
-export default ProjectsPage;
+export default function ProjectsPage() {
+  return (
+    <Layout seo={<NextSeo title="Projects" />}>
+      <ProjectsPageInner />
+    </Layout>
+  );
+}

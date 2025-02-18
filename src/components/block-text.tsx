@@ -17,13 +17,18 @@ import {
 import { useEvent } from "react-use";
 import {
   BoxGeometry,
+  LineBasicMaterial,
   LineSegments,
   MathUtils,
   Vector3,
   WireframeGeometry,
+  type PerspectiveCamera as PerspectiveCameraType,
 } from "three";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import {
+  FontLoader,
+  TextGeometry,
+  type TextGeometryParameters,
+} from "three-stdlib";
 
 import { useAnimatedSwitch } from "~/components/animated-items";
 import { withErrorBoundary } from "~/components/error-boundary";
@@ -34,18 +39,33 @@ import fontJson from "~/fonts/helv.json";
 const REMOVE_DURATION = 1000;
 const SHOW_DURATION = 300;
 
-const parsedFont = new FontLoader().parse(fontJson);
+type FixedFontData = Omit<typeof fontJson, "glyphs"> & {
+  glyphs: {
+    [key in keyof (typeof fontJson)["glyphs"]]?: (typeof fontJson)["glyphs"][key] & {
+      _cachedOutline: string[];
+    };
+  };
+};
+
+const parsedFont = new FontLoader().parse(fontJson as unknown as FixedFontData);
 
 let seqIdCounter = 1;
 const seqId = () => seqIdCounter++;
 
-/** @param {THREE.Vector3} vec3 */
 const r = new Vector3();
-const initialInnerPos = (vec3) => {
+const initialInnerPos = (vec3: Vector3) => {
   return r.set(0, 0, 7).add(vec3).toArray();
 };
 
-const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
+const Char: React.FC<{
+  char: string;
+  textGeomConfig: TextGeometryParameters;
+  pos: Vector3;
+  innerPos: Vector3;
+  size: Vector3;
+  animateIn: boolean;
+  isInitial: boolean; // unused
+}> = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
   const [ref, boxApi] = useBox(() => ({
     mass: 1,
     position: pos.toArray(),
@@ -103,13 +123,13 @@ const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
   //     <boxGeometry args={size.toArray()} />
   //   </wireframeGeometry>
   // </animated.lineSegments>;
-  const dev = useRef();
+  const dev = useRef<LineSegments>(null);
   if (IS_DEV && !dev.current) {
     const geometry = new BoxGeometry(...size.toArray());
 
     const wireframe = new WireframeGeometry(geometry);
 
-    const line = new LineSegments(wireframe);
+    const line = new LineSegments(wireframe, new LineBasicMaterial());
     line.material.depthTest = false;
     line.material.color.setHex(0x777777);
 
@@ -118,67 +138,87 @@ const Char = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
 
   return (
     <group ref={ref}>
+      {/* @ts-expect-error waiting for https://github.com/pmndrs/react-spring/pull/2349 */}
       <animated.mesh
         receiveShadow
         castShadow
         position={springs.innerPosAnimated}
       >
+        {/* @ts-expect-error waiting for ^ */}
         <animated.meshNormalMaterial transparent opacity={springs.opacity} />
-        <textGeometry args={[char, textGeomConfig]} />
+        <renamedTextGeometry args={[char, textGeomConfig]} />
+        {/* @ts-expect-error waiting for ^ */}
       </animated.mesh>
       {dev.current ? <primitive object={dev.current} /> : null}
     </group>
   );
 };
 
-const Text = ({
+const Text: React.FC<{
+  children: string;
+  fontSize?: number;
+  depth?: number;
+  bevelThickness?: number;
+  letterPadding?: number;
+  animateIn?: boolean;
+  isInitial?: boolean;
+}> = ({
   children,
   fontSize = 15,
   depth = 0.5,
   bevelThickness = 3,
   letterPadding = 3,
-  animateIn,
-  isInitial,
+  animateIn = false,
+  isInitial = false,
 }) => {
   const letters = useMemo(() => {
-    const arr = children.split("").map((char) => ({ char, id: seqId() }));
-
     let moveX = 0;
-    let i = 0;
-    for (const el of arr) {
-      const glyph = parsedFont.data.glyphs[el.char];
 
-      const { x_min, x_max, ha: _ha } = glyph;
+    const arr: {
+      char: string;
+      id: number;
+      size: Vector3;
+      pos: Vector3;
+      innerPos: Vector3;
+    }[] = children.split("").map((char, i) => {
+      const glyph = fontJson.glyphs[char as keyof typeof fontJson.glyphs];
+      if (!glyph) throw new Error(`Glyph not found for char: ${char}`);
 
-      const width = ((x_max - x_min) / 1000) * fontSize;
+      const width = ((glyph.x_max - glyph.x_min) / 1000) * fontSize;
 
-      el.size = new Vector3(
+      const size = new Vector3(
         bevelThickness / 2 + width,
         bevelThickness / 2 + fontSize,
         2 * bevelThickness + depth,
       );
 
       const w2 = width / 2;
-      el.innerPos = new Vector3(-w2, -fontSize / 2, 0);
+      const innerPos = new Vector3(-w2, -fontSize / 2, 0);
 
       if (i > 0) moveX += letterPadding;
       moveX += w2;
-      el.pos = new Vector3(moveX, 0, 0);
+      const pos = new Vector3(moveX, 0, 0);
 
       moveX += w2;
 
-      i++;
-    }
+      return {
+        char,
+        id: seqId(),
+        size,
+        pos,
+        innerPos,
+      };
+    });
 
     for (const el of arr) {
       el.pos.x -= moveX / 2;
     }
 
     return arr;
-  }, [children]);
+  }, [children, fontSize, depth, bevelThickness, letterPadding]);
 
   const textGeomConfig = useMemo(
-    () => ({
+    (): TextGeometryParameters => ({
       font: parsedFont,
       size: fontSize,
       height: depth, // this is actually depth
@@ -187,12 +227,12 @@ const Text = ({
       bevelThickness,
       bevelSize: 0.75,
       bevelOffset: 0,
-      bevelSegments: 4,
+      // bevelSegments: 4,
     }),
     [fontSize, depth, bevelThickness],
   );
 
-  console.log("Text", { letters, animateIn, isInitial });
+  // console.log("Text", { letters, animateIn, isInitial });
 
   return (
     <group>
@@ -212,7 +252,13 @@ const Text = ({
   );
 };
 
-const SpringGroup = ({ children, changeKey }) => {
+const SpringGroup: React.FC<{
+  children: React.ReactElement<{
+    animateIn: boolean;
+    isInitial: boolean;
+  }>;
+  changeKey: string;
+}> = ({ children, changeKey }) => {
   const stack = useAnimatedSwitch(changeKey, children, REMOVE_DURATION);
 
   return stack.map((s, i) =>
@@ -227,11 +273,13 @@ const SpringGroup = ({ children, changeKey }) => {
 
 const cameraZ = 190;
 
-const Resizer = ({ parentRef }) => {
-  const camera = useThree((state) => state.camera);
+const Resizer: React.FC<{
+  parentRef: React.RefObject<HTMLDivElement | null>;
+}> = ({ parentRef }) => {
+  const camera = useThree((state) => state.camera as PerspectiveCameraType);
 
   const resize = () => {
-    const { clientWidth: w, clientHeight: h } = parentRef.current;
+    const { clientWidth: w, clientHeight: h } = parentRef.current!;
 
     camera.aspect = w / h;
 
@@ -255,15 +303,18 @@ const Resizer = ({ parentRef }) => {
   return null;
 };
 
+// TODO: why are we doing this inside a component?
 const ExtendReactThree = () => {
-  useMemo(() => extendReactThree({ TextGeometry }), []);
+  useMemo(() => extendReactThree({ RenamedTextGeometry: TextGeometry }), []);
 
   return null;
 };
 
-const BlockText_ = ({ text }) => {
-  const parentRef = useRef();
-  const cameraRef = useRef();
+const EMPTY_Z = 0;
+
+const BlockText_: React.FC<{ text: string }> = ({ text }) => {
+  const parentRef = useRef<HTMLDivElement>(null);
+  const cameraRef = useRef<PerspectiveCameraType>(null);
 
   return (
     <>
@@ -308,13 +359,13 @@ const BlockText_ = ({ text }) => {
           {/* <pointLight position={[10, 10, 10]} /> */}
           {/* <Suspense fallback={null}> */}
           {/* <Environment preset="city" /> doesn't do anything */}
-          <Physics allowSleep step={1 / 30} gravity={[0, -20, 0]}>
+          <Physics allowSleep stepSize={1 / 30} gravity={[0, -20, 0]}>
             <SpringGroup changeKey={text}>
               <Text>{text}</Text>
             </SpringGroup>
             {/* this `y` is perfect for resting the letters on initially */}
             <FloorPlane
-              size={[100, 100]}
+              size={[100, 100, EMPTY_Z]}
               position={[0, -8.25, 0]}
               rotation={[-Math.PI / 2, 0, 0]}
             />
@@ -328,9 +379,13 @@ const BlockText_ = ({ text }) => {
 };
 
 export const BlockText = memo(
-  withErrorBoundary(BlockText_, ({ error }) => {
-    if (!IS_DEV) return null;
-    console.error("BlockText error", error);
-    return <p>Error: {error.message}</p>;
-  }),
+  withErrorBoundary(
+    BlockText_,
+    IS_DEV
+      ? ({ error }) => {
+          console.error("BlockText error", error);
+          return <p>Error: {error.message}</p>;
+        }
+      : null,
+  ),
 );

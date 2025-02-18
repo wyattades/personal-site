@@ -2,8 +2,8 @@ import { memo } from "react";
 
 import { matchAll } from "~/lib/utils";
 
-const withInliners = (str) => {
-  const parts = [];
+const withInliners = (str: string) => {
+  const parts: React.ReactNode[] = [];
   let lastIndex = 0;
   for (const m of str.matchAll(/\[(.*?)\]\((.*?)\)/g)) {
     const before = str.substring(lastIndex, m.index);
@@ -23,7 +23,11 @@ const withInliners = (str) => {
  * Simple and buggy markdown implementation.
  * Supports: links, ordered-lists, unordered-lists, paragraphs
  */
-export const Markdown = memo(function InnerMarkdown({ children }) {
+export const Markdown = memo(function InnerMarkdown({
+  children,
+}: {
+  children: string;
+}) {
   if (typeof children !== "string" || children.length === 0) return null;
 
   return children
@@ -34,7 +38,7 @@ export const Markdown = memo(function InnerMarkdown({ children }) {
         return (
           <ul key={i}>
             {matchAll(str, /^\s*-\s*(.*)/gm, (m, j) => {
-              return <li key={j}>{withInliners(m[1])}</li>;
+              return <li key={j}>{withInliners(m[1]!)}</li>;
             })}
           </ul>
         );
@@ -42,7 +46,7 @@ export const Markdown = memo(function InnerMarkdown({ children }) {
         return (
           <ol key={i}>
             {matchAll(str, /^\s*\d+[.\s]\s*(.*)/gm, (m, j) => {
-              return <li key={j}>{withInliners(m[1])}</li>;
+              return <li key={j}>{withInliners(m[1]!)}</li>;
             })}
           </ol>
         );

@@ -1,11 +1,10 @@
+import { type Triplet, useBox } from "@react-three/cannon";
+import { Canvas } from "@react-three/fiber";
 import * as _ from "lodash-es";
-import { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { createPortal as creatReactPortal } from "react-dom";
 import { PerspectiveCamera, Vector3 } from "three";
-// eslint-disable-next-line import/named
-import { useBox } from "@react-three/cannon";
-import { Canvas } from "@react-three/fiber";
-import { frameCorners as frameCameraCorners } from "three/examples/jsm/utils/CameraUtils";
+import { frameCorners as frameCameraCorners } from "three/examples/jsm/utils/CameraUtils.js";
 
 import { BallOnChain } from "~/components/ball-on-chain";
 import { withErrorBoundary } from "~/components/error-boundary";
@@ -45,15 +44,20 @@ const TWO_PI = 2 * Math.PI;
 // })();
 
 // fast rounding to nearest 1 digit
-const roundPixelNum = (number) => {
+const roundPixelNum = (number: number) => {
   return ((number * 10) | 0) * 0.1;
 };
 // fast rounding to nearest 3 digits
-const roundAngleNum = (number) => {
+const roundAngleNum = (number: number) => {
   return ((number * 1000) | 0) * 0.001;
 };
 
-const ElementBody = ({ start, position, size, el }) => {
+const ElementBody: React.FC<{
+  start: { x: number; y: number };
+  position: Triplet;
+  size: Triplet;
+  el: HTMLElement;
+}> = ({ start, position, size, el }) => {
   const [_ref, bodyApi] = useBox(() => ({
     mass: 1,
     linearFactor: [1, 1, 0],
@@ -63,13 +67,14 @@ const ElementBody = ({ start, position, size, el }) => {
     allowSleep: true,
   }));
 
-  const tmp = useRef({ i: 0 });
+  const tmp = useRef<{ i: number; r?: Triplet; p?: Triplet }>({ i: 0 });
 
   const [w, h] = size;
   const updateStyles = () => {
     if ((tmp.current.i++ & 2) === 0) return;
 
-    const { p, r } = tmp.current;
+    const p = tmp.current.p!;
+    const r = tmp.current.r!;
 
     const x = (p[0] - w * 0.5) * scaleOut - start.x,
       y = (p[1] - h * 0.5) * -scaleOut - start.y,
@@ -119,12 +124,17 @@ const getViewBounds = (scale = scaleIn) => {
   };
 };
 
-const FullPageCanvas = ({ children, hide, ...rest }) => {
+const FullPageCanvas: React.FC<{
+  children: React.ReactNode;
+  hide?: boolean;
+  style?: React.CSSProperties;
+}> = ({ children, hide, ...rest }) => {
   // make sure never this is never rendered server-side!
   const [{ camera, style }] = useState(() => {
     const viewBounds = getViewBounds();
 
     const cam = new PerspectiveCamera();
+    // @ts-expect-error `manual` is not typed???
     cam.manual = true; // tell `@react-three/fiber` not to update our camera
     cam.position.z = 500; // give a arbitrarily far camera z so scene looks more orthographic
     frameCameraCorners(
@@ -181,21 +191,46 @@ const FullPageCanvas = ({ children, hide, ...rest }) => {
   );
 };
 
+type ElState = {
+  el: HTMLElement;
+  start: { x: number; y: number };
+  position: Triplet;
+  size: Triplet;
+};
+type FloorState = {
+  position: Triplet;
+  size: Triplet;
+  rotation: Triplet;
+};
+
 const HTMLPhysics_ = ({
   selector = ".box-link, .content > p, .content > h1 > span, .plain-button",
 }) => {
-  const [state, setState] = useState(null);
+  const [state, setState] = useState<{
+    els: ElState[];
+    floors: FloorState[];
+    viewBounds: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      bottomLeft: Vector3;
+      bottomMiddle: Vector3;
+      bottomRight: Vector3;
+      topLeft: Vector3;
+    };
+  } | null>(null);
 
   useEffect(() => {
     const depth = 100 * scaleIn;
 
-    let removeFixedEls = [];
+    let removeFixedEls: HTMLElement[] = [];
 
     const { scrollTop, scrollHeight } = document.documentElement;
 
     document.body.classList.add("phys__overflow-hidden");
 
-    const els = $$(selector).map((el) => {
+    const els: ElState[] = $$(selector).map((el) => {
       if (window.getComputedStyle(el).display === "inline")
         el.classList.add("phys__inline-block");
 
@@ -225,10 +260,12 @@ const HTMLPhysics_ = ({
     const floorsWidth = Math.max(minWidth, viewBounds.width);
     const floorsExtraX = (floorsWidth - viewBounds.width) / 2;
 
-    const floors = [
+    const EMPTY_Z = 0;
+
+    const floors: FloorState[] = [
       {
         position: viewBounds.bottomMiddle.toArray(),
-        size: [floorsWidth, depth],
+        size: [floorsWidth, depth, EMPTY_Z],
         rotation: [-Math.PI / 2, 0, 0],
       },
       {
@@ -236,7 +273,7 @@ const HTMLPhysics_ = ({
           .clone()
           .setX(viewBounds.bottomLeft.x - floorsExtraX)
           .toArray(),
-        size: [viewBounds.height, depth],
+        size: [viewBounds.height, depth, EMPTY_Z],
         rotation: [-Math.PI / 2, Math.PI / 2, 0],
       },
       {
@@ -244,7 +281,7 @@ const HTMLPhysics_ = ({
           .clone()
           .setX(viewBounds.bottomRight.x + floorsExtraX)
           .toArray(),
-        size: [viewBounds.height, depth],
+        size: [viewBounds.height, depth, EMPTY_Z],
         rotation: [-Math.PI / 2, -Math.PI / 2, 0],
       },
     ];
@@ -270,7 +307,7 @@ const HTMLPhysics_ = ({
 
       document.body.classList.remove("phys__overflow-hidden");
     };
-  }, []);
+  }, [selector]);
 
   if (!state) return null;
 

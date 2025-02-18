@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { ArrayList } from "java-to-javascript/lib/polyfills";
 
 // This source code was converted directly from Java (specifically Processing)

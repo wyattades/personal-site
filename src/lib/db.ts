@@ -10,6 +10,9 @@ import {
   orderBy as orderQuery,
   Timestamp,
   where as whereQuery,
+  type CollectionReference,
+  type QueryConstraint,
+  type WhereFilterOp,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -28,17 +31,36 @@ export const firestore = getFirestore(app);
 
 export const dbNow = () => Timestamp.now();
 
-class Collection {
-  constructor(collecName) {
-    this.collec = getCollection(firestore, collecName);
+type Scalar = string | number | boolean | null | Timestamp;
+
+export type WithId<T> = T & { id: string };
+
+class Collection<T> {
+  collec: CollectionReference<T>;
+
+  constructor(readonly collecName: string) {
+    this.collec = getCollection(
+      firestore,
+      collecName,
+    ) as CollectionReference<T>;
   }
 
-  async add(data) {
+  async add(data: T) {
     return (await addDoc(this.collec, data)).id;
   }
 
-  async get({ limit, limitToLast, order, where } = {}) {
-    const queries = [];
+  async get({
+    limit,
+    limitToLast,
+    order,
+    where,
+  }: {
+    limit?: number;
+    limitToLast?: number;
+    order?: Record<string, "asc" | "desc">;
+    where?: Record<string, Scalar | [WhereFilterOp, Scalar]>;
+  }) {
+    const queries: QueryConstraint[] = [];
 
     if (limit != null) queries.push(limitQuery(limit));
     else if (limitToLast != null) queries.push(limitToLastQuery(limitToLast));
@@ -51,7 +73,7 @@ class Collection {
 
     if (where)
       for (const fieldPath in where) {
-        let op = "==";
+        let op: WhereFilterOp = "==";
         let val = where[fieldPath];
         if (Array.isArray(val)) [op, val] = val;
         queries.push(whereQuery(fieldPath, op, val));
@@ -60,10 +82,14 @@ class Collection {
     return (await getDocs(buildQuery(this.collec, ...queries))).docs.map(
       (d) => {
         const data = d.data();
+        // @ts-expect-error just do it
         data.id = d.id;
-        return data;
+        return data as WithId<T>;
       },
     );
   }
 }
-export const collection = (collecName) => new Collection(collecName);
+export type { Collection };
+
+export const collection = <T>(collecName: string) =>
+  new Collection<T>(collecName);

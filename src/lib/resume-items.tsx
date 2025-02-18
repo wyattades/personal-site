@@ -58,7 +58,7 @@ const experienceItems = [
   },
 ];
 
-export const getResumeItems = (maxExperience = null) => {
+export const getResumeItems = (maxExperience?: number) => {
   const shownExpItems =
     maxExperience != null
       ? experienceItems.slice(0, maxExperience)

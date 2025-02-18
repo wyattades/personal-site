@@ -1,8 +1,8 @@
 export class JsonStorage {
-  constructor(type = "local", prefix = null) {
-    this.type = type;
-    this.prefix = prefix;
-  }
+  constructor(
+    readonly type: "local" | "session",
+    readonly prefix?: string,
+  ) {}
 
   get storage() {
     return this.type === "session"
@@ -10,7 +10,7 @@ export class JsonStorage {
       : window.localStorage;
   }
 
-  get(key) {
+  get(key: string) {
     try {
       if (this.prefix) key = `${this.prefix}:${key}`;
       const raw = this.storage.getItem(key);
@@ -19,14 +19,14 @@ export class JsonStorage {
     return null;
   }
 
-  set(key, value) {
+  set(key: string, value: unknown) {
     try {
       if (this.prefix) key = `${this.prefix}:${key}`;
       this.storage.setItem(key, JSON.stringify(value));
     } catch {}
   }
 
-  fetch(key, fallback) {
+  fetch<T>(key: string, fallback: () => T): T {
     const val = this.get(key);
     if (val != null) return val;
     const fetched = fallback();
@@ -34,7 +34,7 @@ export class JsonStorage {
       return fetched.then((next) => {
         this.set(key, next);
         return next;
-      });
+      }) as T;
     } else {
       this.set(key, fetched);
       return fetched;

@@ -10,13 +10,19 @@ import { FluidInit as createFluid } from "~/lib/fluid";
 //   }, [watcher, name, listener]);
 // };
 
-const Fluid_ = ({ getSplashInfo }) => {
-  const canvasRef = useRef();
+const Fluid_: React.FC<{
+  getSplashInfo: (iteration: number) => {
+    amount: number;
+    timeout: number;
+    moveAmount: number;
+  };
+}> = ({ getSplashInfo }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const fluid = createFluid(canvasRef.current);
 
-    let randomTimeoutId;
+    let randomTimeoutId: NodeJS.Timeout | undefined;
     if (getSplashInfo) {
       let iteration = 0;
       const randomSplash = () => {
@@ -26,7 +32,7 @@ const Fluid_ = ({ getSplashInfo }) => {
 
         randomTimeoutId = setTimeout(randomSplash, timeout);
       };
-      randomTimeoutId = randomSplash();
+      randomSplash();
     }
 
     return () => {

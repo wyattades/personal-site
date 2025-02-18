@@ -1,15 +1,15 @@
 import baseConfig from "@wyattades/eslint-config";
 
 export default [
-  baseConfig,
+  ...baseConfig,
   {
     rules: {
-      "react/jsx-filename-extension": "off",
+      "no-console": "off",
       "react/no-unknown-property": "off", // @react-three/fiber breaks this
     },
   },
   {
-    files: ["lib/sketches/**/*", "lib/fluid.js"],
+    files: ["src/lib/sketches/**/*", "src/lib/fluid.ts"],
     rules: {
       "@typescript-eslint/no-use-before-define": "off",
       "prefer-const": "off",

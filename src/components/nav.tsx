@@ -1,6 +1,8 @@
-import { IoMoon as DarkIcon } from "@react-icons/all-files/io5/IoMoon";
-import { IoSunny as LightIcon } from "@react-icons/all-files/io5/IoSunny";
-import { MdSettingsBrightness as SystemIcon } from "@react-icons/all-files/md/MdSettingsBrightness";
+import {
+  Moon as DarkIcon,
+  Sun as LightIcon,
+  Settings as SystemIcon,
+} from "lucide-react";
 
 import { NavLink } from "~/components/link";
 import { useTheme } from "~/components/style-theme";
@@ -14,16 +16,16 @@ const themeIcons = {
 const StyleThemeButton = () => {
   const theme = useTheme();
 
-  const ThemeIcon = themeIcons[theme.mode] || themeIcons.light;
+  const ThemeIcon = (theme && themeIcons[theme.mode]) || themeIcons.light;
 
   return (
     <button
       type="button"
       className="button-reset nav-item"
-      onClick={theme.toggleMode}
+      onClick={theme?.toggleMode}
       style={{ width: 56 }} // same as height
       aria-label="Toggle theme"
-      title={`Toggle ${theme.mode} theme`}
+      title={`Toggle ${theme?.mode ?? ""} theme`}
     >
       <span>&nbsp;</span>
 
@@ -31,13 +33,13 @@ const StyleThemeButton = () => {
         style={{
           padding: "2px 0",
           transition: "transform 300ms ease",
-          transform: `scaleX(${theme.changeCount % 2 === 0 ? 1 : -1})`,
+          transform: `scaleX(${(theme?.changeCount ?? 0) % 2 === 0 ? 1 : -1})`,
         }}
       >
         <ThemeIcon size="1.5rem" />
       </i>
 
-      <span>{theme.mode}</span>
+      <span>{theme?.mode}</span>
 
       <style jsx>{`
         span {

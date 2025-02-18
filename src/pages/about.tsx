@@ -1,4 +1,4 @@
-import { FaLink as LinkIcon } from "@react-icons/all-files/fa/FaLink";
+import { Link as LinkIcon } from "lucide-react";
 import { NextSeo } from "next-seo";
 
 import { AnimatedItems } from "~/components/animated-items";
@@ -7,7 +7,7 @@ import { getResumeItems } from "~/lib/resume-items";
 
 const resumeItems = getResumeItems();
 
-const AboutPage = () => {
+const AboutPageInner = () => {
   return (
     <AnimatedItems>
       <div className="space-between content">
@@ -22,8 +22,10 @@ const AboutPage = () => {
   );
 };
 
-AboutPage.getLayout = ({ children }) => (
-  <Layout seo={<NextSeo title="About" />}>{children}</Layout>
-);
-
-export default AboutPage;
+export default function AboutPage() {
+  return (
+    <Layout seo={<NextSeo title="About" />}>
+      <AboutPageInner />
+    </Layout>
+  );
+}

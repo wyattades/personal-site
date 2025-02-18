@@ -1,15 +1,13 @@
-/** @returns {HTMLElement | null} */
-export const $ = (s, d) => (d ? s : document).querySelector(d || s);
+export const $ = (s: string, d?: HTMLElement): HTMLElement | null =>
+  (d ?? document).querySelector(s);
 
-/** @returns {HTMLElement[]} */
-export const $$ = (s, d) =>
-  Array.from((d ? s : document).querySelectorAll(d || s));
+export const $$ = (s: string, d?: HTMLElement): HTMLElement[] =>
+  Array.from((d ?? document).querySelectorAll(s));
 
-/**
- * @param {HTMLElement} el
- * @param {number} depth
- */
-export const findFixedParent = (el, depth = 4) => {
+export const findFixedParent = (
+  el: HTMLElement,
+  depth = 4,
+): HTMLElement | null => {
   if (depth <= 0) return null;
   const parent = el.parentElement;
   if (!parent || parent === document.body) return null;

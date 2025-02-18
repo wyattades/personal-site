@@ -1,6 +1,9 @@
-import { FaCloudDownloadAlt as DownloadIcon } from "@react-icons/all-files/fa/FaCloudDownloadAlt";
-import { FaCode as CodeIcon } from "@react-icons/all-files/fa/FaCode";
-import { FaLink as LinkIcon } from "@react-icons/all-files/fa/FaLink";
+import {
+  Code as CodeIcon,
+  Download as DownloadIcon,
+  Link as LinkIcon,
+} from "lucide-react";
+import type { GetStaticProps } from "next";
 import { NextSeo } from "next-seo";
 import Image from "next/image";
 
@@ -9,9 +12,11 @@ import { Layout } from "~/components/layout";
 import { GoBackLink } from "~/components/link";
 import { Markdown } from "~/components/markdown";
 import { PlaySketch } from "~/components/play-sketch";
-import { projects } from "~/lib/projects";
+import { projects, type ProjectItem } from "~/lib/projects";
 
-export const getStaticProps = async ({ params: { project_id } }) => {
+export const getStaticProps: GetStaticProps = async ({
+  params: { project_id } = {},
+}) => {
   const project = projects.find((p) => !p.noPage && p.id === project_id);
 
   if (!project)
@@ -37,7 +42,11 @@ export const getStaticPaths = async () => {
   };
 };
 
-const ShowProjectPage = ({ project }) => {
+type Props = {
+  project: ProjectItem;
+};
+
+const ShowProjectPageInner: React.FC<Props> = ({ project }) => {
   const {
     title,
     desc,
@@ -143,8 +152,10 @@ const ShowProjectPage = ({ project }) => {
   );
 };
 
-ShowProjectPage.getLayout = ({ children }) => {
-  return <Layout pageClassName="content">{children}</Layout>;
-};
-
-export default ShowProjectPage;
+export default function ShowProjectPage(props: Props) {
+  return (
+    <Layout pageClassName="content">
+      <ShowProjectPageInner {...props} />
+    </Layout>
+  );
+}

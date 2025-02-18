@@ -1,17 +1,29 @@
+import type { Timestamp } from "firebase/firestore";
 import * as _ from "lodash-es";
 
-import { collection, dbNow } from "~/lib/db";
-import { sessionJsonStorage } from "~/lib/utils/jsonStorage";
+import { type Collection, collection, dbNow } from "~/lib/db";
+import { sessionJsonStorage } from "~/lib/utils/json-storage";
 
-export class ScoardBoard {
-  topScores = null;
+export type ScoreEntry = {
+  score: number;
+  username: string;
+  session: string;
+  created_at: Timestamp;
+};
 
-  constructor(sketchSlug) {
-    this.sketchSlug = sketchSlug;
-    this.db = collection(`sketch_scoreboards/${this.sketchSlug}/entries`);
+export class ScoreBoard {
+  topScores: (ScoreEntry & { id: string | null; place: number })[] | null =
+    null;
+
+  db: Collection<ScoreEntry>;
+
+  constructor(readonly sketchSlug: string) {
+    this.db = collection<ScoreEntry>(
+      `sketch_scoreboards/${this.sketchSlug}/entries`,
+    );
   }
 
-  async finishWithScore(score) {
+  async finishWithScore(score: number) {
     this.topScores = null;
 
     const username = sessionJsonStorage.fetch(
@@ -36,11 +48,11 @@ export class ScoardBoard {
       });
     }
 
-    let scores = await this.db.get({
+    let scores: (ScoreEntry & { id: string | null })[] = await this.db.get({
       order: { score: "desc", created_at: "desc" },
     });
 
-    let latest = null;
+    let latest: (ScoreEntry & { id: string | null }) | undefined;
     if (savedScoreId) {
       [latest] = _.remove(scores, (s) => s.id === savedScoreId);
     } else if (score != null) {
@@ -48,6 +60,8 @@ export class ScoardBoard {
         id: null,
         score,
         username: username || "YOU",
+        session: "",
+        created_at: dbNow(),
       };
     }
 
@@ -60,15 +74,12 @@ export class ScoardBoard {
       else scores.splice(i, 0, latest);
     }
 
-    scores.forEach((d, i) => {
-      d.place = i + 1;
-    });
-
     // get the top 5 scores
-    this.topScores = scores.slice(0, 5);
+    this.topScores = scores.slice(0, 5).map((s, i) => ({ ...s, place: i + 1 }));
 
     // add our latest score if it's not already in topScores
-    if (latest && !this.topScores.includes(latest)) this.topScores.push(latest);
+    if (latest && !this.topScores.some((s) => s.id === latest.id))
+      this.topScores.push({ ...latest, place: this.topScores.length + 1 });
   }
 
   dispose() {
