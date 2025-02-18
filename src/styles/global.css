@@ -5,7 +5,7 @@
   --mobile-w: 768px;
   --bg-color: #ffffff;
   --offset-color: #cecece;
-  --text-color: #000000;
+  --text-color: #0d111b;
   --link-color: #0039f3;
   --error-color: #cf2f2f;
   --help-text-color: #818181;
@@ -19,7 +19,7 @@
 /* } */
 body.theme-dark {
   --bg-color: #0e1c36;
-  --offset-color: #261c53;
+  --offset-color: #35286f;
   --text-color: #f5fbef;
   --link-color: #f0a6ca;
 }
