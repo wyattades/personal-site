@@ -180,35 +180,44 @@ const Text: React.FC<{
       size: Vector3;
       pos: Vector3;
       innerPos: Vector3;
-    }[] = children.split("").map((char, i) => {
-      const glyph = fontJson.glyphs[char as keyof typeof fontJson.glyphs];
-      if (!glyph) throw new Error(`Glyph not found for char: ${char}`);
+    }[] = children
+      .split("")
+      .map((char, i) => {
+        if (!(char in fontJson.glyphs) && char !== " ") {
+          console.warn(`Glyph not found for char: ${char}`);
+        }
+        const glyph =
+          fontJson.glyphs[char as keyof typeof fontJson.glyphs] ||
+          fontJson.glyphs.r; // "r" has a pretty nice width for a space
 
-      const width = ((glyph.x_max - glyph.x_min) / 1000) * fontSize;
+        const width = ((glyph.x_max - glyph.x_min) / 1000) * fontSize;
 
-      const size = new Vector3(
-        bevelThickness / 2 + width,
-        bevelThickness / 2 + fontSize,
-        2 * bevelThickness + depth,
-      );
+        const size = new Vector3(
+          bevelThickness / 2 + width,
+          bevelThickness / 2 + fontSize,
+          2 * bevelThickness + depth,
+        );
 
-      const w2 = width / 2;
-      const innerPos = new Vector3(-w2, -fontSize / 2, 0);
+        const w2 = width / 2;
+        const innerPos = new Vector3(-w2, -fontSize / 2, 0);
 
-      if (i > 0) moveX += letterPadding;
-      moveX += w2;
-      const pos = new Vector3(moveX, 0, 0);
+        if (i > 0) moveX += letterPadding;
+        moveX += w2;
+        const pos = new Vector3(moveX, 0, 0);
 
-      moveX += w2;
+        moveX += w2;
 
-      return {
-        char,
-        id: seqId(),
-        size,
-        pos,
-        innerPos,
-      };
-    });
+        if (char === " ") return null;
+
+        return {
+          char,
+          id: seqId(),
+          size,
+          pos,
+          innerPos,
+        };
+      })
+      .filter((c) => c != null);
 
     for (const el of arr) {
       el.pos.x -= moveX / 2;

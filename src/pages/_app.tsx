@@ -1,5 +1,6 @@
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
+import { Lexend } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
 import { ThemeProvider } from "~/components/style-theme";
@@ -7,6 +8,10 @@ import { ThemeProvider } from "~/components/style-theme";
 import "normalize.css";
 import "~/styles/global.css";
 import "~/styles/resume.css";
+
+// Font files can be colocated inside of `pages`
+// const helveesti = localFont({ src: "../fonts/ABCHelveesti-Regular.woff" });
+const font = Lexend({ subsets: ["latin"] });
 
 const HOST_URL = process.env.HOST_URL;
 
@@ -61,6 +66,12 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
           cardType: "summary_large_image",
         }}
       />
+
+      <style jsx global>{`
+        :root {
+          --primary-font: ${font.style.fontFamily};
+        }
+      `}</style>
 
       <ThemeProvider>
         <Component {...pageProps} />
