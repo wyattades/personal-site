@@ -2,9 +2,9 @@
 
 ## Technologies
 
+- Typescript
 - React
 - Next.js
-- FontAwesome
-- ReactTransitionGroup
-- SCSS
-- Three.js
+- Lucide icons
+- Three.js w/ react-three-fiber
+- Cannon.js physics engine
