@@ -297,9 +297,15 @@ const HTMLPhysics_ = ({
 
       for (const { el } of els) {
         el.classList.remove("phys__inline-block");
-
         el.style.transform = "";
       }
+
+      // make sure this happens after physics stops running
+      setTimeout(() => {
+        for (const { el } of els) {
+          el.style.transform = "";
+        }
+      });
 
       for (const el of removeFixedEls) {
         el.classList.remove("phys__absolute");
