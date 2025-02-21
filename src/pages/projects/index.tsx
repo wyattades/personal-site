@@ -14,7 +14,7 @@ const ProjectsPageInner = () => {
   const [broken, setBroken] = useState(false);
 
   return (
-    <div className="box-list">
+    <>
       <AnimatedItems>
         <div
           className="content"
@@ -31,9 +31,10 @@ const ProjectsPageInner = () => {
         </div>
         {projectItems.map((p) => {
           return (
-            <div key={p.id} className="box-link">
+            <Link key={p.id} className="BoxLink" href={`/projects/${p.id}`}>
               {p.image ? (
                 <Image
+                  className="BoxLink--bg-image"
                   src={p.image}
                   fill
                   // https://nextjs.org/docs/pages/api-reference/components/image#sizes
@@ -42,10 +43,8 @@ const ProjectsPageInner = () => {
                   alt=""
                 />
               ) : null}
-              <Link href={`/projects/${p.id}`}>
-                <span>{p.title}</span>
-              </Link>
-            </div>
+              <span>{p.title}</span>
+            </Link>
           );
         })}
         <div
@@ -69,13 +68,13 @@ const ProjectsPageInner = () => {
       </AnimatedItems>
 
       {broken && <HTMLPhysics />}
-    </div>
+    </>
   );
 };
 
 export default function ProjectsPage() {
   return (
-    <Layout seo={<NextSeo title="Projects" />}>
+    <Layout seo={<NextSeo title="Projects" />} pageClassName="box-list">
       <ProjectsPageInner />
     </Layout>
   );

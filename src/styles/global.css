@@ -413,7 +413,7 @@ dl.expertise-table {
   }
 }
 
-.box-link {
+.BoxLink {
   --transition: 0.5s var(--default-easing);
 
   display: flex;
@@ -427,9 +427,11 @@ dl.expertise-table {
 
   flex-basis: calc(100% / 3 - 2rem);
   height: 200px;
-  margin: 1rem;
 
-  img {
+  text-decoration: none;
+  overflow: hidden;
+
+  .BoxLink--bg-image {
     z-index: 0;
     opacity: 0 !important;
     visibility: hidden;
@@ -439,68 +441,62 @@ dl.expertise-table {
     pointer-events: none;
   }
 
-  a {
-    flex: 1;
+  > span {
+    transition: var(--default-transition);
+    transition-property: transform, text-shadow, color;
+
     width: 100%;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    text-decoration: none;
-    display: block;
-    overflow: hidden;
-    z-index: 0;
+    text-align: center;
+    color: var(--text-color);
 
-    span {
-      opacity: 1;
-      transition: var(--default-transition);
-      transition-property: transform, text-shadow, color;
+    font-weight: 600;
 
-      width: 100%;
-      height: 100%;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      text-align: center;
-      color: var(--text-color);
-
-      font-weight: 600;
-
-      padding: 16px;
-      box-sizing: border-box;
-    }
+    padding: 16px;
+    box-sizing: border-box;
   }
 
   &:hover {
-    a {
-      /* background: linear-gradient(
+    /* background: linear-gradient(
          to bottom,
          transparent 80%,
          var(--bg-color) 100%
        );*/
 
-      span {
-        transform: translateY(40%);
-        color: #000;
-        --c: #fff;
-        --s: 1px;
-        text-shadow:
-          calc(-1 * var(--s)) calc(-1 * var(--s)) 0 var(--c),
-          var(--s) calc(-1 * var(--s)) 0 var(--c),
-          calc(-1 * var(--s)) var(--s) 0 var(--c),
-          var(--s) var(--s) 0 var(--c);
-      }
+    > span {
+      transform: translateY(40%);
+      color: #000;
+      --c: #fff;
+      --s: 1px;
+      text-shadow:
+        calc(-1 * var(--s)) calc(-1 * var(--s)) 0 var(--c),
+        var(--s) calc(-1 * var(--s)) 0 var(--c),
+        calc(-1 * var(--s)) var(--s) 0 var(--c),
+        var(--s) var(--s) 0 var(--c);
     }
-    img {
+
+    .BoxLink--bg-image {
       visibility: visible;
       opacity: 1 !important;
     }
+  }
+}
+@media (max-width: 768px) {
+  .BoxLink {
+    flex-basis: 100%;
+    height: 150px;
   }
 }
 
 .box-list {
   display: flex;
   flex-flow: row wrap;
-  margin: 0 -1rem 0 -1rem;
+  gap: 2rem;
 }
 
 .plain-button {
@@ -557,11 +553,6 @@ dl.expertise-table {
 }
 
 @media (max-width: 768px) {
-  .box-link {
-    flex-basis: 100%;
-    height: 150px;
-  }
-
   .flex-table span:first-child {
     min-width: 100px;
     flex-basis: 100px;

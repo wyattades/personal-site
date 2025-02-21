@@ -9,12 +9,14 @@ import { BlockText } from "~/components/physics-import";
 
 let welcomeCounter = 0;
 const WELCOMES = [
-  "Welcome",
+  // "Welcome",
+  "Hi there!",
   "Howdy",
-  "Bienvenue",
+  // "Bienvenue",
   "Hola",
   "Bonjour",
-  "Hi there",
+  "Ni Hao",
+  "Konnichiwa",
 ];
 const genWelcome = () => {
   console.log("genWelcome", welcomeCounter);

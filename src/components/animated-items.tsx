@@ -1,3 +1,6 @@
+"use client";
+
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, {
   Children as ReactChildren,
@@ -122,7 +125,10 @@ export const PageTransition: React.FC<{
 function canInjectStyle(
   children: React.ReactNode,
 ): children is React.ReactHTMLElement<HTMLElement> {
-  return isValidElement(children) && typeof children.type === "string";
+  return (
+    isValidElement(children) &&
+    (typeof children.type === "string" || children.type === Link)
+  );
 }
 
 export const Fade: React.FC<{

@@ -204,7 +204,7 @@ type FloorState = {
 };
 
 const HTMLPhysics_ = ({
-  selector = ".box-link, .content > p, .content > h1 > span, .plain-button",
+  selector = ".BoxLink, .content > p, .content > h1 > span, .plain-button",
 }) => {
   const [state, setState] = useState<{
     els: ElState[];
