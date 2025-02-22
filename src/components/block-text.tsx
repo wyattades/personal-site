@@ -34,7 +34,8 @@ import { useAnimatedSwitch } from "~/components/animated-items";
 import { withErrorBoundary } from "~/components/error-boundary";
 import { debug, FloorPlane, IS_DEV, Physics } from "~/components/physics";
 
-import fontJson from "~/fonts/helv.json";
+// To generate this: https://gero3.github.io/facetype.js/
+import fontJson from "~/fonts/lexend_semibold.json";
 
 const REMOVE_DURATION = 1000;
 const SHOW_DURATION = 300;
@@ -54,7 +55,7 @@ const seqId = () => seqIdCounter++;
 
 const r = new Vector3();
 const initialInnerPos = (vec3: Vector3) => {
-  return r.set(0, 0, 7).add(vec3).toArray();
+  return r.set(0, -1, 7).add(vec3).toArray();
 };
 
 const Char: React.FC<{
@@ -164,10 +165,10 @@ const Text: React.FC<{
   isInitial?: boolean;
 }> = ({
   children,
-  fontSize = 15,
+  fontSize = 16,
   depth = 0.5,
   bevelThickness = 3,
-  letterPadding = 3,
+  letterPadding = 4,
   animateIn = false,
   isInitial = false,
 }) => {
@@ -185,12 +186,16 @@ const Text: React.FC<{
       .map((char, i) => {
         if (!(char in fontJson.glyphs) && char !== " ") {
           console.warn(`Glyph not found for char: ${char}`);
+          return null;
         }
+
         const glyph =
           fontJson.glyphs[char as keyof typeof fontJson.glyphs] ||
           fontJson.glyphs.r; // "r" has a pretty nice width for a space
 
         const width = ((glyph.x_max - glyph.x_min) / 1000) * fontSize;
+
+        // const leftX = (glyph.x_min / 1000) * fontSize;
 
         const size = new Vector3(
           bevelThickness / 2 + width,
@@ -199,6 +204,7 @@ const Text: React.FC<{
         );
 
         const w2 = width / 2;
+        // const idkPlz = 1.8;
         const innerPos = new Vector3(-w2, -fontSize / 2, 0);
 
         if (i > 0) moveX += letterPadding;
@@ -231,7 +237,7 @@ const Text: React.FC<{
       font: parsedFont,
       size: fontSize,
       height: depth, // this is actually depth
-      curveSegments: 16,
+      curveSegments: 12,
       bevelEnabled: true,
       bevelThickness,
       bevelSize: 0.75,
@@ -292,7 +298,7 @@ const Resizer: React.FC<{
 
     camera.aspect = w / h;
 
-    const objectsWidth = 70; // should be close to `moveX`
+    const objectsWidth = 90; // should be close to `moveX`
 
     // Set FOV so letters fit in screen with some margin (20deg)
     const fov =
@@ -312,7 +318,7 @@ const Resizer: React.FC<{
   return null;
 };
 
-// TODO: why are we doing this inside a component?
+// for some reason this works better when it's in render cycle...
 const ExtendReactThree = () => {
   useMemo(() => extendReactThree({ RenamedTextGeometry: TextGeometry }), []);
 

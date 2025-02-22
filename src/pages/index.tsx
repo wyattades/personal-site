@@ -1,3 +1,4 @@
+import { shuffle } from "lodash-es";
 import { useRef, useState } from "react";
 import { useDebounce as useDebounceFn } from "react-use";
 
@@ -7,19 +8,20 @@ import { Layout } from "~/components/layout";
 import { useHoveredLink } from "~/components/link";
 import { BlockText } from "~/components/physics-import";
 
-let welcomeCounter = 0;
-const WELCOMES = [
+const WELCOMES = shuffle([
   // "Welcome",
   "Hi there!",
   "Howdy",
+  "Hello!",
   // "Bienvenue",
   "Hola",
   "Bonjour",
   "Ni Hao",
   "Konnichiwa",
-];
+]);
+let welcomeCounter = Math.floor(Math.random() * WELCOMES.length);
 const genWelcome = () => {
-  console.log("genWelcome", welcomeCounter);
+  // console.log("genWelcome", welcomeCounter);
   return WELCOMES[welcomeCounter++ % WELCOMES.length]!;
 };
 
