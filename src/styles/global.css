@@ -399,6 +399,11 @@ dl.expertise-table {
   .image {
     margin-bottom: 24px;
   }
+  blockquote {
+    margin-bottom: 24px;
+    padding-left: 16px;
+    border-left: 4px solid var(--offset-color);
+  }
   li {
     margin-bottom: 8px;
   }
@@ -448,9 +453,11 @@ dl.expertise-table {
     width: 100%;
     height: 100%;
     flex: 1;
-    display: flex;
+    display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
 
     text-align: center;
     color: var(--text-color);
@@ -469,7 +476,7 @@ dl.expertise-table {
        );*/
 
     > span {
-      transform: translateY(40%);
+      transform: translateY(35%);
       color: #000;
       --c: #fff;
       --s: 1px;
@@ -506,9 +513,16 @@ dl.expertise-table {
   background: var(--bg-color);
   cursor: pointer;
   transition: background-color var(--default-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .plain-button:hover {
   background: var(--offset-color);
+}
+.plain-button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .go-back-link {

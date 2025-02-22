@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import { Lexend } from "next/font/google";
@@ -14,6 +15,8 @@ import "~/styles/resume.css";
 const font = Lexend({ subsets: ["latin"] });
 
 const HOST_URL = process.env.HOST_URL;
+
+const queryClient = new QueryClient();
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
@@ -74,7 +77,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       `}</style>
 
       <ThemeProvider>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       </ThemeProvider>
     </>
   );

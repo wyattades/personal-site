@@ -1,0 +1,68 @@
+import { BlogComments } from "~/components/blog-comments";
+import { Layout } from "~/components/layout";
+import { PopupHelp } from "~/components/popup-help";
+
+export default function BlogPage({ children }) {
+  return <Layout pageClassName="content">{children}</Layout>;
+}
+
+export const metadata = {
+  title: "It’s so easy to write a newsletter!",
+  publishedAt: "2025-02-18",
+  excerpt:
+    "I'm in a cozy upstate New York cabin in the dead of winter. It's snowing outside, and I'm sitting on the couch with a glass of orange wine. It’s zen, the perfect environment to write my first newsletter. Here we go!",
+};
+
+# It’s so easy to write a newsletter!
+
+I'm in a cozy upstate New York cabin in the dead of winter. It's snowing outside, and I'm sitting on the couch with a glass of orange wine. It’s zen, the perfect environment to write my first newsletter. Here we go!
+
+Hmm. I can tap my fingers rhythmically, but no words are being typed. Something’s off.
+
+I realize something: it’s much more instinctive to think about the *look* of the final product than the content of the words. What color will the text be to contrast well with what color of background? Which font, and what line-spacing, will be most pleasing to the eye? When the user hovers over **certain words,** wouldn’t it be cool to show a popup with some tangential content, such as the definition of some <PopupHelp content={<>Definition:<br/>1. Of or relating to a labyrinth.<br/>2. Having or requiring great skill or knowledge; intricate or difficult.</>}>labyrinthine</PopupHelp> word?
+
+I’m procrastinating. It turns out visualizing a product is easy, coming up with a subject for an essay is hard.
+
+# It’s so hard to write a newsletter.
+
+Throughout my life, I’ve never found it easy to write for other people. Back in 11th-grade literature class, I didn’t enjoy analyzing the classics, and I’m sure Mrs. Thurston didn’t enjoy my dubious blunders of wordy spaghetti all that much either. Then in undergrad, I finally “did well” in a technical writing course. My final paper was a case study on the <PopupHelp content="The study of how groups of small, simple agents can collectively solve complex problems. The most common example is a swarm of drones, but it can be applied to anything from a school of fish to a flock of birds.">“Practicality of swarm robotics”</PopupHelp>. That class hammered in the idea of cutting fluff, sticking to the facts, writing beautifully predictable sentence structures. In short, I had found the glorious “technical writing style” i.e. an engineer’s perverted idea of communication.
+
+Creative writing is now an engineering problem.
+
+## ~~Rose~~ Technical-tinted lenses
+
+Adam Savage’s book *Every Tool’s a Hammer* talks about his strategies for solving a complex problem:
+
+Define the problem clearly; know the “why” you are doing it. Research relevant techniques and past works. Roughly plan a solution; break it down into its smallest parts. Document your progress & any new ideas. Prototype, iterate, repeat. The takeaway: every failure is just another step towards success.
+
+Here’s my complex problem: **I don’t love writing, but I do love building.**
+
+Can we apply our engineer’s lens towards the writing process?
+
+- **Define the problem:** every week, I want to improve on my writing skills and make something I think brings some value for my friends, and maybe even someone else in the world one day. Why? Peer-pressure from my friends’ newsletters mostly. And what’s wrong with a little external motivation to kick things off?
+- **Research:** I think this may be the most natural part of the process. In my job as a wear-many-hats engineer, I tend to learn a new technology/technique every week, which involves researching until I understand the fundamentals, then practically applying what I learn to make a solution.
+    - For example: A few weeks ago I found out about a powerful new CSS feature: [anchors](https://developer.chrome.com/blog/anchor-positioning-api)! They power the <PopupHelp content={<span style={{ fontSize: '42px'}}>👋</span>}>popup you’re seeing right now</PopupHelp>.
+- **The plan:** As of now, I’m thinking of noodling about engineering challenges, meta-problems e.g. motivation, random thing I learned that day, and we shall see what else!
+- **Documenting progress:** I took some notes yesterday, does that count? — In all seriousness, writing my thoughts throughout the writing process is not one of my habits. For now, my goal is to take more random notes on things I learn throughout the week.
+- **Prototyping:** this is my 3rd stab at writing this dang thing. Iteration achieved 🙌
+
+The last important piece that Adam Savage mentions to solve a complex problem: you do have to **actually** **complete the project.** Your definition of complete may change as you go, but push through the challenges to get to *some* end-state.
+
+I know this will be the hardest part.
+
+For those of us that have the perfectionism disease, it can be hard to balance:
+
+- making something we are proud of
+- making something at all
+
+So, for these first few newsletters, I want to avoid burning out. I will try to get something out there, even if subpar. I know a few people who followed Julia Cameron’s *The Artist’s Way*—Sid, I'm impressed you were writing 3 pages every day—I like one of her quotes:
+
+> We deny that in order to do something well we must first be willing to do it badly.
+> 
+
+So let’s do it badly for now. And if you’re reading along, feel free to call me out if I start obsessing over fonts again. For now, just ship it 🚀
+
+<BlogComments
+  label="Question of the week"
+  title="What’s a creative project you’ve been procrastinating on?"
+/>
