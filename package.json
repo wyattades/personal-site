@@ -47,7 +47,7 @@
     "sass": "^1.85.0",
     "stats.js": "^0.17.0",
     "three": "^0.173.0",
-    "three-stdlib": "^2.35.13"
+    "three-stdlib": "^2.35.14"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",
@@ -56,9 +56,9 @@
     "@wyattades/eslint-config": "^0.20.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.7",
-    "eslint": "^9.20.1",
+    "eslint": "^9.21.0",
     "node-fetch": "^3.3.1",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "puppeteer": "^24.2.1",
     "typescript": "^5.0.4"
