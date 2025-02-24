@@ -203,9 +203,9 @@ type FloorState = {
   rotation: Triplet;
 };
 
-const HTMLPhysics_ = ({
-  selector = ".BoxLink, .content > p, .content > h1 > span, .plain-button",
-}) => {
+const HTMLPhysics_: React.FC<{
+  selector: string;
+}> = ({ selector }) => {
   const [state, setState] = useState<{
     els: ElState[];
     floors: FloorState[];

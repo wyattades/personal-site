@@ -47,27 +47,25 @@ const ProjectsPageInner = () => {
             </Link>
           );
         })}
-        <div
-          className="content"
-          style={{
-            flexBasis: "100%",
-            margin: "0 1rem",
-            paddingTop: "4rem",
-            textAlign: "center",
-          }}
-        >
-          <button
-            type="button"
-            className="plain-button"
-            style={{ zIndex: 5, position: "relative" }}
-            onClick={() => setBroken((r) => !r)}
-          >
-            {broken ? "🛠 Fix" : "💣 Break"} this page?
-          </button>
-        </div>
       </AnimatedItems>
+      <button
+        type="button"
+        className="plain-button"
+        style={{
+          transform: "translate(calc(50% - 1rem), -100%) rotate(-90deg)",
+          zIndex: 5,
+          position: "fixed",
+          bottom: "4rem",
+          right: "0",
+        }}
+        onClick={() => setBroken((r) => !r)}
+      >
+        {broken ? "🛠 Fix" : "💣 Break"} this page?
+      </button>
 
-      {broken && <HTMLPhysics />}
+      {broken && (
+        <HTMLPhysics selector=".BoxLink, .content > p, .content > h1 > span" />
+      )}
     </>
   );
 };
