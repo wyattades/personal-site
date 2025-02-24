@@ -191,7 +191,8 @@ const CharsGroup: React.FC<{
 
         const width = ((glyph.x_max - glyph.x_min) / 1000) * fontSize;
 
-        // const leftX = (glyph.x_min / 1000) * fontSize;
+        // TODO: mesh is showing as slightly right of where the bounding box is showing...
+        // can't figure out the fix...
 
         const size = new Vector3(
           bevelThickness / 2 + width,
@@ -200,7 +201,7 @@ const CharsGroup: React.FC<{
         );
 
         const w2 = width / 2;
-        // const idkPlz = 1.8;
+
         const innerPos = new Vector3(-w2, -fontSize / 2, 0);
 
         if (i > 0) moveX += letterSpacing;

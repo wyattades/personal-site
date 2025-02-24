@@ -431,7 +431,7 @@ dl.expertise-table {
   box-sizing: border-box;
 
   transition: color var(--transition);
-  border: 1px solid var(--text-color);
+  border: 2px solid var(--text-color);
   position: relative;
 
   flex-basis: calc(100% / 3 - 2rem);
@@ -512,7 +512,7 @@ dl.expertise-table {
 .plain-button {
   line-height: 1.5;
   padding: 6px 16px;
-  border: 1px solid var(--text-color);
+  border: 2px solid var(--text-color);
   background: var(--bg-color);
   cursor: pointer;
   transition: background-color var(--default-transition);

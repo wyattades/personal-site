@@ -23,11 +23,13 @@ const ProjectsPageInner = () => {
           <h1 style={{ marginBottom: 0, paddingBottom: "3rem" }}>
             <span>Projects</span>
           </h1>
-          <p style={{ paddingBottom: "3rem" }}>
-            Here are some of my noteworthy projects that were mostly created in
-            my spare time. You can also view all of them and more on my{" "}
-            <a href="https://github.com/wyattades">github</a>.
-          </p>
+          <div style={{ paddingBottom: "3rem" }}>
+            <p>
+              Here are some of my noteworthy projects that were mostly created
+              in my spare time. You can also view all of them and more on my{" "}
+              <a href="https://github.com/wyattades">github</a>.
+            </p>
+          </div>
         </div>
         {projectItems.map((p) => {
           return (
@@ -64,7 +66,7 @@ const ProjectsPageInner = () => {
       </button>
 
       {broken && (
-        <HTMLPhysics selector=".BoxLink, .content > p, .content > h1 > span" />
+        <HTMLPhysics selector=".BoxLink, .content p, .content > h1 > span" />
       )}
     </>
   );

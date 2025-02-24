@@ -61,18 +61,6 @@ export default function BlogIndexPage({
         span.date {
           color: var(--offset-color);
         }
-
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 1rem;
-        }
-
-        .grid :global(.blog-card) {
-          padding: 1rem;
-          border: 1px solid var(--offset-color);
-          border-radius: 0.5rem;
-        }
       `}</style>
     </Layout>
   );

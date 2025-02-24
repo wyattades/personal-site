@@ -41,8 +41,8 @@ export const PopupHelp: React.FC<{
           background: white;
           border-radius: 6px;
           box-shadow:
-            0 -4px 10px rgba(0, 0, 0, 0.05),
-            0 4px 20px rgba(0, 0, 0, 0.15);
+            0 -4px 10px rgba(0, 0, 0, 0.1),
+            0 4px 25px rgba(0, 0, 0, 0.25);
           padding: 0.75rem 1rem;
           width: max-content;
           max-width: 300px;
