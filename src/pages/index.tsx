@@ -52,7 +52,7 @@ const IndexPageInner = () => {
 
       <AnimatedItems>
         <div className="title-wrapper">
-          <h1>Wyatt Ades</h1>
+          <h1>- Wyatt Ades</h1>
         </div>
       </AnimatedItems>
 
@@ -65,7 +65,7 @@ const IndexPageInner = () => {
         }
         h1 {
           margin-top: 250px;
-          text-transform: uppercase;
+
           text-align: center;
           pointer-events: all;
         }

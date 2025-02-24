@@ -16,12 +16,8 @@ import {
 } from "react";
 import { useEvent } from "react-use";
 import {
-  BoxGeometry,
-  LineBasicMaterial,
-  LineSegments,
   MathUtils,
   Vector3,
-  WireframeGeometry,
   type PerspectiveCamera as PerspectiveCameraType,
 } from "three";
 import {
@@ -32,7 +28,13 @@ import {
 
 import { useAnimatedSwitch } from "~/components/animated-items";
 import { withErrorBoundary } from "~/components/error-boundary";
-import { debug, FloorPlane, IS_DEV, Physics } from "~/components/physics";
+import {
+  debug,
+  FloorPlane,
+  IS_DEV,
+  Physics,
+  usePhysicsDebug,
+} from "~/components/physics";
 
 // To generate this: https://gero3.github.io/facetype.js/
 import fontJson from "~/fonts/lexend_semibold.json";
@@ -67,7 +69,7 @@ const Char: React.FC<{
   animateIn: boolean;
   isInitial: boolean; // unused
 }> = ({ char, textGeomConfig, pos, innerPos, size, animateIn }) => {
-  const [ref, boxApi] = useBox(() => ({
+  const [rigidbodyRef, boxApi] = useBox(() => ({
     mass: 1,
     position: pos.toArray(),
     args: size.toArray(),
@@ -106,7 +108,7 @@ const Char: React.FC<{
 
   useLayoutEffect(() => {
     if (!animateIn) {
-      const temp = ref.current.position.clone();
+      const temp = rigidbodyRef.current.position.clone();
       temp.z -= 10;
       boxApi.position.set(...temp.toArray());
       explodeLetter();
@@ -117,28 +119,10 @@ const Char: React.FC<{
     explodeLetter();
   });
 
-  // show a box representing the letter's bounding box for debugging
-  // TODO: somehow render this via JSX. the following doesn't work yet:
-  // <animated.lineSegments position={innerPosAnimated}>
-  //   <wireframeGeometry>
-  //     <boxGeometry args={size.toArray()} />
-  //   </wireframeGeometry>
-  // </animated.lineSegments>;
-  const dev = useRef<LineSegments>(null);
-  if (IS_DEV && !dev.current) {
-    const geometry = new BoxGeometry(...size.toArray());
-
-    const wireframe = new WireframeGeometry(geometry);
-
-    const line = new LineSegments(wireframe, new LineBasicMaterial());
-    line.material.depthTest = false;
-    line.material.color.setHex(0x777777);
-
-    dev.current = line;
-  }
+  const isDebug = usePhysicsDebug();
 
   return (
-    <group ref={ref}>
+    <group ref={rigidbodyRef}>
       {/* @ts-expect-error waiting for https://github.com/pmndrs/react-spring/pull/2349 */}
       <animated.mesh
         receiveShadow
@@ -150,25 +134,37 @@ const Char: React.FC<{
         <renamedTextGeometry args={[char, textGeomConfig]} />
         {/* @ts-expect-error waiting for ^ */}
       </animated.mesh>
-      {dev.current ? <primitive object={dev.current} /> : null}
+      {/* {dev.current ? <primitive object={dev.current} /> : null} */}
+
+      {/* show a box representing the letter's bounding box for debugging */}
+      {isDebug ? (
+        <lineSegments position={[0, 0, 0]}>
+          <lineBasicMaterial depthTest={false} color="#777777" />
+          <wireframeGeometry>
+            <boxGeometry args={size.toArray()} />
+          </wireframeGeometry>
+        </lineSegments>
+      ) : null}
     </group>
   );
 };
 
-const Text: React.FC<{
+const CharsGroup: React.FC<{
   children: string;
   fontSize?: number;
   depth?: number;
   bevelThickness?: number;
-  letterPadding?: number;
+  letterSpacing?: number;
   animateIn?: boolean;
   isInitial?: boolean;
 }> = ({
   children,
   fontSize = 16,
-  depth = 0.5,
-  bevelThickness = 3,
-  letterPadding = 4,
+  // depth = 0.5,
+  // bevelThickness = 3,
+  depth = 4,
+  bevelThickness = 0,
+  letterSpacing = 2,
   animateIn = false,
   isInitial = false,
 }) => {
@@ -207,7 +203,7 @@ const Text: React.FC<{
         // const idkPlz = 1.8;
         const innerPos = new Vector3(-w2, -fontSize / 2, 0);
 
-        if (i > 0) moveX += letterPadding;
+        if (i > 0) moveX += letterSpacing;
         moveX += w2;
         const pos = new Vector3(moveX, 0, 0);
 
@@ -230,19 +226,28 @@ const Text: React.FC<{
     }
 
     return arr;
-  }, [children, fontSize, depth, bevelThickness, letterPadding]);
+  }, [children, fontSize, depth, bevelThickness, letterSpacing]);
 
   const textGeomConfig = useMemo(
     (): TextGeometryParameters => ({
+      // font — an instance of THREE.Font.
       font: parsedFont,
+      // size — Float. Size of the text. Default is 100.
       size: fontSize,
+      // depth — Float. Thickness to extrude text. Default is 50.
       height: depth, // this is actually depth
-      curveSegments: 12,
-      bevelEnabled: true,
+      // curveSegments — Integer. Number of points on the curves. Default is 12.
+      curveSegments: 14,
+      // bevelEnabled — Boolean. Turn on bevel. Default is False.
+      bevelEnabled: bevelThickness > 0,
+      // bevelThickness — Float. How deep into text bevel goes. Default is 10.
       bevelThickness,
+      // bevelSize — Float. How far from text outline is bevel. Default is 8.
       bevelSize: 0.75,
+      // bevelOffset — Float. How far from text outline bevel starts. Default is 0.
       bevelOffset: 0,
-      // bevelSegments: 4,
+      // bevelSegments — Integer. Number of bevel segments. Default is 3.
+      // bevelSegments: 3,
     }),
     [fontSize, depth, bevelThickness],
   );
@@ -347,16 +352,17 @@ const BlockText_: React.FC<{ text: string }> = ({ text }) => {
         <Canvas>
           <ExtendReactThree />
           <Resizer parentRef={parentRef} />
-          <group name="Camera" position={[0, 0, cameraZ]}>
-            <PerspectiveCamera
-              makeDefault
-              far={3000}
-              near={0.1}
-              fov={42} // will be overridden by `<Resizer/>`
-              ref={cameraRef}
-            />
+          {/* <group name="Camera" position={[0, 0, cameraZ]}> */}
+          <PerspectiveCamera
+            makeDefault
+            far={3000}
+            near={0.1}
+            fov={42} // will be overridden by `<Resizer/>`
+            ref={cameraRef}
+            position={[0, 0, cameraZ]}
+          />
 
-            {/* <directionalLight
+          {/* <directionalLight
               castShadow
               position={[10, 20, 15]}
               shadow-camera-right={8}
@@ -368,7 +374,7 @@ const BlockText_: React.FC<{ text: string }> = ({ text }) => {
               intensity={2}
               shadow-bias={-0.0001}
             /> */}
-          </group>
+          {/* </group> */}
           <ambientLight intensity={1} />
           {/* <ambientLight /> */}
           {/* <pointLight position={[10, 10, 10]} /> */}
@@ -376,7 +382,7 @@ const BlockText_: React.FC<{ text: string }> = ({ text }) => {
           {/* <Environment preset="city" /> doesn't do anything */}
           <Physics allowSleep stepSize={1 / 30} gravity={[0, -20, 0]}>
             <SpringGroup changeKey={text}>
-              <Text>{text}</Text>
+              <CharsGroup>{text}</CharsGroup>
             </SpringGroup>
             {/* this `y` is perfect for resting the letters on initially */}
             <FloorPlane

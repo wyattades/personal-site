@@ -69,13 +69,15 @@ export const useStats = (enabled = true) => {
 
 const debugCtx = createContext(false);
 
+export const usePhysicsDebug = () => useContext(debugCtx);
+
 export const FloorPlane: React.FC<PlaneProps & { size: Triplet }> = ({
   size,
   ...props
 }) => {
   const [ref] = usePlane(() => props);
 
-  const isDebug = useContext(debugCtx);
+  const isDebug = usePhysicsDebug();
 
   if (isDebug)
     return (

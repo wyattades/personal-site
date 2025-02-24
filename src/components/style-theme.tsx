@@ -24,10 +24,14 @@ const supportsColorScheme =
     ? true
     : (window.matchMedia?.("(prefers-color-scheme)")?.matches ?? false);
 
-type ThemeKey = "light" | "dark" | "system";
+type ThemeKey = "light" | "dark";
 
 const ORDER: [ThemeKey, ...ThemeKey[]] = supportsColorScheme
-  ? ["light", "dark", "system"]
+  ? [
+      "light",
+      "dark",
+      // "system" TODO: add system support
+    ]
   : ["light", "dark"];
 
 const useIsFirstMount = () => {

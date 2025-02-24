@@ -1,16 +1,12 @@
 "use client";
 
-import {
-  Moon as DarkIcon,
-  Sun as LightIcon,
-  Settings as SystemIcon,
-} from "lucide-react";
+import { Moon as DarkIcon, Sun as LightIcon } from "lucide-react";
 import { useTheme } from "~/components/style-theme";
 
 const themeIcons = {
   light: LightIcon,
   dark: DarkIcon,
-  system: SystemIcon,
+  // system: SystemIcon,
 };
 
 export const ThemeSelector = () => {
@@ -23,7 +19,6 @@ export const ThemeSelector = () => {
       type="button"
       className="button-reset nav-item"
       onClick={theme?.toggleMode}
-      style={{ width: 56 }} // same as height
       aria-label="Toggle theme"
       title={`Toggle ${theme?.mode ?? ""} theme`}
     >
@@ -36,7 +31,7 @@ export const ThemeSelector = () => {
           transform: `scaleX(${(theme?.changeCount ?? 0) % 2 === 0 ? 1 : -1})`,
         }}
       >
-        <ThemeIcon size="1.5rem" />
+        <ThemeIcon />
       </i>
 
       <span>{theme?.mode}</span>
@@ -50,6 +45,18 @@ export const ThemeSelector = () => {
           text-transform: capitalize;
           transition: opacity 300ms ease;
           opacity: 0;
+        }
+        button {
+          width: 3rem;
+          @media (max-width: 768px) {
+            width: 2.5rem;
+          }
+        }
+        button svg {
+          width: 1.5rem;
+          @media (max-width: 768px) {
+            width: 1.25rem;
+          }
         }
         button:hover span {
           opacity: 1;
