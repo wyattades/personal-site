@@ -18,6 +18,11 @@ const HOST_URL = process.env.HOST_URL;
 
 const queryClient = new QueryClient();
 
+// TODO: transitions between pages: run both pages in parallel while they swap,
+// so the prev page runs the fade-out.
+// there's also view-transitions https://github.com/facebook/react/pull/31975, which
+// may be easier to implement but is just opacity???
+
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
