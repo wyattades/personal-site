@@ -514,6 +514,7 @@ dl.expertise-table {
   padding: 6px 16px;
   border: 2px solid var(--text-color);
   background: var(--bg-color);
+  color: var(--text-color);
   cursor: pointer;
   transition: background-color var(--default-transition);
   display: inline-flex;
