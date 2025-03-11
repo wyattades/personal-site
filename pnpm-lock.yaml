@@ -50,6 +50,9 @@ importers:
       '@types/react-transition-group':
         specifier: ^4.4.6
         version: 4.4.12(@types/react@19.0.10)
+      '@types/stats.js':
+        specifier: ^0.17.3
+        version: 0.17.3
       '@types/webpack-env':
         specifier: ^1.18.8
         version: 1.18.8
