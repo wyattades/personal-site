@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { animated, useSpring } from "@react-spring/three";
 import { useBox } from "@react-three/cannon";
 import { PerspectiveCamera } from "@react-three/drei";
@@ -132,7 +133,7 @@ const Char: React.FC<{
         {/* @ts-expect-error waiting for ^ */}
         <animated.meshNormalMaterial transparent opacity={springs.opacity} />
         <renamedTextGeometry args={[char, textGeomConfig]} />
-        {/* @ts-expect-error waiting for ^ */}
+        {/* @ts-ignore in CI this is valid but not in local... */}
       </animated.mesh>
       {/* {dev.current ? <primitive object={dev.current} /> : null} */}
 
