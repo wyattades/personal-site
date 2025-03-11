@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   Physics as CannonPhysics,
-  Debug,
   usePlane,
   type PlaneProps,
   type Triplet,
@@ -101,8 +101,8 @@ const PhysicsDebug: React.FC<{ children: React.ReactNode }> = IS_DEV
 
       return enabled ? (
         <debugCtx.Provider value={enabled}>
-          {/* @ts-expect-error waiting for ^ */}
-          <Debug color="#ff0000">{children}</Debug>
+          {/* @ts-ignore waiting for fix */}
+          <PhysicsDebug color="#ff0000">{children}</PhysicsDebug>
         </debugCtx.Provider>
       ) : (
         children
@@ -114,7 +114,7 @@ export const Physics: React.FC<
   PhysicsProviderProps & { children: React.ReactNode }
 > = ({ children, ...rest }) => {
   return (
-    // @ts-expect-error waiting for ^
+    // @ts-ignore waiting for fix
     <CannonPhysics {...rest}>
       <PhysicsDebug>{children}</PhysicsDebug>
     </CannonPhysics>
