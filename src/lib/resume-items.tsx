@@ -1,10 +1,20 @@
 const experienceItems = [
   {
+    title: "Stepful",
+    link: "https://stepful.com",
+    role: "Engineering Manager",
+    from: "January 2022",
+    to: null,
+    desc: [
+      "First engineer at Stepful, an online education platform for healthcare workers. Doubling worker salaries.",
+    ],
+  },
+  {
     title: "Vanly",
     link: "https://vanly.app",
-    role: "Co-founder & CTO",
-    from: "2019",
-    to: null,
+    role: "Co-founder & CTO (Acquired)",
+    from: "March 2019",
+    to: "April 2025",
     desc: [
       "A two-sided marketplace for homeowners to Share Driveway Space™ with vanlifers",
       "Top performing SEO PWA website, cross-platform mobile app, ML prediction service, suite of admin tools",
@@ -19,19 +29,19 @@ const experienceItems = [
     desc: [
       "Project lead for the most vital company capstone projects: jobs directory, Triplebyte Screen, profile editor",
       "Added sub 30ms React server-side-rendering system in Rails",
-      "Moved all web infrastructure and test suites to parallelized Docker containers for a tremendous increase in speed, caching and reliability",
+      "Moved all web infrastructure and test suites to parallelized Docker containers for a 4x increase in build speed, caching and reliability",
     ],
   },
-  {
-    title: "Rootid",
-    link: "https://rootid.com",
-    role: "Dev-ops Intern",
-    from: "2018",
-    to: "2019",
-    desc: [
-      "Moved to Docker infrastructure and created automated integration testing suite for >20 client websites",
-    ],
-  },
+  // {
+  //   title: "Rootid",
+  //   link: "https://rootid.com",
+  //   role: "Dev-ops Intern",
+  //   from: "2018",
+  //   to: "2019",
+  //   desc: [
+  //     "Moved to Docker infrastructure and created automated integration testing suite for >20 client websites",
+  //   ],
+  // },
   {
     title: "Baskin School of Engineering",
     link: "https://soe.ucsc.edu",
