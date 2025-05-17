@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { MessageCircle, Send } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { trackEvent } from "~/lib/tracking";
 
 type Comment = {
   id: number;
@@ -106,6 +107,10 @@ const createComment = async (params: {
   content: string;
   author: string;
 }) => {
+  trackEvent("Create Blog Comment", {
+    ...params,
+  });
+
   const response = await fetch("/api/comments", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

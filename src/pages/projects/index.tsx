@@ -7,6 +7,7 @@ import { Layout } from "~/components/layout";
 import { Link } from "~/components/link";
 import { HTMLPhysics } from "~/components/physics-import";
 import { projects } from "~/lib/projects";
+import { trackEvent } from "~/lib/tracking";
 
 const projectItems = projects.filter((p) => !p.noListing);
 
@@ -60,7 +61,11 @@ const ProjectsPageInner = () => {
           bottom: "4rem",
           right: "0",
         }}
-        onClick={() => setBroken((r) => !r)}
+        onClick={() => {
+          trackEvent("Trigger Wrecking Ball", { broken });
+
+          setBroken((r) => !r);
+        }}
       >
         {broken ? "🛠 Fix" : "💣 Break"} this page?
       </button>
