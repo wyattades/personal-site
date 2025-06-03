@@ -38,26 +38,39 @@ const projects: ProjectItem[] = [
     url: "https://vanly.app",
     desc: "A platform for people sleeping in their vehicles to find overnight parking",
   },
-  {
-    id: "megabyte",
-    title: "MegaByte",
-    url: "https://triplebyte.github.io/megabyte-game",
-    desc: "A quick platformer where you answer coding questions. Made for a Triplebyte marketing effort",
-    isGame: true,
-  },
-  {
-    id: "wing-it-online",
-    title: "Wing It - Online",
-    url: "https://wing-it-beyond.netlify.app",
-    desc: 'Online version of the card-game "Wing It Beyond" for the game studio Flying Leap Games',
-    isGame: true,
-  },
+
   {
     id: "articulus",
     title: "Articulus",
     source: "https://github.com/wyattades/articulus",
     url: "https://articulus.vercel.app",
     desc: "A sandbox physics game where you connect rediculous machines together",
+    isGame: true,
+  },
+
+  {
+    id: "inf-p2p",
+    title: "Infinite world web physics game",
+    source: "https://github.com/wyattades/inf-p2p",
+    url: "https://wyattades.github.io/inf-p2p",
+    desc: "Messing around with 3D WebGL, car physics, and infinite world generation",
+    // "First-person, infinite random terrain, HTML. It's cool just click it",
+    isGame: true,
+  },
+  {
+    id: "warmvector",
+    isGame: true,
+    url: "https://warmvector-java.vercel.app",
+    source: "https://github.com/wyattades/warmvector_java",
+    title: "WarmVector",
+    desc: "Shooting bad guys, randomly generated levels, destructable terrain. Created with my own 2D Java game engine.\n\nClick the link to see the Java engine running in CheerpJ (a Java to WASM compiler).",
+  },
+
+  {
+    id: "wing-it-online",
+    title: "Wing It - Online",
+    url: "https://wing-it-beyond.netlify.app",
+    desc: 'Online version of the card-game "Wing It Beyond" for the game studio Flying Leap Games',
     isGame: true,
   },
   {
@@ -69,37 +82,19 @@ const projects: ProjectItem[] = [
 aggregating and sharing any movie, TV show, or Spotify song.`,
   },
   {
+    id: "megabyte",
+    title: "MegaByte",
+    url: "https://triplebyte.github.io/megabyte-game",
+    desc: "A quick platformer where you answer coding questions. Made for a Triplebyte marketing effort",
+    isGame: true,
+  },
+  {
     id: "generative-line-art",
     title: "Generative Line Art",
     source: "https://github.com/wyattades/generative-line-art",
     url: "https://wyattades.github.io/generative-line-art",
     desc: `Create line art using this simple yet versatile line art generation tool. Export 
 the result as a scalable vector graphic (SVG)!`,
-  },
-  {
-    id: "java-to-javascript",
-    title: "Java to Javascript",
-    image: "npm",
-    source: "https://github.com/wyattades/java-to-javascript",
-    url: "https://www.npmjs.com/package/java-to-javascript",
-    desc: "Convert Java Classes to ES6 Classes",
-  },
-  {
-    id: "rails-macro",
-    title: "rails.macro",
-    image: "npm",
-    source: "https://github.com/wyattades/rails.macro",
-    url: "https://www.npmjs.com/package/rails.macro",
-    desc: "A babel macro to let JavaScript code access Ruby on Rails named routes",
-  },
-  {
-    id: "inf-p2p",
-    title: "Infinite world web physics game",
-    source: "https://github.com/wyattades/inf-p2p",
-    url: "https://wyattades.github.io/inf-p2p",
-    desc: "Messing around with 3D WebGL, car physics, and infinite world generation",
-    // "First-person, infinite random terrain, HTML. It's cool just click it",
-    isGame: true,
   },
   {
     id: "shared-docs",
@@ -171,15 +166,30 @@ The user can view and manage multiple personal news feeds. This project mainly s
 a learning experience and proof of concept for a fully cross-platform react app i.e. the 
 same code-base is used on desktop browser, mobile browser, android, and ios.`,
   },
-
   {
-    id: "bsoe_map",
-    title: "BSOE Interactive Map",
-    source: "https://github.com/wyattades/bsoe_map",
-    url: "https://buildingmaps.soe.ucsc.edu/",
-    desc: `This is a tool for generating interactive floor-map webpages. The example shows 
-UCSC Baskin School of Engineering building maps.`,
+    id: "java-to-javascript",
+    title: "Java to Javascript",
+    image: "npm",
+    source: "https://github.com/wyattades/java-to-javascript",
+    url: "https://www.npmjs.com/package/java-to-javascript",
+    desc: "Convert Java Classes to ES6 Classes",
   },
+  {
+    id: "rails-macro",
+    title: "rails.macro",
+    image: "npm",
+    source: "https://github.com/wyattades/rails.macro",
+    url: "https://www.npmjs.com/package/rails.macro",
+    desc: "A babel macro to let JavaScript code access Ruby on Rails named routes",
+  },
+  //   {
+  //     id: "bsoe_map",
+  //     title: "BSOE Interactive Map",
+  //     source: "https://github.com/wyattades/bsoe_map",
+  //     url: "https://buildingmaps.soe.ucsc.edu/",
+  //     desc: `This is a tool for generating interactive floor-map webpages. The example shows
+  // UCSC Baskin School of Engineering building maps.`,
+  //   },
   {
     id: "map_maker",
     title: "JSON Game-Map Maker",
@@ -188,35 +198,27 @@ UCSC Baskin School of Engineering building maps.`,
     desc: `Create simple maps made of rectangular walls, and output a JSON array (can also 
 generate map using inputted JSON).`,
   },
-  {
-    id: "orgchart",
-    title: "Organization Chart",
-    source: "https://github.com/wyattades/org-chart-module",
-    url: "https://wyattades.github.io/org-chart-module/",
-    desc: `Create embedded Org Charts using this simple javascript library. These charts have 
-a simplistic material design and are intuitively interactive.`,
-  },
-  {
-    id: "minshell",
-    title: "MinShell",
-    source: "https://github.com/wyattades/minshell",
-    desc: `A minimalist command-line shell that supports some of the basic features of Bash. 
-Compile the tiny source-code on your OS to try it out!`,
-  },
+  //   {
+  //     id: "orgchart",
+  //     title: "Organization Chart",
+  //     source: "https://github.com/wyattades/org-chart-module",
+  //     url: "https://wyattades.github.io/org-chart-module/",
+  //     desc: `Create embedded Org Charts using this simple javascript library. These charts have
+  // a simplistic material design and are intuitively interactive.`,
+  //   },
+  //   {
+  //     id: "minshell",
+  //     title: "MinShell",
+  //     source: "https://github.com/wyattades/minshell",
+  //     desc: `A minimalist command-line shell that supports some of the basic features of Bash.
+  // Compile the tiny source-code on your OS to try it out!`,
+  //   },
 
-  {
-    url: "https://github.com/wyattades/WarmVector_Client_Singleplayer/releases",
-    id: "warmvector",
-    isGame: true,
-    noListing: true,
-    title: "WarmVector",
-    desc: "Shooting bad guys, randomly generated levels, destructable terrain. Created with my own 2D Java game engine",
-  },
   {
     id: "arc-dodger",
     p5Sketch: true,
     isGame: true,
-    noListing: true,
+    // noListing: true,
     title: "Arc Dodger",
     desc: "Colorful arcs are comin', and they're comin' strong! This one’s addicting...",
     help: "Avoid the colored pie! Use the LEFT and RIGHT arrow keys to move, and press SPACE to restart",
@@ -269,6 +271,16 @@ Compile the tiny source-code on your OS to try it out!`,
     title: "Hit-Block-Die",
     desc: "Dodge those red things!",
   },
+
+  // TODO: Add tanks game
+  // {
+  //   id: "tanks",
+  //   p5Sketch: true,
+  //   isGame: true,
+  //   noListing: true,
+  //   title: "Tanks",
+  //   desc: "Tanks game, built in React/TypeScript",
+  // },
 
   {
     id: "games",
