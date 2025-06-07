@@ -18,6 +18,12 @@ const WELCOMES = shuffle([
   "Bonjour",
   "Ni Hao",
   "Konnichiwa",
+  "Sawasdee Krub",
+  "Guten Tag",
+  "Ciao",
+  "Namaste",
+  "Annyeonghaseyo",
+  "Hallo",
 ]);
 let welcomeCounter = Math.floor(Math.random() * WELCOMES.length);
 const genWelcome = () => {
