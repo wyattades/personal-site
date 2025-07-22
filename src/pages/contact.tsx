@@ -2,6 +2,7 @@ import {
   Mail as EmailIcon,
   Github as GithubIcon,
   Linkedin as LinkedinIcon,
+  Twitter as TwitterIcon,
 } from "lucide-react";
 import { NextSeo } from "next-seo";
 
@@ -51,6 +52,12 @@ const ContactPageInner = () => {
         <a href="https://open.spotify.com/user/wyattades">
           <SpotifyIcon className="icon-head" aria-hidden />
           open.spotify.com/user/wyattades
+        </a>
+      </p>
+      <p>
+        <a href="https://x.com/wyattades">
+          <TwitterIcon className="icon-head" aria-hidden />
+          x.com/wyattades
         </a>
       </p>
     </AnimatedItems>
