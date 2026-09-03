@@ -1,12 +1,10 @@
 import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
-import remarkGfm from "remark-gfm";
 
 const HOST_URL = process.env.VERCEL_URL
   ? "https://wyattades.com"
   : "http://localhost:3000";
 
-// eslint-disable-next-line import/no-mutable-exports
 let nextConfig: NextConfig = {
   env: {
     HOST_URL,
@@ -16,6 +14,11 @@ let nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      {
+        source: "/projects/games",
+        destination: "/projects",
+        permanent: true,
+      },
       {
         // TEMP: support legacy routes
         source: "/projects/games/:game_id",
@@ -30,7 +33,7 @@ let nextConfig: NextConfig = {
 
 nextConfig = createMDX({
   options: {
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: ["remark-gfm"],
   },
 })(nextConfig);
 
