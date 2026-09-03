@@ -10,9 +10,13 @@ type ArticleImport = {
 };
 
 export const getArticles = async () => {
-  const requireFn = require.context("~/pages/blog", true, /^\.\/.*\.mdx$/);
+  // NOTE: must be a relative path; Turbopack's `require.context` does not
+  // resolve the `~/*` tsconfig alias, and silently returns zero matches.
+  const requireFn = require.context("../pages/blog", true, /^\.\/.*\.mdx$/);
+  const paths = requireFn.keys() as string[];
+
   return Promise.all(
-    requireFn.keys().map(async (path) => {
+    paths.map(async (path) => {
       const mod: ArticleImport = await requireFn(path);
       const slug = path.replace(/^.*[\\/]/, "").replace(/\.mdx$/, "");
       if (!mod.metadata?.title)

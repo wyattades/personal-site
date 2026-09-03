@@ -1,13 +1,13 @@
 import {
+  BriefcaseBusiness as LinkedinIcon,
+  CodeXml as GithubIcon,
   Mail as EmailIcon,
-  Github as GithubIcon,
-  Linkedin as LinkedinIcon,
-  Twitter as TwitterIcon,
+  MessageCircle as TwitterIcon,
 } from "lucide-react";
-import { NextSeo } from "next-seo";
 
 import { AnimatedItems } from "~/components/animated-items";
 import { Layout } from "~/components/layout";
+import { NextSeo } from "~/components/seo";
 
 function SpotifyIcon({ className }: { className?: string }) {
   return (

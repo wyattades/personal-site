@@ -434,7 +434,8 @@ dl.expertise-table {
   border: 2px solid var(--text-color);
   position: relative;
 
-  flex-basis: calc(100% / 3 - 2rem);
+  /* 3 columns sharing the 2 gaps of `.box-list` */
+  flex-basis: calc((100% - 4rem) / 3);
   height: 200px;
 
   text-decoration: none;
@@ -475,6 +476,12 @@ dl.expertise-table {
 
     padding: 16px;
     box-sizing: border-box;
+
+    small {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
   }
 
   &:hover {
@@ -507,6 +514,92 @@ dl.expertise-table {
   display: flex;
   flex-flow: row wrap;
   gap: 2rem;
+}
+
+.project-filters {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.filter-groups {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-chip {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1;
+
+  padding: 0.55rem 0.9rem;
+  border: 2px solid var(--offset-color);
+  border-radius: 999px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+
+  transition:
+    background-color var(--default-transition),
+    border-color var(--default-transition),
+    color var(--default-transition);
+
+  &:hover {
+    border-color: var(--text-color);
+  }
+
+  &[aria-pressed="true"] {
+    background: var(--text-color);
+    border-color: var(--text-color);
+    color: var(--bg-color);
+  }
+}
+
+.filter-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 2px solid var(--offset-color);
+  border-radius: 50%;
+  background: var(--bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+
+  transition:
+    border-color var(--default-transition),
+    color var(--default-transition);
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover {
+    border-color: var(--error-color);
+    color: var(--error-color);
+  }
+}
+
+.filter-chip:focus-visible,
+.filter-clear:focus-visible {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
 }
 
 .plain-button {

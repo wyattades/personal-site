@@ -17,10 +17,7 @@ export default function BlogIndexPage({
   return (
     <Layout pageClassName="box-list">
       <AnimatedItems>
-        <div
-          className="content"
-          style={{ flexBasis: "100%", margin: "0 1rem" }}
-        >
+        <div className="content" style={{ flexBasis: "100%" }}>
           <h1 style={{ marginBottom: 0, paddingBottom: "3rem" }}>
             <span>Blog</span>
           </h1>

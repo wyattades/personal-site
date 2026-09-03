@@ -2,11 +2,12 @@ const experienceItems = [
   {
     title: "Stepful",
     link: "https://stepful.com",
-    role: "Engineering Manager",
+    role: "Staff II Software Engineer",
     from: "January 2022",
     to: null,
     desc: [
       "First engineer at Stepful, an online education platform for healthcare workers. Doubling worker salaries.",
+      "Promoted from Founding Software Engineer to Engineering Manager (March 2025), Staff I Software Engineer (August 2025), and Staff II Software Engineer (January 2026)",
     ],
   },
   {

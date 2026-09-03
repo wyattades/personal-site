@@ -124,13 +124,13 @@ const Char: React.FC<{
 
   return (
     <group ref={rigidbodyRef}>
-      {/* @ts-expect-error waiting for https://github.com/pmndrs/react-spring/pull/2349 */}
       <animated.mesh
         receiveShadow
         castShadow
-        position={springs.innerPosAnimated}
+        position={
+          springs.innerPosAnimated as unknown as [number, number, number]
+        }
       >
-        {/* @ts-expect-error waiting for ^ */}
         <animated.meshNormalMaterial transparent opacity={springs.opacity} />
         <renamedTextGeometry args={[char, textGeomConfig]} />
         {/* @ts-ignore in CI this is valid but not in local... */}

@@ -1,8 +1,7 @@
 import { Link as LinkIcon } from "lucide-react";
-import { NextSeo } from "next-seo";
-
 import { AnimatedItems } from "~/components/animated-items";
 import { Layout } from "~/components/layout";
+import { NextSeo } from "~/components/seo";
 import { getResumeItems } from "~/lib/resume-items";
 
 const resumeItems = getResumeItems();

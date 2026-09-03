@@ -43,8 +43,10 @@ const useIsFirstMount = () => {
 export const ThemeProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  let [mode, setMode] = useLocalStorage<ThemeKey>("style-theme", ORDER[0]);
-  mode ||= ORDER[0];
+  const [mode = ORDER[0], setMode] = useLocalStorage<ThemeKey>(
+    "style-theme",
+    ORDER[0],
+  );
 
   const changeCounter = useRef(0);
 

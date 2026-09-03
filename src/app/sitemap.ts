@@ -13,8 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/resume",
     "/projects",
-    "/projects/games",
-    ...projects.filter((p) => !p.noPage).map((p) => `/projects/${p.id}`),
+    ...projects.map((p) => `/projects/${p.id}`),
   ];
 
   return pathnames.map((pathname) => ({

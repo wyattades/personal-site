@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { DefaultSeo } from "next-seo";
 import type { AppProps } from "next/app";
 import { Lexend } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
+import { DefaultSeo } from "~/components/seo";
 import { ThemeProvider } from "~/components/style-theme";
 
 import "normalize.css";

@@ -1,10 +1,21 @@
 import { createClient } from "@libsql/client";
 import { NextResponse } from "next/server";
 
-const client = createClient({
-  url: process.env.DATABASE_URL!,
-  authToken: process.env.DATABASE_AUTH_TOKEN!,
-});
+let client: ReturnType<typeof createClient> | null = null;
+
+const getClient = () => {
+  if (client) return client;
+
+  const url = process.env.DATABASE_URL;
+  if (!url) throw new Error("DATABASE_URL is not configured");
+
+  client = createClient({
+    url,
+    authToken: process.env.DATABASE_AUTH_TOKEN,
+  });
+
+  return client;
+};
 
 export async function GET(request: Request) {
   try {
@@ -18,7 +29,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const result = await client.execute({
+    const result = await getClient().execute({
       sql: "SELECT * FROM comments WHERE article_slug = ? ORDER BY created_at DESC",
       args: [articleSlug],
     });
@@ -45,7 +56,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await client.execute({
+    const result = await getClient().execute({
       sql: "INSERT INTO comments (article_slug, content, author) VALUES (?, ?, ?) RETURNING *",
       args: [article_slug, content, author || null],
     });

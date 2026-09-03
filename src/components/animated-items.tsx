@@ -36,7 +36,6 @@ export const useAnimatedSwitch = <Children extends React.ReactElement>(
       value,
       children,
       isInitial: true,
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       remove: () => removeKey(0),
       timeout: null as NodeJS.Timeout | null,
     },

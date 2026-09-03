@@ -4,7 +4,6 @@ import {
   Link as LinkIcon,
 } from "lucide-react";
 import type { GetStaticProps } from "next";
-import { NextSeo } from "next-seo";
 import Image from "next/image";
 
 import { AnimatedItems } from "~/components/animated-items";
@@ -12,12 +11,13 @@ import { Layout } from "~/components/layout";
 import { GoBackLink } from "~/components/link";
 import { Markdown } from "~/components/markdown";
 import { PlaySketch } from "~/components/play-sketch";
+import { NextSeo } from "~/components/seo";
 import { projects, type ProjectItem } from "~/lib/projects";
 
 export const getStaticProps: GetStaticProps = async ({
   params: { project_id } = {},
 }) => {
-  const project = projects.find((p) => !p.noPage && p.id === project_id);
+  const project = projects.find((p) => p.id === project_id);
 
   if (!project)
     return {
@@ -33,11 +33,9 @@ export const getStaticProps: GetStaticProps = async ({
 
 export const getStaticPaths = async () => {
   return {
-    paths: projects
-      .filter((p) => !p.noPage)
-      .map((p) => ({
-        params: { project_id: p.id },
-      })),
+    paths: projects.map((p) => ({
+      params: { project_id: p.id },
+    })),
     fallback: false,
   };
 };
