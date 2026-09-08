@@ -39,7 +39,7 @@ export const projectTypes = [
   "Game",
   "Library",
   "Experiment",
-  "Physical",
+  "Real-world",
 ] as const;
 
 export type ProjectType = (typeof projectTypes)[number];
@@ -47,7 +47,8 @@ export type ProjectType = (typeof projectTypes)[number];
 export const projectTopics = [
   "AI/ML",
   "Collaboration",
-  "Developer Tools",
+  // "Developer Tools",
+  "Physics Simulation",
   "Graphics",
   "Mobile",
 ] as const;
@@ -59,20 +60,20 @@ const projects: ProjectItem[] = [
     id: "vanly",
     title: "Vanly",
     type: "Product",
-    topics: ["AI/ML", "Mobile"],
+    topics: ["Mobile"],
     url: "https://vanly.app",
     desc: `A platform for people sleeping in their vehicles to find safe overnight parking. I co-founded Vanly, served as CTO, and helped build it from 2019 until we sold the company in April 2025. 🎉
 
 Available on the [App Store](https://apps.apple.com/us/app/vanly-rv-vanlife-parking/id1583417008) and [Google Play](https://play.google.com/store/apps/details?id=com.vanly.mobileapp).
 
-Built with Next.js, Firestore, TensorFlow for price recommendations, Stripe, and Capacitor for the mobile apps.`,
+A monorepo built with Next.js, Firestore, TensorFlow for price recommendations, Stripe, and Capacitor for the mobile apps.`,
   },
 
   {
     id: "cyperful",
     title: "Cyperful",
     type: "Library",
-    topics: ["Developer Tools"],
+    topics: [],
     source: "https://github.com/stepful/cyperful",
     url: "https://rubygems.org/gems/cyperful",
     desc: `The Capybara visual debugger. Cyperful adds a Cypress-like interface to Ruby system tests, including live test steps, API requests, console logs, interactive pausing, automatic restarts, and video recording.`,
@@ -80,8 +81,8 @@ Built with Next.js, Firestore, TensorFlow for price recommendations, Stripe, and
   {
     id: "soft-bodies",
     title: "Soft Bodies",
-    type: "Experiment",
-    topics: ["Graphics"],
+    type: "Game",
+    topics: ["Graphics", "Physics Simulation"],
     source: "https://github.com/wyattades/soft-bodies",
     url: "https://soft.everett.works",
     desc: "A soft-body physics sandbox whose solver is Rust compiled to WebAssembly, running in a Web Worker so the simulation never blocks the UI. Squishiness, friction, gravity, and solver quality are all tunable live, and you can draw or import SVG shapes to drop into the world.",
@@ -90,7 +91,7 @@ Built with Next.js, Firestore, TensorFlow for price recommendations, Stripe, and
     id: "mining-game",
     title: "Deep Drill Mining",
     type: "Game",
-    topics: ["Graphics"],
+    topics: ["Graphics", "Physics Simulation"],
     source: "https://github.com/wyattades/mining-game",
     url: "https://deep-drill-mining.vercel.app",
     desc: "A browser-based mining game with procedurally generated, dynamically destructible terrain, 2D physics, and isometric 3D rendering.",
@@ -108,7 +109,7 @@ Built with Next.js, Firestore, TensorFlow for price recommendations, Stripe, and
     id: "articulus",
     title: "Articulus",
     type: "Game",
-    topics: ["Graphics"],
+    topics: ["Graphics", "Physics Simulation"],
     source: "https://github.com/wyattades/articulus",
     url: "https://articulus.vercel.app",
     desc: "A sandbox physics game where you connect rediculous machines together",
@@ -117,7 +118,7 @@ Built with Next.js, Firestore, TensorFlow for price recommendations, Stripe, and
     id: "inf-p2p",
     title: "Infinite world web physics game",
     type: "Game",
-    topics: ["Graphics"],
+    topics: ["Graphics", "Physics Simulation"],
     source: "https://github.com/wyattades/inf-p2p",
     url: "https://wyattades.github.io/inf-p2p",
     desc: "Messing around with 3D WebGL, car physics, and infinite world generation",
@@ -126,7 +127,7 @@ Built with Next.js, Firestore, TensorFlow for price recommendations, Stripe, and
   {
     id: "warmvector",
     type: "Game",
-    topics: ["Graphics"],
+    topics: ["Graphics", "Physics Simulation"],
     url: "https://warmvector-java.vercel.app",
     source: "https://github.com/wyattades/warmvector_java",
     title: "WarmVector",
@@ -185,13 +186,13 @@ the result as a scalable vector graphic (SVG)!`,
     type: "Product",
     topics: ["Collaboration"],
     url: "https://shared-docs-protodemo.vercel.app",
-    desc: `An online text editor that supports multiple users editing and viewing at the same time. Uses Firebase's webhooks to synchronize data.`,
+    desc: `An online text editor that supports multiple users editing and viewing at the same time. Uses Firebase websockets to synchronize edits in real-time.`,
   },
   {
     id: "logic-gates",
     title: "Logic Gates",
     type: "Experiment",
-    topics: ["Developer Tools"],
+    topics: [],
     url: "https://logicgates.vercel.app",
     source: "https://github.com/wyattades/logic-gates",
     desc: `A sandbox for simulating logic gates.
@@ -225,8 +226,8 @@ your friends!`,
     source: "https://github.com/wyattades/daily_learner",
     // dead link (404) as of Sep 2026
     // url: "https://dailylearner.pythonanywhere.com",
-    desc: `A webapp for entering arbitrary data in a way that's accessible to anyone. 
-Easily perform analytics and predictions using machine learning. Currently supports 
+    desc: `A webapp for performing predictions from arbitrary data that's accessible to anyone. 
+Run classification and regression using machine learning. Currently supports 
 two types of Linear Models and a Blackbox Model.`,
   },
   {
@@ -244,14 +245,14 @@ got to make some fun GIFs out of it ^`,
   {
     id: "trebuchet",
     title: "Floating Arm Trebuchet",
-    type: "Physical",
-    topics: ["Graphics"],
+    type: "Real-world",
+    topics: ["Graphics", "Physics Simulation"],
     desc: `Built a [floating arm trebuchet](https://en.wikipedia.org/wiki/Floating_arm_trebuchet) 
-from scratch in high school! First I modeled the trebuchet in Autodesk Inventor, then added 
-physics constraints and ran the simulation as seen in the GIF above.
-    
+from scratch in high school. I first modeled the trebuchet in Autodesk Inventor, then added 
+physics constraints. You can see the physics simulation in action in the GIF above.
+
 The actual build consisted of: metal square tubing for the frame, sheet metal for scaffolding, and wooden 
-lathed wheels with ball bearings. It ended up being able to throw a small metal sphere over 300ft!`,
+lathed wheels with ball bearings. It could throw a metal sphere over 300ft!`,
   },
   {
     id: "aggregor",
@@ -269,7 +270,7 @@ same code-base is used on desktop browser, mobile browser, android, and ios.`,
     id: "java-to-javascript",
     title: "Java to Javascript",
     type: "Library",
-    topics: ["Developer Tools"],
+    topics: [],
     image: "npm",
     source: "https://github.com/wyattades/java-to-javascript",
     url: "https://www.npmjs.com/package/java-to-javascript",
@@ -279,7 +280,7 @@ same code-base is used on desktop browser, mobile browser, android, and ios.`,
     id: "rails-macro",
     title: "rails.macro",
     type: "Library",
-    topics: ["Developer Tools"],
+    topics: [],
     image: "npm",
     source: "https://github.com/wyattades/rails.macro",
     url: "https://www.npmjs.com/package/rails.macro",
@@ -297,7 +298,7 @@ same code-base is used on desktop browser, mobile browser, android, and ios.`,
     id: "map_maker",
     title: "JSON Game-Map Maker",
     type: "Product",
-    topics: ["Developer Tools", "Graphics"],
+    topics: ["Graphics"],
     source: "https://github.com/wyattades/json_map_generator",
     url: "http://wyattades.github.io/json_map_generator",
     desc: `Create simple maps made of rectangular walls, and output a JSON array (can also 
