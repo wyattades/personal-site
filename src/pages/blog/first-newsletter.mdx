@@ -1,9 +1,9 @@
+import { ArticleLayout } from "~/components/article-layout";
 import { BlogComments } from "~/components/blog-comments";
-import { Layout } from "~/components/layout";
 import { PopupHelp } from "~/components/popup-help";
 
 export default function BlogPage({ children }) {
-  return <Layout pageClassName="content">{children}</Layout>;
+  return <ArticleLayout metadata={metadata}>{children}</ArticleLayout>;
 }
 
 export const metadata = {

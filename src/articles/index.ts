@@ -1,12 +1,14 @@
 import type { MDXContent } from "mdx/types";
 
+export type ArticleMetadata = {
+  title: string;
+  publishedAt: DateString;
+  excerpt?: string;
+};
+
 type ArticleImport = {
   default: MDXContent;
-  metadata: {
-    title: string;
-    publishedAt: DateString;
-    excerpt?: string;
-  };
+  metadata: ArticleMetadata;
 };
 
 export const getArticles = async () => {

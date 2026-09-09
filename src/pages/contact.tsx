@@ -1,7 +1,7 @@
 import {
-  BriefcaseBusiness as LinkedinIcon,
-  CodeXml as GithubIcon,
   Mail as EmailIcon,
+  CodeXml as GithubIcon,
+  BriefcaseBusiness as LinkedinIcon,
   MessageCircle as TwitterIcon,
 } from "lucide-react";
 
@@ -43,12 +43,6 @@ const ContactPageInner = () => {
         </a>
       </p>
       <p>
-        <a href="https://linkedin.com/in/wyattades/">
-          <LinkedinIcon className="icon-head" aria-hidden />
-          linkedin.com/in/wyattades
-        </a>
-      </p>
-      <p>
         <a href="https://open.spotify.com/user/wyattades">
           <SpotifyIcon className="icon-head" aria-hidden />
           open.spotify.com/user/wyattades
@@ -60,13 +54,27 @@ const ContactPageInner = () => {
           x.com/wyattades
         </a>
       </p>
+      <p>
+        <a href="https://linkedin.com/in/wyattades/">
+          <LinkedinIcon className="icon-head" aria-hidden />
+          linkedin.com/in/wyattades
+        </a>
+      </p>
     </AnimatedItems>
   );
 };
 
 export default function ContactPage() {
   return (
-    <Layout seo={<NextSeo title="Contact" />} pageClassName="content">
+    <Layout
+      seo={
+        <NextSeo
+          title="Contact"
+          description="Get in touch with Wyatt Ades — email, GitHub, and LinkedIn."
+        />
+      }
+      pageClassName="content"
+    >
       <ContactPageInner />
     </Layout>
   );

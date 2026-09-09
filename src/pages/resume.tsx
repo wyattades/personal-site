@@ -7,7 +7,7 @@ const ResumePage = () => {
   return (
     <div id="resume-root">
       <NextSeo
-        title="Wyatt Ades Resume"
+        title="Resume"
         description="Self-driven full-stack engineer with focus on Progressive Web Applications and seamless user experiences"
         robotsProps={{ nosnippet: true }}
       />

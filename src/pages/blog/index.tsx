@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getArticles } from "~/articles";
 import { AnimatedItems } from "~/components/animated-items";
 import { Layout } from "~/components/layout";
+import { NextSeo } from "~/components/seo";
 
 export const getStaticProps = async () => {
   return {
@@ -15,17 +16,25 @@ export default function BlogIndexPage({
   articles,
 }: Awaited<ReturnType<typeof getStaticProps>>["props"]) {
   return (
-    <Layout pageClassName="box-list">
+    <Layout
+      pageClassName="box-list"
+      seo={
+        <NextSeo
+          title="Blog"
+          description="Essays on engineering, tooling, and the meta-problems of building things — written by Wyatt Ades."
+        />
+      }
+    >
       <AnimatedItems>
         <div className="content" style={{ flexBasis: "100%" }}>
-          <h1 style={{ marginBottom: 0, paddingBottom: "3rem" }}>
+          <h1 style={{ marginBottom: 0 }}>
             <span>Blog</span>
           </h1>
-          {/* <p style={{ paddingBottom: "3rem" }}>
-            Here are some of my noteworthy projects that were mostly created in
-            my spare time. You can also view all of them and more on my{" "}
-            <a href="https://github.com/wyattades">github</a>.
-          </p> */}
+          <p style={{ paddingBottom: "3rem" }}>
+            Occasional writing about engineering challenges, the tools I build
+            to get around them, and the meta-problems — motivation, taste,
+            knowing when something is done — that turn out to be the hard part.
+          </p>
         </div>
 
         {articles.map((article) => (

@@ -149,7 +149,15 @@ const ProjectsPageInner = () => {
 
 export default function ProjectsPage() {
   return (
-    <Layout seo={<NextSeo title="Projects" />} pageClassName="box-list">
+    <Layout
+      seo={
+        <NextSeo
+          title="Projects"
+          description="Games, developer tools, physics simulations, and products built by Wyatt Ades — most of them open source."
+        />
+      }
+      pageClassName="box-list"
+    >
       <ProjectsPageInner />
     </Layout>
   );

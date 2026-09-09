@@ -23,7 +23,14 @@ const AboutPageInner = () => {
 
 export default function AboutPage() {
   return (
-    <Layout seo={<NextSeo title="About" />}>
+    <Layout
+      seo={
+        <NextSeo
+          title="About"
+          description="Wyatt Ades is a full-stack engineer: co-founder and CTO of Vanly (acquired), previously Triplebyte, now a founding product engineer at Stepful."
+        />
+      }
+    >
       <AboutPageInner />
     </Layout>
   );

@@ -7,6 +7,9 @@ import { BodyProps } from "~/components/body-props";
 import { Layout } from "~/components/layout";
 import { useHoveredLink } from "~/components/link";
 import { BlockText } from "~/components/physics-import";
+import { JsonLd, NextSeo } from "~/components/seo";
+
+const HOST_URL = process.env.HOST_URL!;
 
 const WELCOMES = shuffle([
   // "Welcome",
@@ -82,7 +85,36 @@ const IndexPageInner = () => {
 
 export default function IndexPage() {
   return (
-    <Layout noLayout outsideTransition={<BodyProps className="index-page" />}>
+    <Layout
+      noLayout
+      outsideTransition={<BodyProps className="index-page" />}
+      seo={
+        <>
+          <NextSeo description="Portfolio of Wyatt Ades, a full-stack engineer building games, developer tools, and physics simulations for the web." />
+          <JsonLd
+            id="person-jsonld"
+            data={{
+              "@type": "Person",
+              name: "Wyatt Ades",
+              url: HOST_URL,
+              jobTitle: "Full-stack Engineer",
+              sameAs: [
+                "https://github.com/wyattades",
+                "https://linkedin.com/in/wyattades",
+              ],
+            }}
+          />
+          <JsonLd
+            id="website-jsonld"
+            data={{
+              "@type": "WebSite",
+              name: "Wyatt Ades Portfolio",
+              url: HOST_URL,
+            }}
+          />
+        </>
+      }
+    >
       <IndexPageInner />
     </Layout>
   );

@@ -11,7 +11,7 @@ import { Layout } from "~/components/layout";
 import { GoBackLink } from "~/components/link";
 import { Markdown } from "~/components/markdown";
 import { PlaySketch } from "~/components/play-sketch";
-import { NextSeo } from "~/components/seo";
+import { JsonLd, NextSeo } from "~/components/seo";
 import { projects, type ProjectItem } from "~/lib/projects";
 
 export const getStaticProps: GetStaticProps = async ({
@@ -44,6 +44,23 @@ type Props = {
   project: ProjectItem;
 };
 
+const META_DESC_MAX = 155;
+
+/** Flatten a markdown `desc` into a plain-text meta description. */
+const toMetaDescription = (desc: ProjectItem["desc"]) => {
+  if (typeof desc !== "string") return undefined;
+
+  const text = desc
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // links -> their label
+    .replace(/[*_`#>]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (text.length <= META_DESC_MAX) return text;
+
+  return text.slice(0, text.lastIndexOf(" ", META_DESC_MAX)) + "…";
+};
+
 const ShowProjectPageInner: React.FC<Props> = ({ project }) => {
   const {
     title,
@@ -60,12 +77,17 @@ const ShowProjectPageInner: React.FC<Props> = ({ project }) => {
 
   const isNPM = !!url?.includes("npmjs.com");
 
+  const description = toMetaDescription(desc);
+
   return (
     <>
       <NextSeo
-        title={`${title} - Wyatt Ades Project`}
-        openGraph={
-          image
+        title={`${title} Project`}
+        description={description}
+        openGraph={{
+          title: `${title} - Wyatt Ades Project`,
+          ...(description ? { description } : {}),
+          ...(image
             ? {
                 images: [
                   {
@@ -77,8 +99,24 @@ const ShowProjectPageInner: React.FC<Props> = ({ project }) => {
                   },
                 ],
               }
-            : {}
-        }
+            : {}),
+        }}
+      />
+      <JsonLd
+        id="project-jsonld"
+        data={{
+          "@type": "CreativeWork",
+          name: title,
+          ...(description ? { description } : {}),
+          ...(url ? { sameAs: [url] } : {}),
+          genre: project.type,
+          keywords: project.topics.join(", "),
+          author: {
+            "@type": "Person",
+            name: "Wyatt Ades",
+            url: "https://wyattades.com",
+          },
+        }}
       />
 
       <AnimatedItems dist={24}>
@@ -116,6 +154,8 @@ const ShowProjectPageInner: React.FC<Props> = ({ project }) => {
             <Image
               width={800}
               height={imageW && imageH ? (800 * imageH) / imageW : 600}
+              // above the fold and reliably the LCP element on this page
+              priority
               style={{ objectFit: "cover" }}
               placeholder={imageBlurDataURL ? "blur" : "empty"}
               blurDataURL={imageBlurDataURL || undefined}

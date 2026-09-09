@@ -117,6 +117,57 @@ body {
     opacity: 1;
   }
 }
+
+/*
+ * Staggered page-content reveal, driven by `animation-delay` rather than a JS
+ * timer so the clock starts at first paint instead of after hydration.
+ * `backwards` fill holds the `from` state during the delay.
+ */
+@keyframes animated-item-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--animate-x, 0), var(--animate-y, 0));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes animated-item-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--animate-x, 0), var(--animate-y, 0));
+  }
+}
+
+/*
+ * Chrome reports LCP at the *end* of an opacity animation, so the entrance
+ * duration plus its delay is added directly to LCP for whichever element is
+ * largest. Keep both short.
+ */
+.animated-item {
+  --animate-duration: 400ms;
+
+  animation: animated-item-in var(--animate-duration) var(--default-easing)
+    backwards;
+  animation-delay: var(--animate-delay, 0ms);
+}
+
+.animated-item--out {
+  animation-name: animated-item-out;
+  animation-fill-mode: forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-item {
+    animation: none;
+  }
+}
 @keyframes breath {
   0% {
     transform: scale(1);
@@ -448,10 +499,11 @@ dl.expertise-table {
 
   .BoxLink--bg-image {
     z-index: 0;
+    /* Not `visibility: hidden` — on the blog index this element holds the
+       article excerpt, which should stay in the accessibility tree. */
     opacity: 0 !important;
-    visibility: hidden;
     transition: var(--transition);
-    transition-property: opacity, visibility;
+    transition-property: opacity;
 
     pointer-events: none;
   }
@@ -504,7 +556,6 @@ dl.expertise-table {
     }
 
     .BoxLink--bg-image {
-      visibility: visible;
       opacity: 1 !important;
     }
   }
@@ -671,5 +722,22 @@ dl.expertise-table {
 
   .pad-horizontal {
     padding: 0 16px;
+  }
+}
+
+/*
+ * Honor the OS "reduce motion" setting. Content still appears and hover
+ * states still change, they just do so without movement or a delay.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
   }
 }

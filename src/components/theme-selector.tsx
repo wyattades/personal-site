@@ -41,7 +41,7 @@ export const ThemeSelector = () => {
           font-size: 0.5rem;
           color: var(--help-text-color);
           letter-spacing: 0.5px;
-          font-weight: 600px;
+          font-weight: 600;
           text-transform: capitalize;
           transition: opacity 300ms ease;
           opacity: 0;

@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import { Lexend } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
-import { DefaultSeo } from "~/components/seo";
+import { CanonicalUrl, DefaultSeo } from "~/components/seo";
 import { ThemeProvider } from "~/components/style-theme";
 
 import "normalize.css";
@@ -53,12 +53,12 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       ) : null}
 
       <DefaultSeo
-        title="Wyatt Ades - Portfolio"
+        defaultTitle="Wyatt Ades - Portfolio"
+        titleTemplate="%s - Wyatt Ades"
         description="A website for my projects and contact information"
         openGraph={{
           type: "website",
           locale: "en_US",
-          url: HOST_URL,
           site_name: "Wyatt Ades Portfolio",
           images: [
             {
@@ -74,6 +74,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
           cardType: "summary_large_image",
         }}
       />
+      <CanonicalUrl />
 
       <style jsx global>{`
         :root {

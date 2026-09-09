@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, {
@@ -10,12 +11,8 @@ import React, {
   useContext,
   useEffect,
   useRef,
-  useState,
 } from "react";
-import { Transition } from "react-transition-group";
-import { useInterval, useUpdate } from "react-use";
-
-import { useReducedMotion } from "~/lib/hooks";
+import { useUpdate } from "react-use";
 
 const OutTransition = createContext<{
   onComplete: () => void;
@@ -130,69 +127,6 @@ function canInjectStyle(
   );
 }
 
-export const Fade: React.FC<{
-  children: React.ReactNode;
-  show?: boolean;
-  timeout?: number;
-  toX?: number;
-  toY?: number;
-  unmount?: boolean;
-  disabled?: boolean;
-}> = ({
-  children,
-  show = true,
-  timeout = 500,
-  toX = 0,
-  toY = 0,
-  unmount = false,
-  disabled = false,
-  ...rest
-}) => {
-  const nodeRef = useRef<HTMLDivElement>(null);
-
-  if (!children) return null;
-
-  return (
-    <Transition
-      {...rest}
-      timeout={timeout}
-      in={show || disabled}
-      appear
-      mountOnEnter={unmount}
-      unmountOnExit={unmount}
-      nodeRef={nodeRef}
-    >
-      {(state) => {
-        const hide = state === "exited" || state === "exiting";
-        const style =
-          state === "entered" || disabled
-            ? undefined
-            : {
-                transition: `opacity ${timeout}ms ease, transform ${timeout}ms ease`,
-                opacity: hide ? 0 : 1,
-                transform: hide ? `translate(${toX}px, ${toY}px)` : "none",
-              };
-
-        if (canInjectStyle(children))
-          return style
-            ? cloneElement(children, {
-                ref: nodeRef,
-                style: children.props.style
-                  ? { ...children.props.style, ...style }
-                  : style,
-              })
-            : children;
-
-        return (
-          <div style={style} ref={nodeRef}>
-            {children}
-          </div>
-        );
-      }}
-    </Transition>
-  );
-};
-
 const ANIMATE_DIRS = {
   left: [-1, 0],
   right: [1, 0],
@@ -201,6 +135,21 @@ const ANIMATE_DIRS = {
 } as const;
 type AnimateDir = keyof typeof ANIMATE_DIRS;
 
+const STAGGER_MS = 60;
+/**
+ * Cap on the stagger so long lists (the ~20-item projects grid) finish
+ * revealing in under a second instead of trickling in for two.
+ */
+const MAX_STAGGER_STEPS = 8;
+
+/**
+ * Staggered entrance/exit for a page's top-level content.
+ *
+ * The animation is driven entirely by CSS `animation-delay` rather than a JS
+ * timer, so the reveal clock starts at first paint instead of waiting for
+ * React to hydrate. That keeps the largest element from being stuck at
+ * `opacity: 0` while the bundle parses, which is what dominated LCP.
+ */
 export const AnimatedItems: React.FC<{
   children: React.ReactNode;
   dist?: number;
@@ -208,16 +157,6 @@ export const AnimatedItems: React.FC<{
   const outTransition = useOutTransition();
 
   const validChildren = ReactChildren.toArray(children).filter(isValidElement);
-
-  const [animatedI, setAnimatedI] = useState(-1);
-  useInterval(() => {
-    if (outTransition && animatedI >= 0) {
-      setAnimatedI(animatedI - 1);
-    } else if (!outTransition && animatedI < validChildren.length - 1)
-      setAnimatedI(animatedI + 1);
-  }, 100);
-
-  const reducedMotion = useReducedMotion();
 
   return (
     <>
@@ -228,20 +167,28 @@ export const AnimatedItems: React.FC<{
 
         const [ax, ay] = (dir && ANIMATE_DIRS[dir]) || ANIMATE_DIRS.down;
 
+        const style = {
+          "--animate-delay": `${Math.min(i, MAX_STAGGER_STEPS) * STAGGER_MS}ms`,
+          "--animate-x": `${ax * dist}px`,
+          "--animate-y": `${ay * dist}px`,
+        } as React.CSSProperties;
+
+        const className = clsx(
+          "animated-item",
+          outTransition && "animated-item--out",
+        );
+
+        if (canInjectStyle(item))
+          return cloneElement(item, {
+            key: i,
+            className: clsx(item.props.className, className),
+            style: item.props.style ? { ...item.props.style, ...style } : style,
+          });
+
         return (
-          <Fade
-            key={i}
-            show={
-              outTransition
-                ? animatedI > validChildren.length - i
-                : animatedI >= i
-            }
-            toX={ax * dist}
-            toY={ay * dist}
-            disabled={reducedMotion}
-          >
+          <div key={i} className={className} style={style}>
             {item}
-          </Fade>
+          </div>
         );
       })}
     </>
